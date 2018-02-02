@@ -53,6 +53,7 @@ namespace Ra
 
             }
 
+        //!\todo move this function in "utils" ...
             Aabb aabb(const Vector3Array& pts)
             {
                 return pts.size() > 0 ?
