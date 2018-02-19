@@ -2,6 +2,8 @@
 
 #include <numeric>
 
+#include <Core/Mesh/HalfEdge.hpp>
+#include <Core/Mesh/MeshUtils.hpp>
 #include <Engine/Renderer/OpenGL/OpenGL.hpp>
 
 namespace Ra {
@@ -52,7 +54,7 @@ void Mesh::loadGeometry( const Core::TriangleMesh& mesh ) {
 
     if ( m_mesh.m_triangles.empty() )
     {
-        m_numElements = mesh.m_vertices.size();
+        m_numElements = mesh.vertices().size();
         m_renderMode = RM_POINTS;
     } else
         m_numElements = mesh.m_triangles.size() * 3;
@@ -66,9 +68,10 @@ void Mesh::loadGeometry( const Core::TriangleMesh& mesh ) {
 
 void Mesh::updateMeshGeometry( MeshData type, const Core::Vector3Array& data ) {
     if ( type == VERTEX_POSITION )
-        m_mesh.m_vertices = data;
-    if ( type == VERTEX_NORMAL )
-        m_mesh.m_normals = data;
+        m_mesh.vertices() = data;
+    ///\todo check here
+    //            if(type == VERTEX_NORMAL)
+    //                m_mesh.m_normals = data;
     m_dataDirty[static_cast<uint>( type )] = true;
     m_isDirty = true;
 }
@@ -84,7 +87,7 @@ void Mesh::loadGeometry( const Core::Vector3Array& vertices, const std::vector<u
         m_renderMode = RM_POINTS;
     } else
         m_numElements = nIdx;
-    m_mesh.m_vertices = vertices;
+    m_mesh.vertices() = vertices;
 
     // Check that when loading a triangle mesh we actually have triangles or lines.
     CORE_ASSERT( m_renderMode != GL_TRIANGLES || nIdx % 3 == 0,
@@ -166,7 +169,7 @@ void Mesh::updateGL() {
                                                  : m_dataDirty ) { dirtyTest = dirtyTest || d; } );
         CORE_ASSERT( dirtyTest == m_isDirty, "Dirty flags inconsistency" );
 
-        CORE_ASSERT( !( m_mesh.m_vertices.empty() ), "No vertex." );
+        CORE_ASSERT( !( m_mesh.vertices().empty() ), "No vertex." );
 
         if ( m_vao == 0 )
         {
@@ -200,8 +203,9 @@ void Mesh::updateGL() {
         }
 
         // Geometry data
-        sendGLData( m_mesh.m_vertices, VERTEX_POSITION );
-        sendGLData( m_mesh.m_normals, VERTEX_NORMAL );
+        sendGLData( m_mesh.vertices(), VERTEX_POSITION );
+        ///\todo check here
+        //              sendGLData(m_mesh.m_normals,  VERTEX_NORMAL);
 
         // Vec3 data
         sendGLData( m_v3Data[VERTEX_TANGENT], MAX_MESH + VERTEX_TANGENT );

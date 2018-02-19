@@ -271,14 +271,14 @@ void FancyMeshComponent::setMeshInput( const TriangleMesh* meshptr ) {
     displayMesh.loadGeometry( *meshptr );
 }
 
-Ra::Core::Vector3Array* FancyMeshComponent::getVerticesRw() {
+Ra::Core::TriangleMesh::vertex_attrib_data_type::data_type* FancyMeshComponent::getVerticesRw() {
     getDisplayMesh().setDirty( Ra::Engine::Mesh::VERTEX_POSITION );
-    return &( getDisplayMesh().getGeometry().m_vertices );
+    return &( getDisplayMesh().getGeometry().vertices() );
 }
 
-Ra::Core::Vector3Array* FancyMeshComponent::getNormalsRw() {
+Ra::Core::TriangleMesh::normal_attrib_data_type::data_type* FancyMeshComponent::getNormalsRw() {
     getDisplayMesh().setDirty( Ra::Engine::Mesh::VERTEX_NORMAL );
-    return &( getDisplayMesh().getGeometry().m_normals );
+    return &( getDisplayMesh().getGeometry().normals() );
 }
 
 Ra::Core::VectorArray<Ra::Core::Triangle>* FancyMeshComponent::getTrianglesRw() {

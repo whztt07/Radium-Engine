@@ -31,10 +31,10 @@ void splitEdge( TopologicalMesh& topologicalMesh, TopologicalMesh::EdgeHandle ed
 
     CORE_ASSERT( fraction > 0 && fraction < 1, "Invalid fraction" );
 
-    TopologicalMesh::VertexHandle v1 =
-        topologicalMesh.to_vertex_handle( topologicalMesh.halfedge_handle( edgeHandle, 0 ) );
-    TopologicalMesh::VertexHandle v2 =
-        topologicalMesh.to_vertex_handle( topologicalMesh.halfedge_handle( edgeHandle, 1 ) );
+    TopologicalMesh::HalfedgeHandle he0 = topologicalMesh.halfedge_handle( edgeHandle, 0 );
+    TopologicalMesh::HalfedgeHandle he1 = topologicalMesh.halfedge_handle( edgeHandle, 1 );
+    TopologicalMesh::VertexHandle v1 = topologicalMesh.to_vertex_handle( he0 );
+    TopologicalMesh::VertexHandle v2 = topologicalMesh.to_vertex_handle( he1 );
 
     TopologicalMesh::Point p = TopologicalMesh::Point(
         fraction * topologicalMesh.point( v1 ) + ( 1. - fraction ) * topologicalMesh.point( v2 ) );

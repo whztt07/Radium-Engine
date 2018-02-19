@@ -123,7 +123,7 @@ uint RenderObjectManager::getNumVertices() const {
     {
         if ( ro->isVisible() && ro->getType() == Ra::Engine::RenderObjectType::Fancy )
         {
-            result += ro->getMesh()->getGeometry().m_vertices.size();
+            result += ro->getMesh()->getGeometry().vertices().size();
         }
     }
     return result;
@@ -140,7 +140,7 @@ Core::Aabb RenderObjectManager::getSceneAabb() const {
         {
             Core::Transform t = ro->getComponent()->getEntity()->getTransform();
             auto mesh = ro->getMesh();
-            auto pos = mesh->getGeometry().m_vertices;
+            auto pos = mesh->getGeometry().vertices();
 
             for ( auto& p : pos )
             {
