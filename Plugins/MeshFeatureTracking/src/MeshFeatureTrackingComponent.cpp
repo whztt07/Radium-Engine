@@ -53,12 +53,12 @@ void MeshFeatureTrackingComponent::setScale( Scalar scale ) {
 int MeshFeatureTrackingComponent::getMaxV() const {
     if ( m_data.m_mode != PickingMode::RO && getRoMgr()->exists( m_pickedRoIdx ) )
     {
-        return Ra::Engine::RadiumEngine::getInstance()
-            ->getRenderObjectManager()
+        return getRoMgr()
             ->getRenderObject( m_pickedRoIdx )
             ->getMesh()
             ->getGeometry()
-            .m_vertices.size();
+            .vertices()
+            .size();
     }
     return 0;
 }
@@ -66,9 +66,7 @@ int MeshFeatureTrackingComponent::getMaxV() const {
 int MeshFeatureTrackingComponent::getMaxT() const {
     if ( m_data.m_mode != PickingMode::RO && getRoMgr()->exists( m_pickedRoIdx ) )
     {
-        auto ro =
-            Ra::Engine::RadiumEngine::getInstance()->getRenderObjectManager()->getRenderObject(
-                m_pickedRoIdx );
+        auto ro = getRoMgr()->getRenderObject( m_pickedRoIdx );
         if ( ro->getMesh()->getRenderMode() == MeshRenderMode::RM_TRIANGLES )
         {
             return ro->getMesh()->getGeometry().m_triangles.size();
@@ -557,7 +555,9 @@ void MeshFeatureTrackingComponent::setTriangleIdx( int idx ) {
 
 void MeshFeatureTrackingComponent::update() {
     // check supported picking mode
-    if ( m_data.m_mode != PickingMode::RO && getRoMgr()->exists( m_pickedRoIdx ) )
+    if ( m_data.m_mode != PickingMode::RO &&
+         m_data.m_mode <= PickingMode::TRIANGLE &&
+         getRoMgr()->exists( m_pickedRoIdx ) )
     {
         setPosition( getFeaturePosition() );
         setScale( getFeatureScale() );
@@ -578,13 +578,12 @@ Scalar MeshFeatureTrackingComponent::getFeatureScale() const {
     }
 
     // manage picking mode
-    auto ro = Ra::Engine::RadiumEngine::getInstance()->getRenderObjectManager()->getRenderObject(
-        m_pickedRoIdx );
+    auto ro = getRoMgr()->getRenderObject( m_pickedRoIdx );
     if ( ro->getMesh()->getRenderMode() == MeshRenderMode::RM_POINTS )
     {
         return ro->getAabb().sizes().norm() / 500;
     }
-    const auto& v = ro->getMesh()->getGeometry().m_vertices;
+    const auto& v = ro->getMesh()->getGeometry().vertices();
     switch ( m_data.m_mode )
     {
     case PickingMode::VERTEX:
@@ -633,9 +632,8 @@ Ra::Core::Vector3 MeshFeatureTrackingComponent::getFeaturePosition() const {
     }
 
     // manage picking mode
-    auto ro = Ra::Engine::RadiumEngine::getInstance()->getRenderObjectManager()->getRenderObject(
-        m_pickedRoIdx );
-    const auto& v = ro->getMesh()->getGeometry().m_vertices;
+    auto ro = getRoMgr()->getRenderObject( m_pickedRoIdx );
+    const auto& v = ro->getMesh()->getGeometry().vertices();
     Ra::Core::Vector3 P( 0, 0, 0 );
     switch ( m_data.m_mode )
     {

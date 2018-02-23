@@ -5,7 +5,6 @@
 #include <Core/Mesh/HalfEdge.hpp>
 #include <Core/Mesh/MeshUtils.hpp>
 #include <Engine/Renderer/OpenGL/OpenGL.hpp>
-
 namespace Ra {
 namespace Engine {
 
@@ -29,13 +28,9 @@ Mesh::~Mesh() {
     if ( m_vao != 0 )
     {
         GL_ASSERT( glDeleteVertexArrays( 1, &m_vao ) );
-
         for ( auto& vbo : m_vbos )
         {
-            if ( vbo != 0 )
-            {
-                glDeleteBuffers( 1, &vbo );
-            }
+            glDeleteBuffers( 1, &vbo );
         }
     }
 }

@@ -27,7 +27,7 @@ void MeshConverter::convert( TopologicalMesh& in, TriangleMesh& out ) {
     };
 
     out.clear();
-    using vMap = std::map<vertexData, int, comp_vec>;
+    typedef std::map<vertexData, int, comp_vec> vMap;
 
     vMap vertexHandles;
 
@@ -123,6 +123,7 @@ void MeshConverter::convert( const TriangleMesh& in, TopologicalMesh& out ) {
                     out.halfedge_handle( face_vhandles[vindex], fh );
                 out.property( out.halfedge_normals_pph(), heh ) = face_normals[vindex];
             }
+
             face_vhandles.clear();
         }
     }
