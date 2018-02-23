@@ -27,7 +27,7 @@ void MeshConverter::convert( TopologicalMesh& in, TriangleMesh& out ) {
     };
 
     out.clear();
-    using vMap = std::map<vertexData, int, comp_vec>;
+    typedef std::map<vertexData, int, comp_vec> vMap;
 
     vMap vertexHandles;
 
@@ -65,7 +65,7 @@ void MeshConverter::convert( TopologicalMesh& in, TriangleMesh& out ) {
                 vi = vertexIndex++;
                 vertexHandles.insert( vtr, vMap::value_type( v, vi ) );
                 out.vertices().push_back( v._vertex );
-                out.normals().emplace_back( v._normal );
+                out.normals().push_back( v._normal );
             } else
             { vi = vtr->second; }
             indices[i] = vi;
@@ -89,7 +89,7 @@ void MeshConverter::convert( const TriangleMesh& in, TopologicalMesh& out ) {
     out = TopologicalMesh();
     out.garbage_collection();
     out.request_halfedge_normals();
-
+    out.request_vertex_normals();
     typedef std::unordered_map<Vector3, TopologicalMesh::VertexHandle, hash_vec> vMap;
     vMap vertexHandles;
 
@@ -108,6 +108,7 @@ void MeshConverter::convert( const TriangleMesh& in, TopologicalMesh& out ) {
         {
             vh = out.add_vertex( p );
             vertexHandles.insert( vtr, vMap::value_type( p, vh ) );
+            out.set_normal( vh, TopologicalMesh::Normal( n[0], n[1], n[2] ) );
         } else
         { vh = vtr->second; }
         face_vhandles.push_back( vh );
@@ -118,9 +119,11 @@ void MeshConverter::convert( const TriangleMesh& in, TopologicalMesh& out ) {
             TopologicalMesh::FaceHandle fh = out.add_face( face_vhandles );
             for ( int vindex = 0; vindex < face_vhandles.size(); vindex++ )
             {
-                TopologicalMesh::HalfedgeHandle heh = out.halfedge_handle( face_vhandles[i], fh );
-                out.property( out.halfedge_normals_pph(), heh ) = face_normals[i];
+                TopologicalMesh::HalfedgeHandle heh =
+                    out.halfedge_handle( face_vhandles[vindex], fh );
+                out.property( out.halfedge_normals_pph(), heh ) = face_normals[vindex];
             }
+
             face_vhandles.clear();
         }
     }

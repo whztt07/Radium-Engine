@@ -101,15 +101,15 @@ class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<Topol
 
     using base::halfedge_handle;
     HalfedgeHandle halfedge_handle( VertexHandle vh, FaceHandle fh ) {
-        HalfedgeHandle heh = opposite_halfedge_handle( halfedge_handle( vh ) );
-        int i = 0;
-        while ( face_handle( heh ) != fh )
+
+        for ( VertexIHalfedgeIter vih_it = vih_iter( vh ); vih_it; ++vih_it )
         {
-            heh = opposite_halfedge_handle( next_halfedge_handle( heh ) );
-            i++;
-            CORE_ASSERT( i < 40, "there is more than 40 faces around a vertex" );
+            if ( face_handle( *vih_it ) == fh )
+            {
+                return vih_it;
+            }
         }
-        return heh;
+        return HalfedgeHandle();
     }
 };
 } // namespace Core

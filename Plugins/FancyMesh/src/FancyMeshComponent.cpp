@@ -79,20 +79,20 @@ void FancyMeshComponent::handleMeshLoading( const Ra::Asset::GeometryData* data 
     Ra::Core::Transform N;
     N.matrix() = ( T.matrix() ).inverse().transpose();
 
-    mesh.m_vertices.resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
+    mesh.vertices().resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
 #pragma omp parallel for
     for ( uint i = 0; i < data->getVerticesSize(); ++i )
     {
-        mesh.m_vertices[i] = T * data->getVertices()[i];
+        mesh.vertices()[i] = T * data->getVertices()[i];
     }
 
     if ( data->hasNormals() )
     {
-        mesh.m_normals.resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
+        mesh.normals().resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
 #pragma omp parallel for
         for ( uint i = 0; i < data->getVerticesSize(); ++i )
         {
-            mesh.m_normals[i] = ( N * data->getNormals()[i] ).normalized();
+            mesh.normals()[i] = ( N * data->getNormals()[i] ).normalized();
         }
     }
 
@@ -271,12 +271,12 @@ void FancyMeshComponent::setMeshInput( const TriangleMesh* meshptr ) {
     displayMesh.loadGeometry( *meshptr );
 }
 
-Ra::Core::TriangleMesh::vertex_attrib_data_type::data_type* FancyMeshComponent::getVerticesRw() {
+Ra::Core::TriangleMesh::PointAttribHandle::Container* FancyMeshComponent::getVerticesRw() {
     getDisplayMesh().setDirty( Ra::Engine::Mesh::VERTEX_POSITION );
     return &( getDisplayMesh().getGeometry().vertices() );
 }
 
-Ra::Core::TriangleMesh::normal_attrib_data_type::data_type* FancyMeshComponent::getNormalsRw() {
+Ra::Core::TriangleMesh::NormalAttribHandle::Container* FancyMeshComponent::getNormalsRw() {
     getDisplayMesh().setDirty( Ra::Engine::Mesh::VERTEX_NORMAL );
     return &( getDisplayMesh().getGeometry().normals() );
 }

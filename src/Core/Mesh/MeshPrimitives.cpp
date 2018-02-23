@@ -30,7 +30,7 @@ TriangleMesh makeBox( const Vector3& halfExts ) {
 
 TriangleMesh makeBox( const Aabb& aabb ) {
     TriangleMesh result;
-    result.m_vertices = {
+    result.vertices() = {
         aabb.corner( Aabb::BottomLeftFloor ), aabb.corner( Aabb::BottomRightFloor ),
         aabb.corner( Aabb::TopLeftFloor ),    aabb.corner( Aabb::TopRightFloor ),
         aabb.corner( Aabb::BottomLeftCeil ),  aabb.corner( Aabb::BottomRightCeil ),
@@ -44,7 +44,7 @@ TriangleMesh makeBox( const Aabb& aabb ) {
         Triangle( 4, 5, 6 ), Triangle( 6, 5, 7 )  // Top
     };
 
-    getAutoNormals( result, result.m_normals );
+    getAutoNormals( result, result.normals() );
     checkConsistency( result );
     return result;
 }
@@ -56,7 +56,7 @@ TriangleMesh makeSharpBox( const Vector3& halfExts ) {
 
 TriangleMesh makeSharpBox( const Aabb& aabb ) {
     TriangleMesh result;
-    result.m_vertices = {// Floor Face
+    result.vertices() = {// Floor Face
                          aabb.corner( Aabb::BottomLeftFloor ), aabb.corner( Aabb::TopLeftFloor ),
                          aabb.corner( Aabb::TopRightFloor ), aabb.corner( Aabb::BottomRightFloor ),
 
@@ -92,7 +92,7 @@ TriangleMesh makeSharpBox( const Aabb& aabb ) {
         Triangle( 20, 21, 22 ), Triangle( 20, 22, 23 )  // Top
     };
 
-    getAutoNormals( result, result.m_normals );
+    getAutoNormals( result, result.normals() );
     checkConsistency( result );
     return result;
 }
@@ -101,7 +101,7 @@ TriangleMesh makeGeodesicSphere( Scalar radius, uint numSubdiv ) {
     TriangleMesh result;
     // First, make an icosahedron.
     // Top vertex
-    result.m_vertices.push_back( Vector3( 0, 0, radius ) );
+    result.vertices().push_back( Vector3( 0, 0, radius ) );
 
     const Scalar sq5_5 = radius * std::sqrt( 5.f ) / 5.f;
 
@@ -115,12 +115,12 @@ TriangleMesh makeGeodesicSphere( Scalar radius, uint numSubdiv ) {
             const Scalar x = 2.f * sq5_5 * std::cos( theta );
             const Scalar y = 2.f * sq5_5 * std::sin( theta );
             const Scalar z = j == 0 ? sq5_5 : -sq5_5;
-            result.m_vertices.push_back( Vector3( x, y, z ) );
+            result.vertices().push_back( Vector3( x, y, z ) );
         }
     }
 
     // Bottom vertex
-    result.m_vertices.push_back( Vector3( 0, 0, -radius ) );
+    result.vertices().push_back( Vector3( 0, 0, -radius ) );
 
     for ( int i = 0; i < 5; ++i )
     {
@@ -246,9 +246,9 @@ TriangleMesh makeCapsule( Scalar length, Scalar radius, uint nFaces ) {
         Scalar y = std::sin( theta ) * radius;
 
         // Create 3 circles
-        result.m_vertices.push_back( Vector3( x, y, -l ) );
-        result.m_vertices.push_back( Vector3( x, y, 0.0 ) );
-        result.m_vertices.push_back( Vector3( x, y, l ) );
+        result.vertices().push_back( Vector3( x, y, -l ) );
+        result.vertices().push_back( Vector3( x, y, 0.0 ) );
+        result.vertices().push_back( Vector3( x, y, l ) );
     }
 
     // Cylinder side faces
@@ -270,7 +270,7 @@ TriangleMesh makeCapsule( Scalar length, Scalar radius, uint nFaces ) {
 
     // Part 2 : create the bottom hemisphere.
     const Scalar phiInc = Core::Math::Pi / Scalar( nFaces );
-    uint vert_count = result.m_vertices.size();
+    uint vert_count = result.vertices().size();
 
     // Bottom hemisphere vertices
     for ( uint j = 1; j <= nFaces / 2 - 1; ++j )
@@ -285,11 +285,11 @@ TriangleMesh makeCapsule( Scalar length, Scalar radius, uint nFaces ) {
             const Scalar y = radius * std::sin( theta ) * std::sin( phi );
             const Scalar z = radius * std::cos( phi );
 
-            result.m_vertices.push_back( Vector3( x, y, z - l ) );
+            result.vertices().push_back( Vector3( x, y, z - l ) );
         }
     }
     // Add bottom point (south pole)
-    result.m_vertices.push_back( Vector3( 0, 0, -( l + radius ) ) );
+    result.vertices().push_back( Vector3( 0, 0, -( l + radius ) ) );
 
     // First ring of sphere triangles (joining with the cylinder)
     for ( uint i = 0; i < nFaces; ++i )
@@ -419,18 +419,18 @@ TriangleMesh makeTube( const Vector3& a, const Vector3& b, Scalar outerRadius, S
     for ( uint i = 0; i < nFaces; ++i )
     {
         const Scalar theta = i * thetaInc;
-        result.m_vertices.push_back(
+        result.vertices().push_back(
             a + outerRadius * ( std::cos( theta ) * xPlane + std::sin( theta ) * yPlane ) );
-        result.m_vertices.push_back(
+        result.vertices().push_back(
             c + outerRadius * ( std::cos( theta ) * xPlane + std::sin( theta ) * yPlane ) );
-        result.m_vertices.push_back(
+        result.vertices().push_back(
             b + outerRadius * ( std::cos( theta ) * xPlane + std::sin( theta ) * yPlane ) );
 
-        result.m_vertices.push_back(
+        result.vertices().push_back(
             a + innerRadius * ( std::cos( theta ) * xPlane + std::sin( theta ) * yPlane ) );
-        result.m_vertices.push_back(
+        result.vertices().push_back(
             c + innerRadius * ( std::cos( theta ) * xPlane + std::sin( theta ) * yPlane ) );
-        result.m_vertices.push_back(
+        result.vertices().push_back(
             b + innerRadius * ( std::cos( theta ) * xPlane + std::sin( theta ) * yPlane ) );
     }
 

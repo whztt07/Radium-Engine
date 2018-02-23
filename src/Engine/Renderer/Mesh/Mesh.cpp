@@ -5,7 +5,6 @@
 #include <Core/Mesh/HalfEdge.hpp>
 #include <Core/Mesh/MeshUtils.hpp>
 #include <Engine/Renderer/OpenGL/OpenGL.hpp>
-
 namespace Ra {
 namespace Engine {
 
@@ -29,13 +28,9 @@ Mesh::~Mesh() {
     if ( m_vao != 0 )
     {
         GL_ASSERT( glDeleteVertexArrays( 1, &m_vao ) );
-
         for ( auto& vbo : m_vbos )
         {
-            if ( vbo != 0 )
-            {
-                glDeleteBuffers( 1, &vbo );
-            }
+            glDeleteBuffers( 1, &vbo );
         }
     }
 }
@@ -69,9 +64,8 @@ void Mesh::loadGeometry( const Core::TriangleMesh& mesh ) {
 void Mesh::updateMeshGeometry( MeshData type, const Core::Vector3Array& data ) {
     if ( type == VERTEX_POSITION )
         m_mesh.vertices() = data;
-    ///\todo check here
-    //            if(type == VERTEX_NORMAL)
-    //                m_mesh.m_normals = data;
+    if ( type == VERTEX_NORMAL )
+        m_mesh.normals() = data;
     m_dataDirty[static_cast<uint>( type )] = true;
     m_isDirty = true;
 }
@@ -113,7 +107,12 @@ void Mesh::loadGeometry( const Core::Vector3Array& vertices, const std::vector<u
 }
 
 void Mesh::addData( const Vec3Data& type, const Core::Vector3Array& data ) {
-    m_v3Data[static_cast<uint>( type )] = data;
+    const int index = static_cast<uint>( type );
+    if ( !m_v3DataHandle[index].valid() )
+    {
+        m_mesh.attribManager().addAttrib( m_v3DataHandle[index], std::to_string( index ) );
+    }
+    m_mesh.attribManager().getAttrib( m_v3DataHandle[index] ).data() = data;
     m_dataDirty[MAX_MESH + static_cast<uint>( type )] = true;
     m_isDirty = true;
 }
@@ -204,13 +203,22 @@ void Mesh::updateGL() {
 
         // Geometry data
         sendGLData( m_mesh.vertices(), VERTEX_POSITION );
-        ///\todo check here
-        //              sendGLData(m_mesh.m_normals,  VERTEX_NORMAL);
+        sendGLData( m_mesh.normals(), VERTEX_NORMAL );
 
         // Vec3 data
-        sendGLData( m_v3Data[VERTEX_TANGENT], MAX_MESH + VERTEX_TANGENT );
-        sendGLData( m_v3Data[VERTEX_BITANGENT], MAX_MESH + VERTEX_BITANGENT );
-        sendGLData( m_v3Data[VERTEX_TEXCOORD], MAX_MESH + VERTEX_TEXCOORD );
+
+        if ( m_v3DataHandle[VERTEX_TANGENT].valid() )
+            sendGLData( m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_TANGENT] ).data(),
+                        MAX_MESH + VERTEX_TANGENT );
+        //                sendGLData(m_v3Data[VERTEX_TANGENT],   MAX_MESH +
+        //                VERTEX_TANGENT);
+        if ( m_v3DataHandle[VERTEX_BITANGENT].valid() )
+            sendGLData( m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_BITANGENT] ).data(),
+                        MAX_MESH + VERTEX_BITANGENT );
+        if ( m_v3DataHandle[VERTEX_TEXCOORD].valid() )
+            sendGLData( m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_TEXCOORD] ).data(),
+                        MAX_MESH + VERTEX_TEXCOORD );
+        //                    sendGLData(m_v3Data[VERTEX_TEXCOORD],  MAX_MESH + VERTEX_TEXCOORD);
 
         // Vec4 data
         sendGLData( m_v4Data[VERTEX_COLOR], MAX_MESH + MAX_VEC3 + VERTEX_COLOR );

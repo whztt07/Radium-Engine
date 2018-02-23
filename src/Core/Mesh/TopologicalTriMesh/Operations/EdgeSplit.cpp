@@ -38,13 +38,13 @@ void splitEdge( TopologicalMesh& topologicalMesh, TopologicalMesh::EdgeHandle ed
 
     TopologicalMesh::Point p = TopologicalMesh::Point(
         fraction * topologicalMesh.point( v1 ) + ( 1. - fraction ) * topologicalMesh.point( v2 ) );
-    TopologicalMesh::Normal n =
-        TopologicalMesh::Normal( ( fraction * topologicalMesh.normal( v1 ) +
-                                   ( 1. - fraction ) * topologicalMesh.normal( v2 ) )
-                                     .normalized() );
+
+    //        TopologicalMesh::Normal n =  TopologicalMesh::Normal((fraction *
+    //        topologicalMesh.normal(v1) + (1. - fraction) *
+    //        topologicalMesh.normal(v2)).normalized());
 
     TopologicalMesh::VertexHandle vh = topologicalMesh.add_vertex( p );
-    topologicalMesh.set_normal( vh, n );
+    //        topologicalMesh.set_normal(vh,n);
     topologicalMesh.split( edgeHandle, vh );
 }
 } // namespace TMOperations

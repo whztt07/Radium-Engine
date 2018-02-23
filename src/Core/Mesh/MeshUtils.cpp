@@ -1,3 +1,5 @@
+#include <Core/Mesh/MeshUtils.hpp>
+
 #include <Core/Log/Log.hpp>
 #include <Core/Math/Math.hpp>
 #include <Core/Math/RayCast.hpp>
@@ -14,8 +16,9 @@
 namespace Ra {
 namespace Core {
 namespace MeshUtils {
+
 void getAutoNormals( TriangleMesh& mesh, VectorArray<Vector3>& normalsOut ) {
-    const uint numVertices = mesh.m_vertices.size();
+    const uint numVertices = mesh.vertices().size();
     const uint numTriangles = mesh.m_triangles.size();
 
     normalsOut.clear();
@@ -107,11 +110,11 @@ void removeDuplicates( TriangleMesh& mesh, std::vector<VertexIdx>& vertexMap ) {
         }
     }
 
-    vertexMap.resize( mesh.m_vertices.size() );
-    for ( uint i = 0; i < mesh.m_vertices.size(); i++ )
+    vertexMap.resize( mesh.vertices().size() );
+    for ( uint i = 0; i < mesh.vertices().size(); i++ )
         vertexMap[i] = newIndices[duplicatesMap[i]];
 
-    mesh.m_vertices = uniqueVertices;
+    mesh.vertices() = uniqueVertices;
 }
 
 RayCastResult castRay( const TriangleMesh& mesh, const Ray& ray ) {
@@ -231,7 +234,7 @@ Scalar getMeanEdgeLength( const TriangleMesh& mesh ) {
 
 void checkConsistency( const TriangleMesh& mesh ) {
 #ifdef CORE_DEBUG
-    std::vector<bool> visited( mesh.m_vertices.size(), false );
+    std::vector<bool> visited( mesh.vertices().size(), false );
     for ( uint t = 0; t < mesh.m_triangles.size(); ++t )
     {
         CORE_WARN_IF( !( getTriangleArea( mesh, t ) > 0.f ), "Triangle " << t << " is degenerate" );
