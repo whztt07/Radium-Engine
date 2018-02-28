@@ -17,11 +17,11 @@ layout (location = 0) in vec3 in_position[3];
 layout (location = 1) in vec3 in_normal[3];
 layout (location = 2) in vec3 in_eye[3];
 
-layout (location = 0) out vec3  out_position;
-layout (location = 1) out vec3  out_normal;
-layout (location = 2) out vec3  out_eye;
-layout (location = 3) out int   out_eltID;
-layout (location = 4) out vec3  out_eltCoords;
+layout (location = 0)      out vec3  out_position;
+layout (location = 1)      out vec3  out_normal;
+layout (location = 2)      out vec3  out_eye;
+layout (location = 3) flat out int   out_eltID;
+layout (location = 4)      out vec3  out_eltCoords;
 
 void main()
 {
