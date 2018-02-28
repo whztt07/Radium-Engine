@@ -241,6 +241,7 @@ namespace Ra
         {
             renderer->addLight( m_camera->getLight() );
         }
+		renderer->lockRendering();
     }
 
     void Gui::Viewer::resizeGL( int width_, int height_ )

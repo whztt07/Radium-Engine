@@ -441,10 +441,10 @@ namespace Ra
                     }
                     GL_ASSERT( glReadPixels( query.m_screenCoords.x(), query.m_screenCoords.y(),
                                              1, 1, GL_RGBA_INTEGER, GL_INT, pick ) );
-                    result.m_roIdx = pick[0];                   // RO idx
-                    result.m_vertexIdx.emplace_back( pick[1] ); // vertex idx in the element
+                    result.m_roIdx = pick[0];                    // RO idx
+                    result.m_vertexIdx.emplace_back( pick[1] );  // vertex idx in the element
                     result.m_elementIdx.emplace_back( pick[2] ); // element idx
-                    result.m_edgeIdx.emplace_back( pick[3] ); // edge opposite idx for triangles
+                    result.m_edgeIdx.emplace_back( pick[3] );    // edge opposite idx for triangles
                     result.m_weights.emplace_back( 1.0 );
                 }
                 else
