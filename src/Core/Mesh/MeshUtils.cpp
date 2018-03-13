@@ -97,13 +97,14 @@ namespace Ra
 
                 std::vector<VertexIdx> newIndices(mesh.m_vertices.size(), VertexIdx(-1));
                 Vector3Array uniqueVertices;
+                Vector3Array uniqueNormals;
                 for (uint i = 0; i < mesh.m_vertices.size(); i++)
                 {
                     if (duplicatesMap[i] == i)
                     {
                         newIndices[i] = uniqueVertices.size();
                         uniqueVertices.push_back(mesh.m_vertices[i]);
-
+                        uniqueNormals.push_back(mesh.m_normals[i]);
                     }
                 }
 
@@ -130,6 +131,7 @@ namespace Ra
                     vertexMap[i] = newIndices[duplicatesMap[i]];
 
                 mesh.m_vertices = uniqueVertices;
+                mesh.m_normals  = uniqueNormals;
             }
 
             RayCastResult castRay(const TriangleMesh &mesh, const Ray &ray)
