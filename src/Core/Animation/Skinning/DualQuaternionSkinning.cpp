@@ -9,29 +9,19 @@ void computeDQ( const Pose& pose, const WeightMatrix& weight, DQList& DQ ) {
     DQ.resize( weight.rows(), DualQuaternion( Quaternion( 0, 0, 0, 0 ), Quaternion( 0, 0, 0, 0 ) ) );
 
     // Stores the first non-zero quaternion for each vertex.
-    std::vector<uint> firstNonZero( weight.rows(), std::numeric_limits<uint>::max());
+    std::vector<int> firstNonZero( weight.rows(), std::numeric_limits<int>::max() );
 
     // Contains the converted dual quaternions from the pose
-    std::vector<DualQuaternion> poseDQ(pose.size());
+    std::vector<DualQuaternion> poseDQ( pose.size() );
     //poseDQ.reserve( pose.size());
 
     // Loop through all transforms Tj
     for( int j = 0; j < weight.outerSize(); ++j ) {
-        poseDQ[j] = DualQuaternion( pose[j]);
+        const auto poseDQj = poseDQ[j] = DualQuaternion( pose[j] );
         // Count how many vertices are influenced by the given transform
         const int nonZero = weight.col( j ).nonZeros();
 
         WeightMatrix::InnerIterator it0( weight, j );
-        /*
-#if defined CORE_USE_OMP
-        omp_set_dynamic(0);
-        #pragma omp parallel for schedule( static ) num_threads(4)
-#endif
-        */
-        #pragma omp parallel for
-        // This for loop is here just because OpenMP wants classic for loops.
-        // Since we cannot iterate directly through the non-zero elements using the InnerIterator,
-        // we initialize an InnerIterator to the first element and then we increase it nz times.
         /*
         * This crappy piece of code was done in order to avoid the critical section
         *           DQ[i] += wq;
@@ -41,28 +31,24 @@ void computeDQ( const Pose& pose, const WeightMatrix& weight, DQList& DQ ) {
         * NOTE: this could be definitely improved by using std::thread
         */
         // Loop through all vertices vi who depend on Tj
-        for( int nz = 0; nz < nonZero; ++nz ) {
+        #pragma omp parallel for
+        for( int nz = 0; nz < nonZero; ++nz )
+        {
             WeightMatrix::InnerIterator itn = it0 + Eigen::Index(nz);
-            const uint   i  = itn.row();
-            const Scalar w  = itn.value();
+            const uint   i = itn.row();
+            const Scalar w = itn.value();
 
-            firstNonZero[i] = std::min( firstNonZero[i], uint(j) );
-            const Scalar sign =  Ra::Core::Math::signNZ(  poseDQ[j].getQ0().dot(poseDQ[firstNonZero[i]].getQ0()));
+            firstNonZero[i] = std::min( firstNonZero[i], j );
+            const Scalar sign = Ra::Core::Math::signNZ( poseDQj.getQ0().dot(poseDQ[firstNonZero[i]].getQ0()) );
 
-            const auto  wq = poseDQ[j] * w * sign;
-            DQ[i] += wq;
+            DQ[i] += poseDQj * w * sign;
         }
     }
 
     // Normalize all dual quats.
-    /*
-#if defined CORE_USE_OMP
-    omp_set_dynamic(0);
-#endif
-    #pragma omp parallel for schedule( static ) num_threads(4)
-    */
     #pragma omp parallel for
-    for( int i = 0; i < int(DQ.size()) ; ++i) {
+    for( int i = 0; i < int(DQ.size()) ; ++i)
+    {
         DQ[i].normalize();
     }
 }

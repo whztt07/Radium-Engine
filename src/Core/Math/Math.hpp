@@ -30,6 +30,7 @@ namespace Ra
 
             constexpr Scalar machineEps = std::numeric_limits<Scalar>::epsilon();
             constexpr Scalar dummyEps   = Scalar(1e-5);
+            constexpr Scalar dummyEps2  = Scalar(1e-10);
 
             /// Useful functions
 
