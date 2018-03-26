@@ -35,9 +35,9 @@ namespace FancyMeshPlugin
 {
     FancyMeshComponent::FancyMeshComponent(const std::string& name , bool deformable)
         : Ra::Engine::Component( name  )
-        , m_deformable( deformable )
         , m_basicMat( nullptr )
         , m_texturedMat( nullptr )
+        , m_deformable( deformable )
     {
     }
 

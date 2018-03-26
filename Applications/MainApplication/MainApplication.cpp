@@ -61,6 +61,7 @@ namespace Ra
         , m_frameTimer( new QTimer( this ) )
         , m_frameCounter( 0 )
         , m_numFrames( 0 )
+        , m_maxThreads( 0 )
         , m_realFrameRate( false )
         , m_recordFrames( false )
         , m_recordTimings( false )
