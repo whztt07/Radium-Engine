@@ -62,7 +62,7 @@ Scalar g_tendon_proportion = 0.1;  // percentage of the muscle length which is c
 
 Scalar g_massFactor = 0.5f; // multiplicator of all masses.
 
-Scalar g_stiffness = 0.15f;          // Stiffness of the spring constraints (0.2f);
+Scalar g_stiffness = 0.60f;          // Stiffness of the spring constraints (0.2f);
 Scalar g_rest_length= 0.02f;        // Rest length fraction of the spring constraint ( 0.02f)
 Scalar g_tendon_stiffness = 1.f;   // Stiffness of spring for tendon sections (1.f)
 Scalar g_tendon_rest_length = -1.f; // Rest length of srping of tendon section (-1.f)

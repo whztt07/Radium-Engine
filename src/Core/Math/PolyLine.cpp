@@ -81,6 +81,11 @@ Scalar PolyLine::project( const Vector3& p ) const
     }
 
     CORE_ASSERT( segment < m_ptsDiff.size(), "Invalid index" );
+    if ( segment < 0)
+    {
+        segment = 0;
+        //BREAKPOINT(0);
+    }
 
     // Our answer would normally be the closest projected point from all segments.
     Scalar t  = ts[segment];
