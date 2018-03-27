@@ -208,6 +208,22 @@ namespace Ra
                 }
             }
 
+            // See "Efficient feature extraction for 2D/3D objects in mesh representation"
+            // Cha Zhang and Tsuhan Chen, 2001
+            Scalar getVolume(const TriangleMesh &mesh, const Vector3 &origin)
+            {
+                Scalar volume {0};
+                for (const auto& t : mesh.m_triangles)
+                {
+                    Vector3 a = mesh.m_vertices[t[0]] - origin;
+                    Vector3 b = mesh.m_vertices[t[1]] - origin;
+                    Vector3 c = mesh.m_vertices[t[2]] - origin;
+
+                    volume += (a.dot(b.cross(c)));
+                }
+                return std::abs(volume) / Scalar (6);
+            }
+
 
 
         } // namespace MeshUtils

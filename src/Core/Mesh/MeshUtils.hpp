@@ -23,7 +23,6 @@ namespace Ra
             /// Fills the given array with the vertices of a given triangle.
             inline void getTriangleVertices( const TriangleMesh& mesh, TriangleIdx triIdx,
                                                     std::array<Vector3, 3>& verticesOut );
-
             /// Returns the area of a given triangle.
             inline Scalar getTriangleArea( const TriangleMesh& mesh, TriangleIdx triIdx );
 
@@ -45,8 +44,9 @@ namespace Ra
             /// first occurrence.
             RA_CORE_API bool findDuplicates( const TriangleMesh& mesh, std::vector<VertexIdx>& duplicatesMap );
 
+            /// Removes the duplicate vertices in a given mesh, returning an array to map the previous triangles to the
+            /// new
             RA_CORE_API void removeDuplicates(TriangleMesh& mesh, std::vector<VertexIdx>& vertexMap);
-
 
             /// Returns a list of edges from a given triangle mesh
             RA_CORE_API inline std::vector<Ra::Core::Vector2ui> getEdges( const TriangleMesh& mesh );
@@ -62,6 +62,9 @@ namespace Ra
 
             /// Apply a transform to all vertices
             RA_CORE_API void bakeTransform( TriangleMesh& mesh, const Transform& T);
+
+            /// Compute the volume of a 3D mesh by summing the signed volume of a tetrahedron
+            RA_CORE_API Scalar getVolume( const TriangleMesh& mesh, const Ra::Core::Vector3& origin = Ra::Core::Vector3::Zero());
 
             //
             // Checks
