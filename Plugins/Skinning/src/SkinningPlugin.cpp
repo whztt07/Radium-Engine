@@ -44,7 +44,7 @@ namespace SkinningPlugin
 
     bool SkinningPluginC::doAddAction( int& nb )
     {
-        nb = 3;
+        nb = 4;
         return true;
     }
 
@@ -62,6 +62,10 @@ namespace SkinningPlugin
         case 2:
         {
             return m_widget->m_actionCoR;
+        }
+        case 3:
+        {
+            return m_widget->m_actionRS;
         }
         default:
             return nullptr;
@@ -95,21 +99,23 @@ namespace SkinningPlugin
         m_current( nullptr )
     {
         m_skinningSelect = new QComboBox( this );
-        m_skinningSelect->setMaxVisibleItems( 3 );
-        m_skinningSelect->setMaxCount( 3 );
+        m_skinningSelect->setMaxVisibleItems( 4 );
+        m_skinningSelect->setMaxCount( 4 );
         m_skinningSelect->setDuplicatesEnabled( false );
         m_skinningSelect->setCurrentIndex( 1 );
 
         m_skinningSelect->insertItems( 0, QStringList()
-            << "Linear Blend Skinning" << "Dual Quaternion Skinning" << "Center of Rotation skinning" );
+            << "Linear Blend Skinning" << "Dual Quaternion Skinning" << "Center of Rotation skinning"<<"Rigid Skinning" );
         m_skinningSelect->setEnabled( false );
 
         m_actionLBS = new QAction(QIcon(":/Assets/Images/LB.png"), QString("Linear Blending"),nullptr);
         m_actionDQ  = new QAction(QIcon(":/Assets/Images/DQ_on.png"), QString("Dual Quaternion"), nullptr);
         m_actionCoR = new QAction(QIcon(":/Assets/Images/CoR.png"), QString("Center of Rotation"),nullptr);
+        m_actionRS  = new QAction(QIcon(":/Assets/Images/CoR.png"), QString("Rigid"),nullptr);
         m_actionLBS->setEnabled( false );
         m_actionDQ->setEnabled( false );
         m_actionCoR->setEnabled( false );
+        m_actionRS->setEnabled( false );
 
         connect( m_skinningSelect,
             static_cast< void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
@@ -119,6 +125,7 @@ namespace SkinningPlugin
         connect( m_actionLBS, &QAction::triggered, this, &SkinningWidget::onLSBActionTriggered );
         connect( m_actionDQ,  &QAction::triggered, this, &SkinningWidget::onDQActionTriggered );
         connect( m_actionCoR, &QAction::triggered, this, &SkinningWidget::onCoRActionTriggered );
+        connect( m_actionRS, &QAction::triggered, this, &SkinningWidget::onRSActionTriggered );
     }
 
 
@@ -137,6 +144,11 @@ namespace SkinningPlugin
         m_skinningSelect->setCurrentIndex(2);
     }
 
+    void SkinningWidget::onRSActionTriggered()
+    {
+        m_skinningSelect->setCurrentIndex(3);
+    }
+
     void SkinningWidget::setCurrent( const Ra::Engine::ItemEntry& entry, SkinningComponent* comp )
     {
         m_current = comp;
@@ -146,6 +158,7 @@ namespace SkinningPlugin
             m_actionLBS->setEnabled( true );
             m_actionDQ->setEnabled( true );
             m_actionCoR->setEnabled( true );
+            m_actionRS->setEnabled( true );
             m_skinningSelect->setCurrentIndex( int( comp->getSkinningType() ) );
         }
         else
@@ -154,6 +167,7 @@ namespace SkinningPlugin
             m_actionLBS->setEnabled( false );
             m_actionDQ->setEnabled( false );
             m_actionCoR->setEnabled( false );
+            m_actionRS->setEnabled( false );
         }
     }
 
@@ -168,6 +182,7 @@ namespace SkinningPlugin
             m_actionLBS->setIcon(QIcon(":/Assets/Images/LB_on.png"));
             m_actionDQ->setIcon(QIcon(":/Assets/Images/DQ.png"));
             m_actionCoR->setIcon(QIcon(":/Assets/Images/CoR.png"));
+            m_actionRS->setIcon(QIcon(":/Assets/Images/CoR.png"));
             break;
         }
         case 1:
@@ -175,6 +190,7 @@ namespace SkinningPlugin
             m_actionLBS->setIcon(QIcon(":/Assets/Images/LB.png"));
             m_actionDQ->setIcon(QIcon(":/Assets/Images/DQ_on.png"));
             m_actionCoR->setIcon(QIcon(":/Assets/Images/CoR.png"));
+            m_actionRS->setIcon(QIcon(":/Assets/Images/CoR.png"));
             break;
         }
         case 2:
@@ -182,8 +198,18 @@ namespace SkinningPlugin
             m_actionLBS->setIcon(QIcon(":/Assets/Images/LB.png"));
             m_actionDQ->setIcon(QIcon(":/Assets/Images/DQ.png"));
             m_actionCoR->setIcon(QIcon(":/Assets/Images/CoR_on.png"));
+            m_actionRS->setIcon(QIcon(":/Assets/Images/CoR.png"));
             break;
         }
+        case 3:
+        {
+            m_actionLBS->setIcon(QIcon(":/Assets/Images/LB.png"));
+            m_actionDQ->setIcon(QIcon(":/Assets/Images/DQ.png"));
+            m_actionCoR->setIcon(QIcon(":/Assets/Images/CoR.png"));
+            m_actionRS->setIcon(QIcon(":/Assets/Images/CoR_on.png"));
+            break;
+        }
+
         default:
         {
             break;

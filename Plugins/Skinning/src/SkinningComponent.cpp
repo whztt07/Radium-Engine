@@ -93,6 +93,12 @@ void SkinningComponent::skin(Scalar dt)
 
             switch ( m_skinningType )
             {
+            case RIGID:
+            {
+                Ra::Core::Animation::rigidSkinning( m_refData.m_referenceMesh.m_vertices, m_frameData.m_refToCurrentRelPose, m_refData.m_weights, m_frameData.m_currentPos );
+                break;
+            }
+
             case LBS:
             {
                 Ra::Core::Animation::linearBlendSkinning( m_refData.m_referenceMesh.m_vertices, m_frameData.m_refToCurrentRelPose, m_refData.m_weights, m_frameData.m_currentPos );

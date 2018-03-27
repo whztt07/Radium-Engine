@@ -47,6 +47,7 @@ private slots:
     void onLSBActionTriggered();
     void onDQActionTriggered();
     void onCoRActionTriggered();
+    void onRSActionTriggered();
 
 private:
     SkinningComponent* m_current;
@@ -54,6 +55,7 @@ private:
     QAction* m_actionLBS;
     QAction* m_actionDQ;
     QAction* m_actionCoR;
+    QAction* m_actionRS;
 };
 
 // Du to an ambiguous name while compiling with Clang, must differentiate plugin claas from plugin namespace

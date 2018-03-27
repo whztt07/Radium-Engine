@@ -23,7 +23,8 @@ namespace SkinningPlugin
         {
             LBS = 0, // Linear Blend Skinning
             DQS,     // Dual Quaternion Skinning
-            COR      // Center of Rotation skinning
+            COR,      // Center of Rotation skinning
+            RIGID     // Rigid skinning
         };
 
         SkinningComponent( const std::string& name, SkinningType type = DQS)

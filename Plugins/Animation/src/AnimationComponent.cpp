@@ -272,6 +272,20 @@ namespace AnimationPlugin
             }
         }
 
+        for (int k = 0; k < m_weights.innerSize(); ++k)
+        {
+            const Scalar sum = m_weights.row( k ).sum();
+            if(! Ra::Core::Math::areApproxEqual(sum, Scalar(0)))
+            {
+                if (! Ra::Core::Math::areApproxEqual(sum, Scalar(1)))
+                {
+                    m_weights.row( k ) /= sum;
+                }
+            }
+        }
+
+
+
         Ra::Core::Animation::checkWeightMatrix( m_weights, false );
     }
 
