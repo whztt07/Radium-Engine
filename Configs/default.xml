@@ -18,7 +18,7 @@
 		<information id="action" value="VIEWER_LEFT_BUTTON_PICKING_QUERY"></information>
 	</keymap>
 	<keymap>
-		<information id="type" modifier="NoModifier" type="key" value="Key_Space"></information>
+		<information id="type" modifier="NoModifier" type="key" value="Key_R"></information>
 		<information id="action" value="VIEWER_RAYCAST_QUERY"></information>
 	</keymap>
 	<keymap>
