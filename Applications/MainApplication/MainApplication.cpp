@@ -74,7 +74,9 @@ Scalar g_keep_inside_stiffness = 1.5f; // Stiffness of the collision vs skin con
 Scalar g_iso_inside = 1.f; // Target iso of the inside constraint (0.01f)
 
 //Scalar g_physics_time_step = 0.001f; // Duration of the physics time step
-Scalar g_physics_time_step = 0.005f; // Duration of the physics time step
+//Scalar g_physics_time_step = 0.005f; // Duration of the physics time step
+uint g_physics_iter = 10;  // number of physics steps per frame
+uint g_framerate = 30;
 
 const uint * g_frame_num_ptr;
 
@@ -138,7 +140,7 @@ namespace Ra
         QCommandLineOption subdivOpt(QStringList{"subdiv"}, "run subdivision","","");
         QCommandLineOption autoplayOpt(QStringList{"autoplay"}, "autoplay animation","","");
         QCommandLineOption animSpeedOpt(QStringList{"animspeed"}, "autoplay animation","scalar","1.0");
-        QCommandLineOption timeStepOpt(QStringList{"timestep"}, "physics time step","scalar","0.001");
+        QCommandLineOption physicsIterOp(QStringList{"timestep"}, "physics iterations","int","10");
         QCommandLineOption numParticlesOpt(QStringList{"numparticles"}, "number of particles","integer","30");
 
 
@@ -155,11 +157,12 @@ namespace Ra
 
 
         parser.addOptions({fpsOpt, pluginOpt, pluginLoadOpt, pluginIgnoreOpt, fileOpt, camOpt, maxThreadsOpt, numFramesOpt, exportOpt,timingsOpt });
-        parser.addOptions({ showAnatOpt, runAnatOpt, transISOpt, subdivOpt, saveMeshes, saveFrames, autoplayOpt, animSpeedOpt, timeStepOpt, numParticlesOpt, noISOpt });
+        parser.addOptions({ showAnatOpt, runAnatOpt, transISOpt, subdivOpt, saveMeshes, saveFrames, autoplayOpt, animSpeedOpt, physicsIterOp, numParticlesOpt, noISOpt });
         parser.addOptions({anatFile, kfFile, physFile});
         parser.process(*this);
 
         if (parser.isSet(fpsOpt))       m_targetFPS = parser.value(fpsOpt).toUInt();
+        g_framerate = m_targetFPS;
         if (parser.isSet(pluginOpt))    pluginsPath = parser.value(pluginOpt).toStdString();
         if (parser.isSet(numFramesOpt)) m_numFrames = parser.value(numFramesOpt).toUInt();
         if (parser.isSet(maxThreadsOpt)) m_maxThreads = parser.value(maxThreadsOpt).toUInt();
@@ -172,7 +175,7 @@ namespace Ra
         if (parser.isSet(subdivOpt))    g_show_subdiv   = true;
         if (parser.isSet(autoplayOpt))  g_anim_autoplay = true;
         if (parser.isSet(animSpeedOpt)) g_animation_speed = parser.value(animSpeedOpt).toDouble();
-        if (parser.isSet(timeStepOpt))  g_physics_time_step = parser.value(timeStepOpt).toDouble();
+        if (parser.isSet(physicsIterOp))  g_physics_iter = parser.value(physicsIterOp).toInt();
         if (parser.isSet(numParticlesOpt)) g_num_particles = parser.value(numParticlesOpt).toInt();
 
 
