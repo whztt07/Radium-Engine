@@ -147,7 +147,7 @@ args="'$*'"
 
 if $(contains "$args" "c")
 then
-    slackbot.py "msg" "#sa2017paper" "Script started with args $args"
+    slackbot.py "msg" "#paper-muscles" "Script started with args $args"
 fi
 
 echo "Starting script"
@@ -222,5 +222,5 @@ if $(contains "$args" "c")
 then
     echo "Copying"
     cp -a $SCRIPTDIR $COPYDIR
-    slackbot.py "msg" "#sa2017paper" "Script finished and copied in $COPYDIR"
+    slackbot.py "msg" "#paper-muscles" "Script finished and copied in $COPYDIR"
 fi
