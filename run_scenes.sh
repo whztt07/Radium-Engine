@@ -3,10 +3,11 @@
 # arguments : 0 1 2 etc. : run scene
 # t : run timings. f : make full video. c : copy to external drive
 
-ROOTDIR="/export/home/warhol/vroussel/code/git-clean/Radium-Engine"
-WORKDIR="/export/home/warhol/vroussel/code/git-clean/Radium-Engine/Bundle-GNU/RelWithDebInfo/bin"
+ROOTDIR="/ssd/canezin/IS_MUSCLES/Radium-Engine"
+WORKDIR="/ssd/canezin/IS_MUSCLES/Radium-Engine/Bundle-GNU/Release/bin"
 SCRIPTDIR="`date +%Y%m%d-%H%M`"
 COPYDIR="/mnt/STORM/wip/muscle-skinning/videos/source_files/"
+SCENE_DIR="/home/fcanezin/Downloads/scenefiles"
 
 # returns true if string 1 contains string 2
 # than you https://stackoverflow.com/questions/2829613
@@ -34,7 +35,7 @@ function run_scene_exportmesh()
 
     mkdir -p $outfolder
 
-    DISPLAY=":0.0" \
+    DISPLAY=":1" \
     ./main-app --fps 30 --autoplay -e $outfolder -n $numframes \
     -f $infolder/$assetfile \
     -c $infolder/$camfile \
@@ -42,7 +43,9 @@ function run_scene_exportmesh()
     --kffile $infolder/$kffile \
     --phyfile $infolder/$phyfile \
     --timestep $timestep \
-    --subdiv --showanat --savemeshes --runanat >& $outfolder/log.txt
+    --numparticles $numparticles \
+    --subdiv --showanat --savemeshes --runanat\
+    >& $outfolder/log.txt
 
     cp $infolder/$camfile $outfolder/camera.cam
 }
@@ -59,7 +62,7 @@ function run_scene_video()
 
     mkdir -p $outfolder
 
-    DISPLAY=":0.0" \
+    DISPLAY=":1" \
     ./main-app --fps 30 --autoplay -e $outfolder -n $numframes \
     -f $infolder/$assetfile \
     -c $infolder/$camfile \
@@ -67,7 +70,9 @@ function run_scene_video()
     --kffile $infolder/$kffile \
     --phyfile $infolder/$phyfile \
     --timestep $timestep \
-    --trans --showanat --saveframes --runanat >& $outfolder/log.txt
+    --numparticles $numparticles \
+    --trans --showanat --saveframes --runanat \
+    >& $outfolder/log.txt
 }
 
 function run_scene_timings()
@@ -91,18 +96,22 @@ function run_scene_timings()
     --kffile $infolder/$kffile \
     --phyfile $infolder/$phyfile \
     --timestep $timestep \
-    --runanat >& "$outfolder/on/log.txt"
+    --numparticles $numparticles \
+    --runanat \
+    >& "$outfolder/on/log.txt"
 
     #run without anatomy
 
-    DISPLAY=":0.0" \
+    DISPLAY=":1" \
     ./main-app --fps 30 --autoplay -e "$outfolder/off" -n $numframes -t \
     -f $infolder/$assetfile \
     -c $infolder/$camfile \
     --anatfile $infolder/$anatfile \
     --kffile $infolder/$kffile \
     --timestep $timestep \
-    --phyfile $infolder/$phyfile  >& "$outfolder/off/log.txt"
+    --numparticles $numparticles\
+    --phyfile $infolder/$phyfile \
+    >& "$outfolder/off/log.txt"
 }
 
 
@@ -160,38 +169,38 @@ ln -s $SCRIPTDIR latest
 if $(contains "$args" "0")
 then
     echo "Running scene 0 (parameters presentation)"
-    run_scene "00" "/home/vroussel/Downloads/GEOM/arm_nomove" "scene00"
-    run_scene "01" "/home/vroussel/Downloads/GEOM/arm_nomove" "scene01"
+    run_scene "00" "$SCENE_DIR/arm_nomove" "scene00"
+    run_scene "01" "$SCENE_DIR/arm_nomove" "scene01"
 fi
 
 if $(contains "$args" "1")
 then
     echo "Running scene 1 (arm shake)"
-    run_scene 1 "/home/vroussel/Downloads/GEOM/arm_rise_shake" "scenefile"
+    run_scene 1 "$SCENE_DIR/arm_rise_shake" "scenefile"
 fi
 
 if $(contains "$args" "2")
 then
     echo "Running scene 2 (biceps curl)"
-    run_scene 2 "/home/vroussel/Downloads/GEOM/arm_biceps_curl" "scenefile"
+    run_scene 2 "$SCENE_DIR/arm_biceps_curl" "scenefile"
 fi
 
 if $(contains "$args" "3")
 then
     echo "Running scene 3 (Pectorals)"
-    run_scene 3 "/home/vroussel/Downloads/GEOM/arm_pecs_biceps" "scenefile"
+    run_scene 3 "$SCENE_DIR/arm_pecs_biceps" "scenefile"
 fi
 
 if $(contains "$args" "4")
 then
     echo "Running scene 4 (Boss Jump)"
-    run_scene 4 "/home/vroussel/Downloads/GEOM/boss_jump" "scenefile"
+    run_scene 4 "$SCENE_DIR/boss_jump" "scenefile"
 fi
 
 if $(contains "$args" "5")
 then
     echo "Running scene 5 (Boss Run)"
-    run_scene 5 "/home/vroussel/Downloads/GEOM/boss_run" "scenefile"
+    run_scene 5 "$SCENE_DIR/boss_run" "scenefile"
 fi
 
 
@@ -212,10 +221,34 @@ fi
 if $(contains "$args" "t")
 then
     echo "Running timings on scene 2"
-    run_scene_timings "/home/vroussel/Downloads/GEOM/arm_biceps_curl" "$SCRIPTDIR/timings" "scenefile"
+    run_scene_timings "$SCENE_DIR/arm_biceps_curl" "$SCRIPTDIR/timings" "scenefile"
     # do not cat the first frame because the setup task screw up the stats
-    find "$SCRIPTDIR/timings/on"  | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_on.txt
-    find "$SCRIPTDIR/timings/off" | grep radiumtimings | grep -v 000000 | xargs cat  |$ROOTDIR/parse_results.py >$SCRIPTDIR/timings_off.txt
+    find "$SCRIPTDIR/timings_scene1/on"  | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_on_scene1.txt
+    find "$SCRIPTDIR/timings_scene1/off" | grep radiumtimings | grep -v 000000 | xargs cat  |$ROOTDIR/parse_results.py >$SCRIPTDIR/timings_off_scene1.txt
+
+    echo "Running timings on scene 2"
+    run_scene_timings "$SCENE_DIR/arm_biceps_curl" "$SCRIPTDIR/timings_scene2" "scenefile"
+    # do not cat the first frame because the setup task screw up the stats
+    find "$SCRIPTDIR/timings_scene2/on"  | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_on_scene2.txt
+    find "$SCRIPTDIR/timings_scene2/off" | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_off_scene2.txt
+
+    echo "Running timings on scene 3"
+    run_scene_timings "$SCENE_DIR/arm_pecs_biceps" "$SCRIPTDIR/timings_scene3" "scenefile"
+    # do not cat the first frame because the setup task screw up the stats
+    find "$SCRIPTDIR/timings_scene3/on"  | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_on_scene3.txt
+    find "$SCRIPTDIR/timings_scene3/off" | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_off_scene3.txt
+
+    echo "Running timings on scene 4"
+    run_scene_timings "$SCENE_DIR/boss_jump" "$SCRIPTDIR/timings_scene4" "scenefile"
+    # do not cat the first frame because the setup task screw up the stats
+    find "$SCRIPTDIR/timings_scene4/on"  | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_on_scene4.txt
+    find "$SCRIPTDIR/timings_scene4/off" | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_off_scene4.txt
+
+    echo "Running timings on scene 5"
+    run_scene_timings "$SCENE_DIR/boss_run" "$SCRIPTDIR/timings_scene5" "scenefile"
+    # do not cat the first frame because the setup task screw up the stats
+    find "$SCRIPTDIR/timings_scene5/on"  | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_on_scene5.txt
+    find "$SCRIPTDIR/timings_scene5/off" | grep radiumtimings | grep -v 000000 | xargs cat | $ROOTDIR/parse_results.py >$SCRIPTDIR/timings_off_scene5.txt
 fi
 
 if $(contains "$args" "c")

@@ -266,7 +266,6 @@ namespace Ra
 
     void Gui::Viewer::wheelEvent( QWheelEvent* event )
     {
-        m_camera->handleWheelEvent(event);
         if (m_isBrushPickingEnabled && isKeyPressed(Qt::Key_Shift))
         {
             m_brushRadius += (event->angleDelta().y() * 0.01 + event->angleDelta().x() * 0.01) > 0 ? 5 : -5 ;
