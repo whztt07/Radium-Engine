@@ -175,6 +175,25 @@ bool RA_CORE_API check_NoWeightVertex( const WeightMatrix& matrix, const bool FA
     return status != 0;
 }
 
+bool normalizeWeights(Eigen::Ref<WeightMatrix> matrix, const bool MT)
+{
+    CORE_UNUSED(MT);
+
+    bool skinningWeightOk = true;
+
+    #pragma omp parallel for if(MT)
+    for (int k = 0; k < matrix.innerSize(); ++k)
+    {
+        const Scalar sum = matrix.row( k ).sum();
+        if(! Ra::Core::Math::areApproxEqual(sum, Scalar(0))){
+            if (! Ra::Core::Math::areApproxEqual(sum, Scalar(1))){
+                skinningWeightOk = false ;
+                matrix.row( k ) /= sum;
+            }
+        }
+    }
+    return ! skinningWeightOk;
+}
 
 } // namespace Animation
 } // Namespace Core

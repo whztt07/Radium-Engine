@@ -165,11 +165,11 @@ namespace Ra
                         p = t * ro->getLocalTransform() * p;
                     }
 
-                        const Ra::Core::Vector3 bmin = pos.getMap().rowwise().minCoeff().head<3>();
-                        const Ra::Core::Vector3 bmax = pos.getMap().rowwise().maxCoeff().head<3>();
+                    const Ra::Core::Vector3 bmin = pos.getMap().rowwise().minCoeff().head<3>();
+                    const Ra::Core::Vector3 bmax = pos.getMap().rowwise().maxCoeff().head<3>();
 
-                        aabb.extend(bmin);
-                        aabb.extend(bmax);
+                    aabb.extend(bmin);
+                    aabb.extend(bmax);
                 }
             }
             return aabb;

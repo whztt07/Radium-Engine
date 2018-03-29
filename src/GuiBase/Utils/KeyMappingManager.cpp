@@ -10,13 +10,29 @@ namespace Ra
             m_domDocument("Keymapping QDomDocument"),
             m_metaEnumAction(QMetaEnum::fromType<KeyMappingAction>()),
             m_metaEnumKey(QMetaEnum::fromType<Qt::Key>()),
-            m_file(new QFile("Configs/default.xml"))
+            m_file(nullptr)
         {
-            loadConfiguration();
+            QSettings settings;
+            QString keymappingfilename =  settings.value("keymapping/config", "Configs/default.xml").toString();
+            if (!keymappingfilename.contains("default.xml")) {
+                LOG(logINFO) << "Loading keymapping " << keymappingfilename.toStdString() << " (from "
+                             << settings.fileName().toStdString() << ")";
+            }
+            loadConfiguration(keymappingfilename.toStdString().c_str());
         }
 
         void KeyMappingManager::bindKeyToAction( int keyCode, KeyMappingAction action )
         {
+            auto f = std::find_if( m_mapping.begin(), m_mapping.end(),
+                                   [&keyCode](const auto &a)
+                                   {
+                                       return a.second == keyCode;
+                                   } );
+            if (f != m_mapping.end())
+            {
+                LOG(logWARNING) << "Binding action " << action << " to code " << keyCode <<
+                                   ", which is already used for action " << f->first << ".";
+            }
             m_mapping[action] = keyCode;
         }
 
@@ -27,7 +43,7 @@ namespace Ra
 
         bool KeyMappingManager::actionTriggered( QMouseEvent * event, KeyMappingAction action )
         {
-            return event->button() == getKeyFromAction( action );
+            return (int(event->button()) | event->modifiers()) == getKeyFromAction( action );
         }
 
         bool KeyMappingManager::actionTriggered( QKeyEvent * event, KeyMappingAction action )
@@ -37,6 +53,7 @@ namespace Ra
 
         void KeyMappingManager::loadConfiguration( const char * filename )
         {
+            // if no filename is given, load default configuration
             if( !filename )
             {
                 filename = "Configs/default.xml";
@@ -44,11 +61,7 @@ namespace Ra
 
             if( m_file )
             {
-                if( m_file->isOpen() )
-                {
-                    m_file->close();
-                    delete m_file;
-                }
+                delete m_file;
             }
 
             m_file = new QFile( filename );
@@ -57,11 +70,9 @@ namespace Ra
             {
                 if( strcmp( filename, "Configs/default.xml") )
                 {
-                    LOG(logERROR) << "Failed to open keymapping configuration file !";
+                    LOG(logERROR) << "Failed to open keymapping configuration file ! " << m_file->fileName().toStdString();
                     LOG(logERROR) << "Trying to load default configuration...";
-
-                    loadConfiguration( "Configs/default.xml" );
-
+                    loadConfiguration();
                     return;
                 }
                 else
@@ -76,16 +87,22 @@ namespace Ra
                 LOG( logERROR ) << "Can't associate XML file to QDomDocument !";
                 LOG( logERROR ) << "Trying to load default configuration...";
 
-                loadConfiguration( "Configs/default.xml" );
-
-                m_file->close();
+                loadConfiguration();
+                return;
             }
+
+            QSettings settings;
+            settings.setValue("keymapping/config", m_file->fileName());
+
+            m_file->close();
 
             loadConfigurationInternal();
         }
 
         void KeyMappingManager::loadConfigurationInternal()
         {
+            m_mapping.clear();
+
             QDomElement domElement = m_domDocument.documentElement();
             QDomNode node = domElement.firstChild();
 
@@ -155,7 +172,7 @@ namespace Ra
             else if( typeString == "mouse" )
             {
                 int buttonValue = getQtMouseButtonValue( keyString );
-                bindKeyToAction( buttonValue, actionValue );
+                bindKeyToAction( buttonValue | modifierValue, actionValue );
             }
         }
 

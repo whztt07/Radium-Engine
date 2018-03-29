@@ -1,6 +1,7 @@
 #include <FancyMeshComponent.hpp>
 
 #include <iostream>
+#include <numeric>
 
 #include <Core/String/StringUtils.hpp>
 #include <Core/Mesh/MeshUtils.hpp>
@@ -74,6 +75,8 @@ namespace FancyMeshPlugin
 
         m_contentName = data->getName();
 
+        m_duplicateTable = data->getDuplicateTable();
+
         std::shared_ptr<Ra::Engine::Mesh> displayMesh( new Ra::Engine::Mesh( meshName ) );
 
         Ra::Core::TriangleMesh mesh;
@@ -81,16 +84,39 @@ namespace FancyMeshPlugin
         Ra::Core::Transform N;
         N.matrix() = (T.matrix()).inverse().transpose();
 
-        for (size_t i = 0; i < data->getVerticesSize(); ++i)
+        mesh.m_vertices.resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
+        #pragma omp parallel for
+        for (uint i = 0; i < data->getVerticesSize(); ++i)
         {
-            mesh.m_vertices.push_back(T * data->getVertices()[i]);
-            mesh.m_normals.push_back((N * data->getNormals()[i]).normalized());
+            mesh.m_vertices[i] = T * data->getVertices()[i];
         }
+
+        if (data->hasNormals())
+        {
+            mesh.m_normals.resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
+            #pragma omp parallel for
+            for (uint i = 0; i < data->getVerticesSize(); ++i)
+            {
+                mesh.m_normals[i] = (N * data->getNormals()[i]).normalized();
+            }
+        }
+
 
         mesh.m_faces = data->getFaces();
         mesh.triangulate();
 
         displayMesh->loadGeometry(mesh);
+
+        // get the actual duplicate table according to the mesh, not to the file data.
+        if (!data->isLoadingDuplicates())
+        {
+            m_duplicateTable.resize( data->getVerticesSize() );
+            std::iota( m_duplicateTable.begin(), m_duplicateTable.end(), 0 );
+        }
+        else
+        {
+            Ra::Core::MeshUtils::findDuplicates( mesh, m_duplicateTable );
+        }
 
         Ra::Core::Vector3Array tangents;
         Ra::Core::Vector3Array bitangents;
@@ -157,6 +183,9 @@ namespace FancyMeshPlugin
         ComponentMessenger::CallbackTypes<TriangleMesh>::Getter cbOut = std::bind( &FancyMeshComponent::getMeshOutput, this );
         msg->registerOutput<TriangleMesh>( getEntity(), this, id, cbOut);
 
+        ComponentMessenger::CallbackTypes<std::vector<uint>>::Getter dtOut = std::bind( &FancyMeshComponent::getDuplicateTableOutput, this );
+        ComponentMessenger::getInstance()->registerOutput<std::vector<uint>>( getEntity(), this, id, dtOut);
+
         ComponentMessenger::CallbackTypes<TriangleMesh>::ReadWrite cbRw = std::bind( &FancyMeshComponent::getMeshRw, this );
         msg->registerReadWrite<TriangleMesh>( getEntity(), this, id, cbRw);
 
@@ -192,6 +221,11 @@ namespace FancyMeshPlugin
     const Ra::Core::TriangleMesh* FancyMeshComponent::getMeshOutput() const
     {
         return &(getMesh());
+    }
+
+    const std::vector<uint>* FancyMeshComponent::getDuplicateTableOutput() const
+    {
+        return &m_duplicateTable;
     }
 
     Ra::Core::TriangleMesh *FancyMeshComponent::getMeshRw()

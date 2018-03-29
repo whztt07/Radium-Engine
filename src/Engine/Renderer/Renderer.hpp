@@ -70,10 +70,35 @@ namespace Ra
                 Core::Timer::TimePoint renderEnd;
             };
 
+            enum PickingMode
+            {
+                RO = 0,    ///< Pick a mesh
+                VERTEX,    ///< Pick a vertex of a mesh
+                EDGE,      ///< Pick an edge of a mesh
+                TRIANGLE,  ///< Pick a triangle of a mesh
+                C_VERTEX,  ///< Picks all vertices of a mesh within a screen space circle
+                C_EDGE,    ///< Picks all edges of a mesh within a screen space circle
+                C_TRIANGLE ///< Picks all triangles of a mesh within a screen space circle
+            };
+
             struct PickingQuery
             {
                 Core::Vector2 m_screenCoords;
                 Core::MouseButton::MouseButton m_button;
+                PickingMode m_mode;
+            };
+
+            struct PickingResult
+            {
+                PickingMode m_mode;            // Picking mode of the query
+                int m_roIdx;                   // Idx of the picked RO
+                std::vector<int> m_vertexIdx;  // Idx of the picked vertex in the element, i.e. point's idx OR idx in line or triangle
+                std::vector<int> m_elementIdx; // Idx of the element, i.e. triangle for mesh, edge for lines and -1 for points
+                std::vector<int> m_edgeIdx;    // Idx of the opposite vertex in the triangle if mesh
+                std::vector<Scalar> m_weights; // weight associated to the picks w.r.t. the distance to the screen space circle center.
+                // Note: There is at most one quadruplet for each querried pixel.
+                // Note: Each quadruplet is unique (no doublons coming from pixels).
+                // Note: Beware that the same mesh vertex would still be picked for each of its adjacent triangles.
             };
 
         public:
@@ -174,7 +199,7 @@ namespace Ra
                 m_pickingQueries.push_back( query );
             }
 
-            inline virtual const std::vector<int>& getPickingResults() const final
+            inline virtual const std::vector<PickingResult>& getPickingResults() const final
             {
                 return m_pickingResults;
             }
@@ -182,6 +207,17 @@ namespace Ra
             inline virtual const std::vector<PickingQuery>& getPickingQueries() const final
             {
                 return m_lastFramePickingQueries;
+            }
+
+            inline virtual void setMousePosition(const Core::Vector2& pos) final
+            {
+                m_mousePosition[0] = pos[0];
+                m_mousePosition[1] = m_height - pos[1];
+            }
+
+            inline virtual void setBrushRadius(Scalar brushRadius) final
+            {
+                m_brushRadius = brushRadius;
             }
 
             inline virtual void toggleDrawDebug()
@@ -276,6 +312,13 @@ namespace Ra
             virtual void updateRenderObjectsInternal( const RenderData& renderData) final;
 
             // 3.
+            virtual void splitRenderQueuesForPicking( const RenderData &renderData ) final;
+            virtual void splitRQ( const std::vector<RenderObjectPtr>& renderQueue,
+                                  std::array<std::vector<RenderObjectPtr>,4>& renderQueuePicking ) final;
+            virtual void renderForPicking( const RenderData& renderData,
+                                           const std::array<const ShaderProgram*,4>& pickingShaders,
+                                           const std::array<std::vector<RenderObjectPtr>,4>& renderQueuePicking ) final ;
+
             virtual void doPicking( const RenderData& renderData ) final;
 
             // 6.
@@ -314,6 +357,12 @@ namespace Ra
             std::vector<RenderObjectPtr> m_xrayRenderObjects;
             std::vector<RenderObjectPtr> m_uiRenderObjects;
 
+            std::array<std::vector<RenderObjectPtr>,4> m_fancyRenderObjectsPicking;
+            std::array<std::vector<RenderObjectPtr>,4> m_debugRenderObjectsPicking;
+            std::array<std::vector<RenderObjectPtr>,4> m_xrayRenderObjectsPicking;
+            std::array<std::vector<RenderObjectPtr>,4> m_uiRenderObjectsPicking;
+            std::array<const ShaderProgram*,4>         m_pickingShaders;
+
             // Simple quad mesh, used to render the final image
             std::unique_ptr<Mesh> m_quadMesh;
 
@@ -332,16 +381,18 @@ namespace Ra
             std::mutex m_renderMutex;
 
             // PICKING STUFF
+            Ra::Core::Vector2 m_mousePosition;
+            float m_brushRadius;
             std::unique_ptr<globjects::Framebuffer> m_pickingFbo;
             std::unique_ptr<Texture>                m_pickingTexture;
 
             // TODO(Charly): Check if this leads to some rendering / picking bugs
             // (because different depth textures would be written, and so on)
-            std::unique_ptr<Texture>    m_depthTexture;
+            std::unique_ptr<Texture> m_depthTexture;
 
-            std::vector<PickingQuery>   m_pickingQueries;
-            std::vector<PickingQuery>   m_lastFramePickingQueries;
-            std::vector<int>            m_pickingResults;
+            std::vector<PickingQuery>  m_pickingQueries;
+            std::vector<PickingQuery>  m_lastFramePickingQueries;
+            std::vector<PickingResult> m_pickingResults;
         };
 
     } // namespace Engine

@@ -121,7 +121,7 @@ namespace Ra
         parser.addHelpOption();
         parser.addVersionOption();
 
-        QCommandLineOption fpsOpt(QStringList{"r", "framerate", "fps"}, "Control the application framerate, 0 to disable it (and run as fast as possible).", "number", "60");
+        QCommandLineOption fpsOpt(QStringList{"r", "framerate", "fps"}, "Control the application framerate, 0 to disable it (and run as fast as possible).", "number", "30");
         QCommandLineOption maxThreadsOpt(QStringList{"m", "maxthreads", "max-threads"}, "Control the maximum number of threads. 0 will set to the number of cores available", "number", "0");
         QCommandLineOption numFramesOpt(QStringList{"n", "numframes"}, "Run for a fixed number of frames.", "number", "0");
         QCommandLineOption pluginOpt(QStringList{"p", "plugins", "pluginsPath"}, "Set the path to the plugin dlls.", "folder", "Plugins");
@@ -285,6 +285,9 @@ namespace Ra
         m_mainWindow.reset( new Gui::MainWindow );
         m_mainWindow->show();
 
+        m_viewer = m_mainWindow->getViewer();
+        CORE_ASSERT( m_viewer != nullptr, "GUI was not initialized" );
+        CORE_ASSERT( m_viewer->context()->isValid(), "OpenGL was not initialized" );
 
         // Allow all events to be processed (thus the viewer should have
         // initialized the OpenGL context..)
@@ -295,11 +298,6 @@ namespace Ra
         {
             LOG( logERROR ) << "An error occurred while trying to load plugins.";
         }
-
-        m_viewer = m_mainWindow->getViewer();
-        CORE_ASSERT( m_viewer != nullptr, "GUI was not initialized" );
-        CORE_ASSERT( m_viewer->context()->isValid(), "OpenGL was not initialized" );
-
         // Create task queue with N-1 threads (we keep one for rendering).
         uint numThreads =  std::thread::hardware_concurrency() - 1;
         if (m_maxThreads > 0 && m_maxThreads < numThreads)
@@ -585,6 +583,7 @@ namespace Ra
         PluginContext context;
         context.m_engine = m_engine.get();
         context.m_selectionManager = m_mainWindow->getSelectionManager();
+        context.m_pickingManager = m_viewer->getPickingManager();
 
         for (const auto& filename : pluginsDir.entryList(QDir::Files))
         {

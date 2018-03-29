@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <Engine/RadiumEngine.hpp>
+#include <Engine/Renderer/Renderer.hpp>
 
 #include <QOpenGLWidget>
 #include <QThread>
@@ -24,18 +25,11 @@ namespace Ra
 
 namespace Ra
 {
-    namespace Engine
-    {
-        class Renderer;
-    }
-}
-
-namespace Ra
-{
     namespace Gui
     {
         class CameraInterface;
         class GizmoManager;
+        class PickingManager;
     }
 }
 
@@ -84,6 +78,9 @@ namespace Ra
             /// Read-write access to renderer
             Engine::Renderer* getRenderer();
 
+            /// Access to the feature picking manager
+            PickingManager* getPickingManager();
+
             //
             // Rendering management
             //
@@ -125,7 +122,9 @@ namespace Ra
         signals:
             void rendererReady();               //! Emitted when the rendered is correctly initialized
             void leftClickPicking ( int id );   //! Emitted when the result of a left click picking is known
-            void rightClickPicking( int id );   //! Emitted when the resut of a right click picking is known
+            void rightClickPicking( const Ra::Engine::Renderer::PickingResult& result );   //! Emitted when the resut of a right click picking is known
+
+            void toggleBrushPicking( bool on ); //! Emitted when the corresponding key is released (see keyReleaseEvent)
 
         public slots:
             /// Tell the renderer to reload all shaders.
@@ -177,6 +176,7 @@ namespace Ra
             virtual void keyPressEvent( QKeyEvent* event ) override;
             virtual void keyReleaseEvent( QKeyEvent* event ) override;
 
+            Engine::Renderer::PickingMode getPickingMode() const;
             /// We intercept the mouse events in this widget to get the coordinates of the mouse
             /// in screen space.
             virtual void mousePressEvent( QMouseEvent* event ) override;
@@ -191,6 +191,11 @@ namespace Ra
             /// Owning pointer to the renderers.
             std::vector<std::unique_ptr<Engine::Renderer>> m_renderers;
             Engine::Renderer* m_currentRenderer;
+
+            /// Owning Pointer to the feature picking manager.
+            PickingManager* m_pickingManager;
+            bool m_isBrushPickingEnabled;
+            float m_brushRadius;
 
             /// Owning pointer to the camera.
             std::unique_ptr<CameraInterface> m_camera;

@@ -87,6 +87,7 @@ namespace Ra
         connect(this, &MainWindow::fileLoading, mainApp, &BaseApplication::loadFile);
 
         // Connect picking results (TODO Val : use events to dispatch picking directly)
+        connect(m_viewer, &Viewer::toggleBrushPicking, this, &MainWindow::toggleCirclePicking);
         connect(m_viewer, &Viewer::rightClickPicking, this, &MainWindow::handlePicking);
         connect(m_viewer, &Viewer::leftClickPicking, m_viewer->getGizmoManager(), &GizmoManager::handlePickingResult);
 
@@ -237,9 +238,14 @@ namespace Ra
         return m_selectionManager;
     }
 
-    void Gui::MainWindow::handlePicking(int pickingResult)
+    void Gui::MainWindow::toggleCirclePicking( bool on )
     {
-        Ra::Core::Index roIndex(pickingResult);
+        m_viewer->setMouseTracking( on );
+    }
+
+    void Gui::MainWindow::handlePicking(const Engine::Renderer::PickingResult& pickingResult)
+    {
+        Ra::Core::Index roIndex(pickingResult.m_roIdx);
         Ra::Engine::RadiumEngine* engine = Ra::Engine::RadiumEngine::getInstance();
         if (roIndex.isValid())
         {
@@ -250,14 +256,15 @@ namespace Ra
                 Ra::Engine::Entity* ent = comp->getEntity();
 
                 // For now we don't enable group selection.
-                m_selectionManager->setCurrentEntry(ItemEntry(ent, comp, roIndex),
-                                                    QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current);
+                m_selectionManager->setCurrentEntry( ItemEntry(ent, comp, roIndex),
+                                                     QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current);
             }
         }
         else
         {
             m_selectionManager->clear();
         }
+
     }
 
     void Gui::MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)

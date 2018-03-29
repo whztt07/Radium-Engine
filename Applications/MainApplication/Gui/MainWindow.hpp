@@ -154,7 +154,7 @@ namespace Ra
             void changeRenderer(const QString& rendererName);
 
             /// Slot for the picking results from the viewer.
-            void handlePicking( int ROIndex );
+            void handlePicking(const Ra::Engine::Renderer::PickingResult& ROIndex);
 
             /// Slot to accept a new renderer
             void onRendererReady();
@@ -174,6 +174,8 @@ namespace Ra
             void on_actionForward_triggered();
             void on_actionDeferred_triggered();
             void on_actionExperimental_triggered();
+
+            void toggleCirclePicking( bool on);
 
         private:
             /// Stores the internal model of engine objects for selection.

@@ -33,12 +33,18 @@ namespace Ra
                     TRACKBALLCAMERA_MANIPULATION = 0,
                     TRACKBALLCAMERA_ROTATE_AROUND,
 
-                    VIEWER_TOGGLE_WIREFRAME,
-                    VIEWER_LEFT_BUTTON_PICKING_QUERY,
-                    VIEWER_RIGHT_BUTTON_PICKING_QUERY,
+                    GIZMOMANAGER_MANIPULATION,
+
+                    VIEWER_BUTTON_PICKING_QUERY,
+                    FEATUREPICKING_VERTEX,
+                    FEATUREPICKING_EDGE,
+                    FEATUREPICKING_TRIANGLE,
+                    FEATUREPICKING_MULTI_CIRCLE,
+
+                    VIEWER_BUTTON_CAST_RAY_QUERY,
                     VIEWER_RAYCAST_QUERY,
 
-                    GIZMOMANAGER_MANIPULATION,
+                    VIEWER_TOGGLE_WIREFRAME,
 
                     COLORWIDGET_PRESSBUTTON
                 };

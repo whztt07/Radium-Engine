@@ -60,6 +60,7 @@ namespace Ra
             , m_drawDebug( true )
             , m_wireframe(false)
             , m_postProcessEnabled(true)
+            , m_brushRadius( 0 )
         {
             GL_CHECK_ERROR;
         }
@@ -78,7 +79,36 @@ namespace Ra
             TextureManager::createInstance();
 
             m_shaderMgr->addShaderProgram("DrawScreen", "Shaders/Basic2D.vert.glsl", "Shaders/DrawScreen.frag.glsl");
-            m_shaderMgr->addShaderProgram("Picking", "Shaders/Picking.vert.glsl", "Shaders/Picking.frag.glsl");
+            m_shaderMgr->addShaderProgram("DrawScreenI", "Shaders/Basic2D.vert.glsl", "Shaders/DrawScreenI.frag.glsl");
+            m_shaderMgr->addShaderProgram("CircleBrush", "Shaders/Basic2D.vert.glsl", "Shaders/CircleBrush.frag.glsl");
+
+            ShaderConfiguration pickingPointsConfig( "PickingPoints" );
+            pickingPointsConfig.addShader(ShaderType_VERTEX  , "Shaders/Picking.vert.glsl");
+            pickingPointsConfig.addShader(ShaderType_GEOMETRY, "Shaders/PickingPoints.geom.glsl");
+            pickingPointsConfig.addShader(ShaderType_FRAGMENT, "Shaders/Picking.frag.glsl");
+            ShaderConfigurationFactory::addConfiguration( pickingPointsConfig );
+            m_pickingShaders[0] = m_shaderMgr->addShaderProgram( pickingPointsConfig );
+
+            ShaderConfiguration pickingLinesConfig( "PickingLines" );
+            pickingLinesConfig.addShader(ShaderType_VERTEX  , "Shaders/Picking.vert.glsl");
+            pickingLinesConfig.addShader(ShaderType_GEOMETRY, "Shaders/PickingLines.geom.glsl");
+            pickingLinesConfig.addShader(ShaderType_FRAGMENT, "Shaders/Picking.frag.glsl");
+            ShaderConfigurationFactory::addConfiguration( pickingLinesConfig );
+            m_pickingShaders[1] = m_shaderMgr->addShaderProgram( pickingLinesConfig );
+
+            ShaderConfiguration pickingLinesAdjacencyConfig( "PickingLinesAdjacency" );
+            pickingLinesAdjacencyConfig.addShader(ShaderType_VERTEX  , "Shaders/Picking.vert.glsl");
+            pickingLinesAdjacencyConfig.addShader(ShaderType_GEOMETRY, "Shaders/PickingLinesAdjacency.geom.glsl");
+            pickingLinesAdjacencyConfig.addShader(ShaderType_FRAGMENT, "Shaders/Picking.frag.glsl");
+            ShaderConfigurationFactory::addConfiguration( pickingLinesAdjacencyConfig );
+            m_pickingShaders[2] = m_shaderMgr->addShaderProgram( pickingLinesAdjacencyConfig );
+
+            ShaderConfiguration pickingTrianglesConfig( "PickingTriangles" );
+            pickingTrianglesConfig.addShader(ShaderType_VERTEX  , "Shaders/Picking.vert.glsl");
+            pickingTrianglesConfig.addShader(ShaderType_GEOMETRY, "Shaders/PickingTriangles.geom.glsl");
+            pickingTrianglesConfig.addShader(ShaderType_FRAGMENT, "Shaders/Picking.frag.glsl");
+            ShaderConfigurationFactory::addConfiguration( pickingTrianglesConfig );
+            m_pickingShaders[3] = m_shaderMgr->addShaderProgram( pickingTrianglesConfig );
 
             m_depthTexture.reset(new Texture("Depth"));
             m_depthTexture->internalFormat = GL_DEPTH_COMPONENT24;
@@ -234,6 +264,91 @@ namespace Ra
                 }
             }
         }
+        // subroutine to Renderer::splitRenderQueuesForPicking()
+        void Renderer::splitRQ( const std::vector<RenderObjectPtr>& renderQueue,
+                                std::array<std::vector<RenderObjectPtr>,4>& renderQueuePicking )
+        {
+            // clean renderQueuePicking
+            for (uint i=0; i<renderQueuePicking.size(); ++i)
+            {
+                renderQueuePicking[i].clear();
+            }
+            // fill renderQueuePicking from renderQueue
+            for (auto it = renderQueue.begin(); it != renderQueue.end(); ++it)
+            {
+                switch ((*it)->getMesh()->getRenderMode())
+                {
+                case Mesh::RM_POINTS:
+                {
+                    renderQueuePicking[0].push_back( *it );
+                    break;
+                }
+                case Mesh::RM_LINES:     // fall through
+                case Mesh::RM_LINE_LOOP: // fall through
+                case Mesh::RM_LINE_STRIP:
+                {
+                    renderQueuePicking[1].push_back( *it );
+                    break;
+                }
+                case Mesh::RM_LINES_ADJACENCY:      // fall through
+                case Mesh::RM_LINE_STRIP_ADJACENCY:
+                {
+                    renderQueuePicking[2].push_back( *it );
+                    break;
+                }
+                case Mesh::RM_TRIANGLES:
+                case Mesh::RM_TRIANGLE_STRIP:
+                case Mesh::RM_TRIANGLE_FAN:
+                {
+                    renderQueuePicking[3].push_back( *it );
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+                }
+            }
+        }
+
+        void Renderer::splitRenderQueuesForPicking( const RenderData& renderData )
+        {
+            splitRQ( m_fancyRenderObjects, m_fancyRenderObjectsPicking );
+            splitRQ( m_debugRenderObjects, m_debugRenderObjectsPicking );
+            splitRQ( m_uiRenderObjects   , m_uiRenderObjectsPicking );
+            splitRQ( m_xrayRenderObjects , m_xrayRenderObjectsPicking );
+        }
+
+        // subroutine to Renderer::doPicking()
+        void Renderer::renderForPicking( const RenderData& renderData,
+                                         const std::array<const ShaderProgram*,4>& pickingShaders,
+                                         const std::array<std::vector<RenderObjectPtr>,4>& renderQueuePicking )
+        {
+            for (uint i = 0; i < pickingShaders.size(); ++i)
+            {
+                pickingShaders[i]->bind();
+                for ( const auto& ro : renderQueuePicking[i] )
+                {
+                    if ( ro->isVisible() && ro->isPickable() )
+                    {
+                        int id = ro->idx.getValue();
+                        pickingShaders[i]->setUniform( "objectId", id );
+
+                        Core::Matrix4 M = ro->getTransformAsMatrix();
+                        Core::Matrix4 N = M.inverse().transpose();
+                        pickingShaders[i]->setUniform( "transform.proj", renderData.projMatrix );
+                        pickingShaders[i]->setUniform( "transform.view", renderData.viewMatrix );
+                        pickingShaders[i]->setUniform( "transform.model", M );
+                        pickingShaders[i]->setUniform( "transform.worldNormal", N );
+
+                        ro->getRenderTechnique()->material->bind( pickingShaders[i] );
+
+                        // render
+                        ro->getMesh()->render();
+                    }
+                }
+            }
+        }
 
         void Renderer::doPicking( const RenderData& renderData )
         {
@@ -251,118 +366,201 @@ namespace Ra
             GL_ASSERT(glClearBufferiv(GL_COLOR, 0, clearColor));
             GL_ASSERT(glClearBufferfv(GL_DEPTH, 0, &clearDepth));
 
-            const ShaderProgram* shader = m_shaderMgr->getShaderProgram("Picking");
-            shader->bind();
+            splitRenderQueuesForPicking( renderData );
 
+            // First draw Fancy Objects
             GL_ASSERT( glEnable( GL_DEPTH_TEST ) );
             GL_ASSERT( glDepthFunc( GL_LESS ) );
 
-            for ( const auto& ro : m_fancyRenderObjects )
-            {
-                if ( ro->isVisible() && ro->isPickable() )
-                {
-                    int id = ro->idx.getValue();
-                    shader->setUniform( "objectId", id );
+            renderForPicking( renderData, m_pickingShaders, m_fancyRenderObjectsPicking );
 
-                    Core::Matrix4 M = ro->getTransformAsMatrix();
-                    shader->setUniform( "transform.proj", renderData.projMatrix );
-                    shader->setUniform( "transform.view", renderData.viewMatrix );
-                    shader->setUniform( "transform.model", M );
-
-                    ro->getRenderTechnique()->material->bind( shader );
-
-                    // render
-                    ro->getMesh()->render();
-                }
-            }
-
-            // Draw debug objects
+            // Then draw debug objects
             GL_ASSERT( glClear( GL_DEPTH_BUFFER_BIT ) );
             if ( m_drawDebug )
             {
-                for ( const auto& ro : m_debugRenderObjects )
+                renderForPicking( renderData, m_pickingShaders, m_debugRenderObjectsPicking );
+            }
+
+            // Then draw xrayed objects on top of normal objects
+            GL_ASSERT( glClear( GL_DEPTH_BUFFER_BIT ) );
+            if ( m_drawDebug )
+            {
+                renderForPicking( renderData, m_pickingShaders, m_xrayRenderObjectsPicking );
+            }
+
+            // Finally draw ui stuff on top of everything
+            // these have a different way to compute the transform matrices
+            GL_ASSERT( glClear( GL_DEPTH_BUFFER_BIT ) );
+            for (uint i = 0; i < m_pickingShaders.size(); ++i)
+            {
+                m_pickingShaders[i]->bind();
+
+                for ( const auto& ro : m_uiRenderObjectsPicking[i] )
                 {
                     if ( ro->isVisible() && ro->isPickable() )
                     {
                         int id = ro->idx.getValue();
-                        shader->setUniform( "objectId", id );
+                        m_pickingShaders[i]->setUniform( "objectId", id );
 
                         Core::Matrix4 M = ro->getTransformAsMatrix();
-                        shader->setUniform( "transform.proj", renderData.projMatrix );
-                        shader->setUniform( "transform.view", renderData.viewMatrix );
-                        shader->setUniform( "transform.model", M );
+                        Core::Matrix4 MV = renderData.viewMatrix * M;
+                        Scalar d = MV.block<3, 1>( 0, 3 ).norm();
 
-                        ro->getRenderTechnique()->material->bind( shader );
+                        Core::Matrix4 S = Core::Matrix4::Identity();
+                        S( 0, 0 ) = S( 1, 1 ) = S( 2, 2 ) = d;
+
+                        M = M * S;
+                        Core::Matrix4 N = M.inverse().transpose();
+
+                        m_pickingShaders[i]->setUniform( "transform.proj", renderData.projMatrix );
+                        m_pickingShaders[i]->setUniform( "transform.view", renderData.viewMatrix );
+                        m_pickingShaders[i]->setUniform( "transform.model", M );
+                        m_pickingShaders[i]->setUniform( "transform.worldNormal", N );
+
+                        ro->getRenderTechnique()->material->bind( m_pickingShaders[i] );
 
                         // render
                         ro->getMesh()->render();
                     }
-                }
-            }
-
-            // Draw xrayed objects on top of normal objects
-            GL_ASSERT( glClear( GL_DEPTH_BUFFER_BIT ) );
-            if ( m_drawDebug )
-            {
-                for ( const auto& ro : m_xrayRenderObjects )
-                {
-                    if ( ro->isVisible() && ro->isPickable() )
-                    {
-                        int id = ro->idx.getValue();
-                        shader->setUniform( "objectId", id );
-
-                        Core::Matrix4 M = ro->getTransformAsMatrix();
-                        shader->setUniform( "transform.proj", renderData.projMatrix );
-                        shader->setUniform( "transform.view", renderData.viewMatrix );
-                        shader->setUniform( "transform.model", M );
-
-                        ro->getRenderTechnique()->material->bind( shader );
-
-                        // render
-                        ro->getMesh()->render();
-                    }
-                }
-            }
-
-
-            // Always draw ui stuff on top of everything
-            GL_ASSERT( glClear( GL_DEPTH_BUFFER_BIT ) );
-            for ( const auto& ro : m_uiRenderObjects )
-            {
-                if ( ro->isVisible() && ro->isPickable() )
-                {
-                    int id = ro->idx.getValue();
-                    shader->setUniform( "objectId", id );
-
-                    Core::Matrix4 M = ro->getTransformAsMatrix();
-                    Core::Matrix4 MV = renderData.viewMatrix * M;
-                    Scalar d = MV.block<3, 1>( 0, 3 ).norm();
-
-                    Core::Matrix4 S = Core::Matrix4::Identity();
-                    S( 0, 0 ) = S( 1, 1 ) = S( 2, 2 ) = d;
-
-                    M = M * S;
-
-                    shader->setUniform( "transform.proj", renderData.projMatrix );
-                    shader->setUniform( "transform.view", renderData.viewMatrix );
-                    shader->setUniform( "transform.model", M );
-
-                    ro->getRenderTechnique()->material->bind( shader );
-
-                    // render
-                    ro->getMesh()->render();
                 }
             }
 
             GL_ASSERT( glReadBuffer( GL_COLOR_ATTACHMENT0 ) );
 
+            int pick[4];
             for ( const auto& query : m_pickingQueries )
             {
-                int picking_result[4];
-                GL_ASSERT( glReadPixels( query.m_screenCoords.x(), query.m_screenCoords.y(),
-                                         1, 1, GL_RGBA_INTEGER, GL_INT, picking_result ) );
-
-                m_pickingResults.push_back( picking_result[0] );
+                PickingResult result;
+                // fill picking result according to picking mode
+                if (query.m_mode < C_VERTEX)
+                {
+                    if (query.m_screenCoords.x() < 0 || query.m_screenCoords.x() > m_width-1 ||
+                        query.m_screenCoords.y() < 0 || query.m_screenCoords.y() > m_height-1 )
+                    {
+                        result.m_roIdx = -1;
+                        m_pickingResults.push_back( result );
+                        continue;
+                    }
+                    GL_ASSERT( glReadPixels( query.m_screenCoords.x(), query.m_screenCoords.y(),
+                                             1, 1, GL_RGBA_INTEGER, GL_INT, pick ) );
+                    result.m_roIdx = pick[0];                   // RO idx
+                    result.m_vertexIdx.emplace_back( pick[1] ); // vertex idx in the element
+                    result.m_elementIdx.emplace_back( pick[2] ); // element idx
+                    result.m_edgeIdx.emplace_back( pick[3] ); // edge opposite idx for triangles
+                    result.m_weights.emplace_back( 1.0 );
+                }
+                else
+                {
+                    // select the results for the RO with the most representatives
+                    // (or first to come if same amount)
+                    std::map<int, std::vector< std::pair<std::tuple<int,int,int>,Scalar> >> resultPerRO;
+                    const Scalar r2 = m_brushRadius*m_brushRadius;
+                    const Scalar pr = 0.1*m_brushRadius;
+                    for(int i=-m_brushRadius; i<=m_brushRadius; i+=3)
+                    {
+                        int h = std::round( std::sqrt( m_brushRadius*m_brushRadius - i*i ) );
+                        for(int j=-h; j<=+h; j+=3)
+                        {
+                            const int x = query.m_screenCoords.x()+i;
+                            const int y = query.m_screenCoords.y()+j;
+                            if (x < 0 || x > m_width-1 || y < 0 || y > m_height-1)
+                            {
+                                continue;
+                            }
+                            GL_ASSERT( glReadPixels( x, y, 1, 1, GL_RGBA_INTEGER, GL_INT, pick ) );
+                            //  w = (1 - ((d-0.1r)/r)^2 )^3  if  d > 0.1r
+                            //      1                        otherwise
+                            const Scalar d = sqrt(i*i+j*j);
+                            Scalar w;
+                            if (d<pr)
+                            {
+                                w = 1.0;
+                            }
+                            else
+                            {
+                                const Scalar x = (d-pr);
+                                const Scalar y = (1 - x*x/r2);
+                                w = y*y*y;
+                            }
+                            resultPerRO[ pick[0] ].emplace_back( std::make_pair( std::make_tuple( pick[1], pick[2], pick[3] ), w ) );
+                        }
+                    }
+                    // get the RO with the max number of picks
+                    int maxRO = -1;
+                    int nbMax = 0;
+                    for (const auto& res : resultPerRO)
+                    {
+                        if (res.first == -1)
+                        {
+                            continue;
+                        }
+                        if (res.second.size() > nbMax)
+                        {
+                            maxRO = res.first;
+                            nbMax = res.second.size();
+                        }
+                    }
+                    result.m_roIdx = maxRO;
+                    if (maxRO != -1)
+                    {
+                        // make picks unique w.r.t. indices, ignoring weights
+                        const auto &mesh = RadiumEngine::getInstance()->getRenderObjectManager()
+                                               ->getRenderObject(maxRO)->getMesh()->getGeometry();
+                        std::sort( resultPerRO[ maxRO ].begin(), resultPerRO[ maxRO ].end(),
+                                   [&query, &mesh](const std::pair<std::tuple<int,int,int>,Scalar> &a,
+                                                   const std::pair<std::tuple<int,int,int>,Scalar> &b)
+                                   {
+                                       switch (query.m_mode)
+                                       {
+                                       case C_VERTEX: // ignore edgeIdx
+                                           return mesh.m_triangles[ std::get<1>(a.first) ]( std::get<0>(a.first) ) <
+                                                  mesh.m_triangles[ std::get<1>(b.first) ]( std::get<0>(b.first) ) ;
+                                       case C_EDGE: // ignore vertexIdx
+                                           return std::get<1>(a.first) < std::get<1>(b.first) ||    // lower TriangleIdx OR
+                                                  ( std::get<1>(a.first) == std::get<1>(b.first) && // ( same TriangleIdx and
+                                                    std::get<2>(a.first) < std::get<2>(b.first) );  //   lower EdgeIdx )
+                                       case C_TRIANGLE: // ignore both
+                                           return std::get<1>(a.first) < std::get<1>(b.first); // lower TriangleIdx
+                                       default: // shouldn't come here, but do something just in case...
+                                           return a.first < b.first;
+                                       }
+                                   } );
+                        auto last = std::unique( resultPerRO[ maxRO ].begin(), resultPerRO[ maxRO ].end(),
+                                                 [&query, &mesh](const std::pair<std::tuple<int,int,int>,Scalar> &a,
+                                                                 const std::pair<std::tuple<int,int,int>,Scalar> &b)
+                                                 {
+                                                     switch (query.m_mode)
+                                                     {
+                                                     case C_VERTEX: // ignore edgeIdx
+                                                         return mesh.m_triangles[ std::get<1>(a.first) ]( std::get<0>(a.first) ) ==
+                                                                mesh.m_triangles[ std::get<1>(b.first) ]( std::get<0>(b.first) ) ;
+                                                     case C_EDGE: // ignore vertexIdx
+                                                         return std::get<1>(a.first) == std::get<1>(b.first) && // same TriangleIdx and
+                                                                std::get<2>(a.first) == std::get<2>(b.first);   // same EdgeIdx
+                                                     case C_TRIANGLE: // ignore both
+                                                         return std::get<1>(a.first) == std::get<1>(b.first); // same TriangleIdx
+                                                     default: // shouldn't come here, but do something just in case...
+                                                         return a.first < b.first;
+                                                     }
+                                                 } );
+                        resultPerRO[ maxRO ].erase( last, resultPerRO[ maxRO ].end() );
+                        // save into result
+                        const auto size = resultPerRO[maxRO].size();
+                        result.m_vertexIdx.resize( size );
+                        result.m_elementIdx.resize( size );
+                        result.m_edgeIdx.resize( size );
+                        result.m_weights.resize( size );
+                        for (uint i=0; i<size; ++i)
+                        {
+                            result.m_vertexIdx[i]  = std::get<0>( resultPerRO[maxRO][i].first );
+                            result.m_elementIdx[i] = std::get<1>( resultPerRO[maxRO][i].first );
+                            result.m_edgeIdx[i]    = std::get<2>( resultPerRO[maxRO][i].first );
+                            result.m_weights[i]    = resultPerRO[maxRO][i].second;
+                        }
+                    }
+                }
+                result.m_mode = query.m_mode;
+                m_pickingResults.push_back( result );
             }
 
             m_pickingFbo->unbind();
@@ -390,12 +588,31 @@ namespace Ra
 
             GL_ASSERT( glViewport( 0, 0, m_width, m_height ) );
 
-            auto shader = m_shaderMgr->getShaderProgram("DrawScreen");
+
+            auto shader = (m_displayedTexture->dataType == GL_INT ||
+                           m_displayedTexture->dataType == GL_UNSIGNED_INT) ?
+                                m_shaderMgr->getShaderProgram("DrawScreenI") :
+                                m_shaderMgr->getShaderProgram("DrawScreen");
             shader->bind();
             shader->setUniform( "screenTexture", m_displayedTexture, 0 );
             m_quadMesh->render();
 
             GL_ASSERT( glDepthFunc( GL_LESS ) );
+
+            // draw brush circle if enabled
+            if( m_brushRadius>0 )
+            {
+                GL_ASSERT( glDisable( GL_BLEND ) );
+                GL_ASSERT( glDisable( GL_DEPTH_TEST ) );
+                auto shader = m_shaderMgr->getShaderProgram("CircleBrush");
+                shader->bind();
+                shader->setUniform("mousePosition", m_mousePosition);
+                shader->setUniform("brushRadius", m_brushRadius);
+                shader->setUniform("dim", Core::Vector2(m_width,m_height));
+                m_quadMesh->render();
+                GL_ASSERT( glEnable( GL_DEPTH_TEST ) );
+                GL_ASSERT( glEnable( GL_BLEND ) );
+            }
         }
 
         void Renderer::notifyRenderObjectsRenderingInternal()

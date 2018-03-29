@@ -121,7 +121,15 @@ namespace Ra
             {
                 return ( id.m_idx == i );
             }
+            friend inline bool  operator== ( const int    i,  const Index& id )
+            {
+                return ( id.m_idx == i );
+            }
             friend inline bool  operator!= ( const Index& id,  const int    i )
+            {
+                return ( id.m_idx != i );
+            }
+            friend inline bool  operator!= ( const int    i, const Index& id )
             {
                 return ( id.m_idx != i );
             }

@@ -7,6 +7,8 @@
 #include <vector>
 #include <Core/Index/Index.hpp>
 
+#include <GuiBase/Utils/PickingManager.hpp>
+
 namespace Ra
 {
 namespace Engine

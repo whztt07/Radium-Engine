@@ -91,29 +91,86 @@ public:
     /// DESTRUCTOR
     ~GeometryData();
 
+    /// NAME
+    inline void setName( const std::string& name );
+
     /// TYPE
     inline GeometryType getType() const;
+    inline void setType( const GeometryType& type );
 
     /// FRAME
     inline Core::Transform getFrame() const;
+    inline void setFrame( const Core::Transform& frame );
 
     /// DATA
     inline uint getVerticesSize()               const;
-    inline const Vector3Array & getVertices()   const;
-    inline const Vector2uArray& getEdges()      const;
-    inline const VectorNuArray& getFaces()      const;
-    inline const VectorNuArray& getPolyhedra()  const;
-    inline const Vector3Array & getNormals()    const;
-    inline const Vector3Array & getTangents()   const;
-    inline const Vector3Array & getBiTangents() const;
-    inline const Vector3Array & getTexCoords()  const;
-    inline const ColorArray   & getColors()     const;
-    inline const WeightArray  & getWeights()    const;
-    inline const MaterialData & getMaterial()   const;
 
-    inline const std::map< uint, uint >& getDuplicateTable() const;
+    inline Vector3Array& getVertices();
+    inline const Vector3Array& getVertices() const;
+    // Copy data from vertexList. In-place setting with getVertices is preferred.
+    template< typename Container >
+    inline void setVertices( const Container &vertexList );
+
+    inline Vector2uArray& getEdges();
+    inline const Vector2uArray& getEdges() const;
+    // Copy data from edgeList. In-place setting with getEdges is preferred.
+    template< typename Container >
+    inline void setEdges(const Container &edgeList );
+
+    inline VectorNuArray& getFaces();
+    inline const VectorNuArray& getFaces() const;
+    // Copy data from edgeList. In-place setting with getEdges is preferred.
+    template< typename Container >
+    inline void setFaces( const Container& faceList );
+
+    inline VectorNuArray& getPolyhedra();
+    inline const VectorNuArray& getPolyhedra() const;
+    // Copy data from polyList. In-place setting with getPolyhedra is preferred.
+    template< typename Container >
+    inline void setPolyhedra( const Container& polyList );
+
+    inline Vector3Array& getNormals();
+    inline const Vector3Array& getNormals() const;
+    // Copy data from normalList. In-place setting with getNormals is preferred.
+    template< typename Container >
+    inline void setNormals( const Container& normalList );
+
+    inline Vector3Array& getTangents();
+    inline const Vector3Array& getTangents() const;
+    // Copy data from tangentList. In-place setting with getTangents is preferred.
+    template< typename Container >
+    inline void setTangents( const Container& tangentList );
+
+    inline Vector3Array& getBiTangents();
+    inline const Vector3Array& getBiTangents() const;
+    // Copy data from bitangentList. In-place setting with getBiTangents is preferred.
+    template< typename Container >
+    inline void setBitangents( const Container& bitangentList );
+
+    inline Vector3Array& getTexCoords();
+    inline const Vector3Array& getTexCoords() const;
+    // Copy data from texCoordList. In-place setting with getTexCoords is preferred.
+    template< typename Container >
+    inline void setTexCoords( const Container& texCoordList );
+
+    inline ColorArray& getColors();
+    inline const ColorArray& getColors() const;
+    // Copy data from colorList. In-place setting with getColors is preferred.
+    template< typename Container >
+    inline void setColors( const Container& colorList );
+
+    inline WeightArray& getWeights();
+    inline const WeightArray& getWeights() const;
+    // Copy data from weightList. In-place setting with getWeights is preferred.
+    inline void setWeights(const WeightArray& weightList);
+
+    inline const MaterialData& getMaterial() const;
+    inline void setMaterial( const MaterialData& material );
 
     /// DUPLICATES
+    inline std::vector<uint>& getDuplicateTable();
+    inline const std::vector<uint>& getDuplicateTable() const;
+    inline void setDuplicateTable( const std::vector<uint>& table );
     inline void setLoadDuplicates( const bool status );
 
     /// QUERY
@@ -141,61 +198,14 @@ public:
     inline void displayInfo() const;
 
 protected:
-    /// NAME
-    inline void setName( const std::string& name );
-
-    /// TYPE
-    inline void setType( const GeometryType& type );
-
-    /// FRAME
-    inline void setFrame( const Core::Transform& frame );
-
-    /// VERTEX
-    inline void setVertices( const std::vector< Core::Vector3 >& vertexList );
-
-    /// EDGE
-    inline void setEdges( const std::vector< Core::Vector2ui >& edgeList );
-
-    /// FACE
-    inline void setFaces( const std::vector< Core::VectorNui >& faceList );
-
-    /// POLYHEDRON
-    inline void setPolyhedron( const std::vector< Core::VectorNui >& polyList );
-
-    /// NORMAL
-    inline void setNormals( const std::vector< Core::Vector3 >& normalList );
-
-    /// TANGENT
-    inline void setTangents( const std::vector< Core::Vector3 >& tangentList );
-
-    /// BITANGENT
-    inline void setBitangents( const std::vector< Core::Vector3 >& bitangentList );
-
-    /// TEXTURE COORDINATE
-    inline void setTextureCoordinates( const std::vector< Core::Vector3 >& texCoordList );
-
-    /// COLOR
-    inline void setColors( const std::vector< Core::Color >& colorList );
-
-    /// WEIGHTS
-    inline void setWeights(const WeightArray& weightList);
-
-    /// MATERIAL
-    inline void setMaterial( const MaterialData& material );
-
-    /// DUPLICATE
-    inline void setDuplicateTable( const std::map< uint, uint >& table );
-
-protected:
     /// VARIABLE
-    //std::string     m_name;
     Core::Transform m_frame;
     GeometryType    m_type;
 
     Vector3Array  m_vertex;
     Vector2uArray m_edge;
     VectorNuArray m_faces;
-    VectorNuArray m_polyhedron;
+    VectorNuArray m_polyhedra;
     Vector3Array  m_normal;
     Vector3Array  m_tangent;
     Vector3Array  m_bitangent;
@@ -206,8 +216,8 @@ protected:
     MaterialData m_material;
     bool         m_hasMaterial;
 
-    std::map< uint, uint > m_duplicateTable;
-    bool                   m_loadDuplicates;
+    std::vector<uint> m_duplicateTable;
+    bool              m_loadDuplicates;
 };
 
 } // namespace Asset

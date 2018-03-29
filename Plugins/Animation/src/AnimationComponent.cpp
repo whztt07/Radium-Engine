@@ -145,7 +145,7 @@ namespace AnimationPlugin
         return m_weights;
     }
 
-    void AnimationComponent::handleSkeletonLoading( const Ra::Asset::HandleData* data, const std::map< uint, uint >& duplicateTable ) {
+    void AnimationComponent::handleSkeletonLoading( const Ra::Asset::HandleData* data, const std::vector< uint >& duplicateTable, uint nbMeshVertices ) {
         std::string name( m_name );
         name.append( "_" + data->getName() );
 
@@ -159,7 +159,7 @@ namespace AnimationPlugin
         std::map< uint, uint > indexTable;
         createSkeleton( data, indexTable );
 
-        createWeightMatrix( data, indexTable, duplicateTable );
+        createWeightMatrix( data, indexTable, duplicateTable, nbMeshVertices );
         m_refPose = m_skel.getPose( Ra::Core::Animation::Handle::SpaceType::MODEL);
 
         setupSkeletonDisplay();
@@ -247,20 +247,10 @@ namespace AnimationPlugin
         }
     }
 
-    void AnimationComponent::createWeightMatrix( const Ra::Asset::HandleData* data, const std::map< uint, uint >& indexTable, const std::map< uint, uint >& duplicateTable ) {
-        // Bad bad bad hack
-        // Fails eventually with a 1 vertex mesh
-        uint vertexSize = 0;
-        for( const auto& item : duplicateTable ) {
-            if( item.second > vertexSize ) {
-                vertexSize = ( item.second > vertexSize ) ? item.second : vertexSize;
-            }
-        }
-        vertexSize++;
-        m_weights.resize( vertexSize, data->getComponentDataSize() );
+    void AnimationComponent::createWeightMatrix(const Ra::Asset::HandleData* data, const std::map< uint, uint >& indexTable,
+                                                 const std::vector< uint >& duplicateTable , uint nbMeshVertices) {
+        m_weights.resize( nbMeshVertices, data->getComponentDataSize() );
 
-        //m_weights.resize( data->getVertexSize(), data->getComponentDataSize() );
-        //m_weights.setZero();
         for( const auto& it : indexTable ) {
             const uint idx = it.first;
             const uint col = it.second;
@@ -271,22 +261,12 @@ namespace AnimationPlugin
                 m_weights.coeffRef( row, col ) = w;
             }
         }
+        Ra::Core::Animation::checkWeightMatrix( m_weights, false, true );
 
-        for (int k = 0; k < m_weights.innerSize(); ++k)
+        if (Ra::Core::Animation::normalizeWeights ( m_weights, true ))
         {
-            const Scalar sum = m_weights.row( k ).sum();
-            if(! Ra::Core::Math::areApproxEqual(sum, Scalar(0)))
-            {
-                if (! Ra::Core::Math::areApproxEqual(sum, Scalar(1)))
-                {
-                    m_weights.row( k ) /= sum;
-                }
-            }
+            LOG(logINFO) << "Skinning weights have been normalized";
         }
-
-
-
-        Ra::Core::Animation::checkWeightMatrix( m_weights, false );
     }
 
     void AnimationComponent::setupIO(const std::string &id)

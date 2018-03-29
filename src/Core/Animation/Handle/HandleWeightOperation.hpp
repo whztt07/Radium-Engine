@@ -52,6 +52,12 @@ bool RA_CORE_API check_NAN( const WeightMatrix& matrix, const bool FAIL_ON_ASSER
 bool RA_CORE_API check_NoWeightVertex( const WeightMatrix& matrix, const bool FAIL_ON_ASSERT = false, const bool MT = false );
 
 
+/**
+ * In-place normalization of the weights, such that matrix.row( k ).sum() = 1;
+ * \return true if normalization was required.
+ */
+bool RA_CORE_API normalizeWeights( Eigen::Ref<WeightMatrix> matrix,
+                                   const bool MT = false );
 
 } // namespace Animation
 } // Namespace Core

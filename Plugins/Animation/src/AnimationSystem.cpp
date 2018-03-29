@@ -148,7 +148,14 @@ namespace AnimationPlugin
             // FIXME(Charly): Certainly not the best way to do this
             AnimationComponent* component = new AnimationComponent( "AC_" + skel->getName() );
             entity->addComponent( component );
-            component->handleSkeletonLoading( skel, ( geomID == uint( -1 ) ) ? std::map< uint, uint >() : geomData[geomID]->getDuplicateTable() );
+            std::vector<uint> dupliTable;
+            uint nbMeshVertices = 0;
+            if (geomID != uint(-1))
+            {
+                dupliTable     = geomData[geomID]->getDuplicateTable();
+                nbMeshVertices = geomData[geomID]->getVerticesSize();
+            }
+            component->handleSkeletonLoading( skel, dupliTable, nbMeshVertices );
             component->handleAnimationLoading( animData );
 
             component->setXray( m_xrayOn );

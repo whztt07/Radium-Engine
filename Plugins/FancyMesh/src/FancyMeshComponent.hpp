@@ -61,6 +61,7 @@ namespace FancyMeshPlugin
 
         // Fancy mesh accepts to give its mesh and (if deformable) to update it
         const Ra::Core::TriangleMesh* getMeshOutput() const;
+        const std::vector<uint>* getDuplicateTableOutput() const;
         Ra::Core::TriangleMesh* getMeshRw();
         void setMeshInput( const Ra::Core::TriangleMesh* mesh );
         Ra::Core::Vector3Array* getVerticesRw();
@@ -70,6 +71,8 @@ namespace FancyMeshPlugin
         const Ra::Core::Index* roIndexRead() const;
 
     private:
+        std::vector<uint> m_duplicateTable;
+
         Ra::Core::Index m_meshIndex;
         Ra::Core::Index m_aabbIndex;
         std::string m_contentName;

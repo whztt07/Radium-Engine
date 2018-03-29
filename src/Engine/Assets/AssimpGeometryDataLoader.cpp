@@ -178,7 +178,7 @@ namespace Ra {
 
         void AssimpGeometryDataLoader::fetchType( const aiMesh& mesh, GeometryData& data ) const
         {
-            data.setType( GeometryData::UNKNOWN );
+            data.setType( Asset::GeometryData::UNKNOWN );
             uint face_type = 0;
             for( uint i = 0; i < mesh.mNumFaces; ++i ) {
                 face_type = std::max( face_type, mesh.mFaces[i].mNumIndices );
@@ -186,19 +186,19 @@ namespace Ra {
             if( face_type != 1 ) {
                 switch( face_type ) {
                     case 0: {
-                        data.setType( GeometryData::POINT_CLOUD );
+                        data.setType( Asset::GeometryData::POINT_CLOUD );
                     } break;
                     case 2: {
-                        data.setType( GeometryData::LINE_MESH );
+                        data.setType( Asset::GeometryData::LINE_MESH );
                     } break;
                     case 3: {
-                        data.setType( GeometryData::TRI_MESH );
+                        data.setType( Asset::GeometryData::TRI_MESH );
                     } break;
                     case 4: {
-                        data.setType( GeometryData::QUAD_MESH );
+                        data.setType( Asset::GeometryData::QUAD_MESH );
                     } break;
                     default: {
-                        data.setType( GeometryData::POLY_MESH );
+                        data.setType( Asset::GeometryData::POLY_MESH );
                     } break;
                 }
             }
@@ -206,58 +206,56 @@ namespace Ra {
 
         void AssimpGeometryDataLoader::fetchVertices( const aiMesh& mesh, GeometryData& data ) {
             const uint size = mesh.mNumVertices;
-#if 0
-            std::vector< Core::Vector3 > vertex( size );
-            vertex.resize( size );
-#pragma omp parallel for
-            for( uint i = 0; i < size; ++i ) {
-                vertex[i] = assimpToCore( mesh.mVertices[i] );
-            }
-#else
-            std::vector< Core::Vector3 > vertex;
+            auto &vertex = data.getVertices();
+            vertex.reserve( size );
+            auto& duplicateTable = data.getDuplicateTable();
+            duplicateTable.reserve( size );
             std::map< Triplet, uint > uniqueTable;
-            data.m_duplicateTable.clear();
             for( uint i = 0; i < size; ++i ) {
                 const Core::Vector3 v = assimpToCore( mesh.mVertices[i] );
                 const Triplet t( v );
                 auto it = uniqueTable.find( t );
-                if( ( it == uniqueTable.end() ) || data.isLoadingDuplicates() ) {
+                if( it == uniqueTable.end() || data.isLoadingDuplicates() ) {
+                    duplicateTable.push_back( vertex.size() );
+                    uniqueTable[t] = vertex.size();
                     vertex.push_back( v );
-                    uniqueTable[t]           = vertex.size() - 1;
-                    data.m_duplicateTable[i] = vertex.size() - 1;
                 } else {
-                    data.m_duplicateTable[i] = it->second;
+                    duplicateTable.push_back( it->second );
                 }
             }
-#endif
-            data.setVertices( vertex );
+            vertex.shrink_to_fit();
+            duplicateTable.shrink_to_fit();
         }
 
 /// EDGE
         void AssimpGeometryDataLoader::fetchEdges( const aiMesh& mesh, GeometryData& data ) const {
             const uint size = mesh.mNumFaces;
-            std::vector< Core::Vector2ui > edge( size );
-#pragma omp parallel for
-            for( int i = 0; i < int(size); ++i ) {
+            auto &edge = data.getEdges();
+            edge.resize( size );
+            #pragma omp parallel for
+            for( uint i = 0; i < size; ++i ) {
                 edge[i] = assimpToCore( mesh.mFaces[i].mIndices, mesh.mFaces[i].mNumIndices ).cast<uint>();
-                edge[i][0] = data.m_duplicateTable.at( edge[i][0] );
-                edge[i][1] = data.m_duplicateTable.at( edge[i][1] );
+                if( !data.isLoadingDuplicates() ) {
+                    edge[i][0] = data.getDuplicateTable().at( edge[i][0] );
+                    edge[i][1] = data.getDuplicateTable().at( edge[i][1] );
+                }
             }
-            data.setEdges( edge );
         }
 
         void AssimpGeometryDataLoader::fetchFaces( const aiMesh& mesh, GeometryData& data ) const {
             const uint size = mesh.mNumFaces;
-            std::vector< Core::VectorNui > face( size );
-#pragma omp parallel for
-            for( int i = 0; i < int(size); ++i ) {
+            auto &face = data.getFaces();
+            face.resize( size );
+            #pragma omp parallel for
+            for( uint i = 0; i < size; ++i ) {
                 face[i] = assimpToCore( mesh.mFaces[i].mIndices, mesh.mFaces[i].mNumIndices ).cast<uint>();
-                const uint face_vertices = mesh.mFaces[i].mNumIndices;
-                for( uint j = 0; j < face_vertices; ++j ) {
-                    face[i][j] = data.m_duplicateTable.at( face[i][j] );
+                if( !data.isLoadingDuplicates() ) {
+                    const uint face_vertices = mesh.mFaces[i].mNumIndices;
+                    for( uint j = 0; j < face_vertices; ++j ) {
+                        face[i][j] = data.getDuplicateTable().at( face[i][j] );
+                    }
                 }
             }
-            data.setFaces( face );
         }
 
         void AssimpGeometryDataLoader::fetchPolyhedron( const aiMesh& mesh, GeometryData& data ) const {
@@ -265,61 +263,61 @@ namespace Ra {
         }
 
         void AssimpGeometryDataLoader::fetchNormals( const aiMesh& mesh, GeometryData& data ) const {
-            const uint size = mesh.mNumVertices;
-            std::vector<Core::Vector3> normal(data.getVerticesSize(), Core::Vector3::Zero());
-#pragma omp parallel for
-            for( int i = 0; i < int(size); ++i )
+            auto &normal = data.getNormals();
+            normal.resize( data.getVerticesSize(), Core::Vector3::Zero() );
+
+            #pragma omp parallel for if (data.isLoadingDuplicates())
+            for( uint i = 0; i < mesh.mNumVertices; ++i )
             {
-                normal.at( data.m_duplicateTable.at( i ) ) += assimpToCore( mesh.mNormals[i] );
+                normal.at( data.getDuplicateTable().at( i ) ) += assimpToCore( mesh.mNormals[i] );
             }
 
-#pragma omp parallel for
-            for( int i = 0; i < int(normal.size()); ++i )
+            #pragma omp parallel for
+            for( uint i = 0; i < uint( normal.size() ); ++i )
             {
                 normal[i].normalize();
             }
-            data.setNormals( normal );
+
         }
 
         void AssimpGeometryDataLoader::fetchTangents( const aiMesh& mesh, GeometryData& data ) const {
-#if defined(LOAD_TEXTURES)
+#if defined(RADIUM_WITH_TEXTURES)
             const uint size = mesh.mNumVertices;
-            std::vector<Core::Vector3> tangent(data.getVerticesSize(), Core::Vector3::Zero());
-#pragma omp parallel for
+            auto &tangent = data.getTangents();
+            tangent.resize( size, Core::Vector3::Zero() );
+            #pragma omp parallel for
             for( uint i = 0; i < size; ++i )
             {
-                tangent[i] = assimpToCore( mesh.mTangents[i]);
+                tangent[i] = assimpToCore( mesh.mTangents[i] );
             }
-            data.setTangents( tangent );
 #endif
+
         }
 
         void AssimpGeometryDataLoader::fetchBitangents( const aiMesh& mesh, GeometryData& data ) const {
-#if defined(LOAD_TEXTURES)
+#if defined(RADIUM_WITH_TEXTURES)
             const uint size = mesh.mNumVertices;
-            std::vector<Core::Vector3> bitangent(data.getVerticesSize());
-#pragma omp parallel for
+            auto &bitangent = data.getBiTangents();
+            bitangent.resize( size );
+            #pragma omp parallel for
             for( uint i = 0; i < size; ++i )
             {
-                bitangent[i] = assimpToCore(mesh.mBitangents[i]);
+                bitangent[i] = assimpToCore( mesh.mBitangents[i] );
             }
-            data.setBitangents( bitangent );
 #endif
         }
 
         void AssimpGeometryDataLoader::fetchTextureCoordinates( const aiMesh& mesh, GeometryData& data ) const {
-#if ( defined(LOAD_TEXTURES) )
+#if ( defined(RADIUM_WITH_TEXTURES) )
             const uint size = mesh.mNumVertices;
-            std::vector<Core::Vector3> texcoord;
-            texcoord.resize(data.getVerticesSize());
-#pragma omp parallel for
+            auto &texcoord = data.getTexCoords();
+            texcoord.resize( data.getVerticesSize() );
+            #pragma omp parallel for
             for ( uint i = 0; i < size; ++i )
             {
                 // FIXME(Charly): Is it safe to only consider texcoords[0] ?
-                // FIXME(Charly): This is probably crappy if you do not allow duplicates.
-                texcoord.at(data.m_duplicateTable.at(i)) = assimpToCore( mesh.mTextureCoords[0][i] );
+                texcoord.at( i ) = assimpToCore( mesh.mTextureCoords[0][i] );
             }
-            data.setTextureCoordinates( texcoord );
 #endif
         }
 

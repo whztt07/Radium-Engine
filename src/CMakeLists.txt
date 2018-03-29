@@ -107,7 +107,7 @@ add_definitions(${Qt5OpenGL_DEFINITIONS})
 add_definitions(${Qt5Xml_DEFINITIONS})
 
 file(GLOB_RECURSE guibase_sources GuiBase/*.cpp)
-file(GLOB_RECURSE guibase_headers GuiBase/*.h guibase/*.hpp)
+file(GLOB_RECURSE guibase_headers GuiBase/*.h GuiBase/*.hpp)
 file(GLOB_RECURSE guibase_inlines GuiBase/*.inl)
 
 set (guibase_libs
