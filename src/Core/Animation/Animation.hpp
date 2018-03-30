@@ -36,6 +36,8 @@ public:
     // Guaranteed to be between 0 and the animation last time
     Scalar getTime(Scalar timestamp) const;
 
+    Scalar getDuration() const;
+
 private:
     std::vector<KeyPose> m_keys;
 };

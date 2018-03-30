@@ -44,6 +44,7 @@ void Animation::normalize()
     sort(m_keys.begin(), m_keys.end(), KeyPoseComparator());
 
 }
+
 Scalar Animation::getTime( Scalar timestamp ) const
 {
     if (m_keys.empty())
@@ -53,6 +54,11 @@ Scalar Animation::getTime( Scalar timestamp ) const
     Scalar duration = m_keys.back().first;
     // ping pong: d - abs(mod(x, 2 * d) - d)
     return duration - std::abs(std::fmod(timestamp, 2 * duration) - duration);
+}
+
+Scalar Animation::getDuration() const
+{
+    return m_keys.back().first;
 }
 
 Pose Animation::getPose(Scalar timestamp) const

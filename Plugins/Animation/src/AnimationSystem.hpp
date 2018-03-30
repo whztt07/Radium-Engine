@@ -44,10 +44,14 @@ namespace AnimationPlugin
 
         Scalar getTime(const Ra::Engine::ItemEntry& entry) const;
 
+        bool isPlaying() const { return m_isPlaying; }
+        bool isStepping() const { return m_isStepping; }
+
     private:
-        bool m_isPlaying; /// See if animation is playing or paused
-        bool m_oneStep;   /// True if one step has been required to play.
-        bool m_xrayOn;    /// True if we want to show xray-bones
+        bool m_isPlaying;  /// See if animation is playing or paused
+        bool m_oneStep;    /// True if one step has been required to play.
+        bool m_isStepping; /// True if one step has been required to play.
+        bool m_xrayOn;     /// True if we want to show xray-bones
     };
 }
 

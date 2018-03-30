@@ -42,6 +42,7 @@ namespace AnimationPlugin
             taskQueue->registerTask( task );
         }
 
+        m_isStepping = m_oneStep;
         m_oneStep = false;
     }
 

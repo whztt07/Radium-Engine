@@ -57,6 +57,7 @@ namespace AnimationPlugin
 
         uint getBoneIdx(Ra::Core::Index index) const ;
         Scalar getTime() const;
+        Scalar getDuration() const;
 
 
         void handleSkeletonLoading(const Ra::Asset::HandleData* data, const std::vector<uint> &duplicateTable , uint nbMeshVertices);
@@ -72,6 +73,8 @@ namespace AnimationPlugin
 
         virtual void setTransform(Ra::Core::Index roIdx, const Ra::Core::Transform& transform) override;
 
+        void saveFrame( int frame ) const;
+        bool loadFrame( int frame );
 
     private:
         // debug function to display the hierarchy
@@ -106,7 +109,7 @@ namespace AnimationPlugin
         const Ra::Core::Animation::RefPose*      getRefPoseOutput() const;
         const Ra::Core::Animation::WeightMatrix* getWeightsOutput() const;
         const bool*                              getWasReset() const;
-        const Ra::Core::Animation::Animation* getAnimation() const;
+        const Ra::Core::Animation::Animation*    getAnimation() const;
         const Scalar* getTimeOutput() const;
 
     private:
