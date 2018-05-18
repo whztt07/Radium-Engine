@@ -18,9 +18,9 @@ TriangleMesh makeParametricSphere( Scalar radius ) {
         {
             // Regular vertices on the sphere.
             const Scalar phi = Scalar( v ) * Core::Math::Pi / Scalar( stacks );
-            result.vertices().push_back( Vector3( radius * std::cos( theta ) * std::sin( phi ),
-                                                  radius * std::sin( theta ) * std::sin( phi ),
-                                                  radius * std::cos( phi ) ) );
+            result.vertices().emplace_back( radius * std::cos( theta ) * std::sin( phi ),
+                                            radius * std::sin( theta ) * std::sin( phi ),
+                                            radius * std::cos( phi ) );
             // Regular triangles
             if ( v > 1 && v < stacks )
             {
@@ -36,9 +36,9 @@ TriangleMesh makeParametricSphere( Scalar radius ) {
 
     // Add the pole vertices.
     uint northPoleIdx = result.vertices().size();
-    result.vertices().push_back( Vector3( 0, 0, radius ) );
+    result.vertices().emplace_back( 0, 0, radius );
     uint southPoleIdx = result.vertices().size();
-    result.vertices().push_back( Vector3( 0, 0, -radius ) );
+    result.vertices().emplace_back( 0, 0, -radius );
 
     // Add the polar caps triangles.
     for ( uint u = 0; u < slices; ++u )
