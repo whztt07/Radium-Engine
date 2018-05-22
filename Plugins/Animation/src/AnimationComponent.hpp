@@ -46,6 +46,7 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
 
     uint getBoneIdx( Ra::Core::Index index ) const;
     Scalar getTime() const;
+    Scalar getDuration() const;
 
     void handleSkeletonLoading( const Ra::Asset::HandleData* data,
                                 const std::vector<Ra::Core::Index>& duplicateTable,
@@ -62,6 +63,9 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
 
     virtual void setTransform( Ra::Core::Index roIdx,
                                const Ra::Core::Transform& transform ) override;
+
+    void saveFrame( int frame ) const;
+    bool loadFrame( int frame );
 
   public:
     // debug function to display the hierarchy

@@ -34,6 +34,7 @@ void AnimationSystem::generateTasks( Ra::Core::TaskQueue* taskQueue,
         taskQueue->registerTask( task );
     }
 
+    m_isStepping = m_oneStep;
     m_oneStep = false;
 }
 
@@ -61,7 +62,7 @@ void AnimationSystem::step() {
     m_oneStep = true;
 }
 
-void AnimationSystem::setPlaying( bool isPlaying ) {
+void AnimationSystem::play( bool isPlaying ) {
     m_isPlaying = isPlaying;
 }
 

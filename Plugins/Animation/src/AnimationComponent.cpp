@@ -1,6 +1,7 @@
 #include <AnimationComponent.hpp>
 
 #include <iostream>
+#include <fstream>
 #include <queue>
 
 #include <Core/Animation/Handle/HandleWeightOperation.hpp>
@@ -391,6 +392,53 @@ const Scalar* AnimationComponent::getTimeOutput() const {
 
 Scalar AnimationComponent::getTime() const {
     return m_animationTime;
+}
+
+Scalar AnimationComponent::getDuration() const {
+    return getAnimation()->getDuration();
+}
+
+void AnimationComponent::saveFrame( int frame ) const {
+    std::ofstream file( m_contentName+"_frame"+std::to_string(frame)+".anim",
+                        std::ios::trunc | std::ios::out | std::ios::binary );
+    if (!file.is_open())
+    {
+        return;
+    }
+    file.write( (const char*) &m_animationID, sizeof(uint) );
+    file.write( (const char*) &m_animationTimeStep, sizeof(bool) );
+    file.write( (const char*) &m_animationTime, sizeof(Scalar) );
+    file.write( (const char*) &m_speed, sizeof(Scalar) );
+    file.write( (const char*) &m_slowMo, sizeof(bool) );
+    const auto& pose = m_skel.getPose( Ra::Core::Animation::Handle::SpaceType::LOCAL );
+    file.write( (const char*) pose.data(), sizeof(Ra::Core::Transform) * pose.size() );
+    std::cout << "Saving anim data at time: " << m_animationTime << std::endl;
+}
+
+bool AnimationComponent::loadFrame( int frame )
+{
+    std::ifstream file( m_contentName+"_frame"+std::to_string(frame)+".anim",
+                        std::ios::in | std::ios::binary );
+    if (!file.is_open())
+    {
+        return false;
+    }
+    file.read( (char*) &m_animationID, sizeof(uint) );
+    file.read( (char*) &m_animationTimeStep, sizeof(bool) );
+    file.read( (char*) &m_animationTime, sizeof(Scalar) );
+    file.read( (char*) &m_speed, sizeof(Scalar) );
+    file.read( (char*) &m_slowMo, sizeof(bool) );
+    auto pose = m_skel.getPose( Ra::Core::Animation::Handle::SpaceType::LOCAL );
+    file.read( (char*) pose.data(), sizeof(Ra::Core::Transform) * pose.size() );
+    m_skel.setPose( pose, Ra::Core::Animation::Handle::SpaceType::LOCAL );
+
+    // update the render objects
+    for (auto& bone : m_boneDrawables)
+    {
+        bone->update();
+    }
+
+    return true;
 }
 
 } // namespace AnimationPlugin
