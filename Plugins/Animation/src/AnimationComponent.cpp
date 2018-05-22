@@ -399,7 +399,7 @@ Scalar AnimationComponent::getDuration() const {
 }
 
 void AnimationComponent::saveFrame( int frame ) const {
-    std::ofstream file( m_contentName+"_frame"+std::to_string(frame)+".anim",
+    std::ofstream file( "animFrames/"+m_contentName+"_frame"+std::to_string(frame)+".anim",
                         std::ios::trunc | std::ios::out | std::ios::binary );
     if (!file.is_open())
     {
@@ -417,7 +417,7 @@ void AnimationComponent::saveFrame( int frame ) const {
 
 bool AnimationComponent::loadFrame( int frame )
 {
-    std::ifstream file( m_contentName+"_frame"+std::to_string(frame)+".anim",
+    std::ifstream file( "animFrames/"+m_contentName+"_frame"+std::to_string(frame)+".anim",
                         std::ios::in | std::ios::binary );
     if (!file.is_open())
     {

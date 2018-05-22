@@ -57,6 +57,11 @@ include_directories(
     ${RADIUM_INCLUDE_DIRS}
     )
 
+add_custom_target( Anim_data_dirs
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYPE}/bin/animFrames"
+    COMMENT "Creating target iso directory in binary dir" VERBATIM
+)
+
 add_library( Animation SHARED ${sources} ${headers} ${inlines} ${app_uis})
 message(INFO " Animation : dependencies are ${RADIUM_LIBRARIES}")
 add_dependencies( Animation ${RADIUM_LIBRARIES})
@@ -70,4 +75,5 @@ target_link_libraries( Animation
                        ${GLBINDING_LIBRARIES}           # Radium dep
                      )
 
+add_dependencies( Animation Anim_data_dirs )
 
