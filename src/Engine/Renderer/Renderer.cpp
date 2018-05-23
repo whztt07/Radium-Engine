@@ -77,7 +77,7 @@ namespace Ra
 
             m_shaderMgr->addShaderProgram("DrawScreen", "Shaders/Basic2D.vert.glsl", "Shaders/DrawScreen.frag.glsl");
             m_shaderMgr->addShaderProgram("DrawScreenI", "Shaders/Basic2D.vert.glsl", "Shaders/DrawScreenI.frag.glsl");
-            m_shaderMgr->addShaderProgram("CircleBrush", "Shaders/Basic2D.vert.glsl", "Shaders/CircleBrush.frag.glsl");
+//            m_shaderMgr->addShaderProgram("CircleBrush", "Shaders/Basic2D.vert.glsl", "Shaders/CircleBrush.frag.glsl");
 
             ShaderConfiguration pickingPointsConfig( "PickingPoints" );
             pickingPointsConfig.addShader(ShaderType_VERTEX  , "Shaders/Picking.vert.glsl");

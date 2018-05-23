@@ -414,12 +414,14 @@ namespace Ra
             m_currentRenderer->toggleWireframe();
         }
 
+        /*
         if (event->key() == Qt::Key_C && event->modifiers() == Qt::NoModifier)
         {
             m_isBrushPickingEnabled = !m_isBrushPickingEnabled;
             m_currentRenderer->setBrushRadius( m_isBrushPickingEnabled ? m_brushRadius : 0 );
             emit toggleBrushPicking( m_isBrushPickingEnabled );
         }
+        */
 
         // Do we need this ?
         //QWindow::keyReleaseEvent(event);
