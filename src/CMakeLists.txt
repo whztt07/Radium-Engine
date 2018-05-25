@@ -74,6 +74,7 @@ add_library(
 
 add_dependencies( ${core_target} eigen3 radiumVersionFile openmesh_lib)
 target_compile_definitions(${core_target} PRIVATE "-DRA_CORE_EXPORTS")
+set_target_properties(${core_target} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 
 target_link_libraries(
     ${core_target}
@@ -138,6 +139,7 @@ else( RADIUM_IO_IS_INTERFACE )
 endif( RADIUM_IO_IS_INTERFACE )
 
 add_dependencies( ${io_target} ${core_target} ${engine_target} )
+set_target_properties(${io_target} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 
 if( RADIUM_ASSIMP_SUPPORT )
     add_dependencies( ${io_target} assimp_lib )
@@ -176,6 +178,7 @@ add_library(
 )
 
 add_dependencies( ${engine_target} ${core_target} glbinding_lib globjects_lib glm_lib)
+set_target_properties(${engine_target} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 
 target_compile_definitions(${engine_target} PRIVATE "-DRA_ENGINE_EXPORTS")
 
@@ -224,6 +227,7 @@ add_library(
 
 add_dependencies( ${guibase_target} ${engine_target} glbinding_lib globjects_lib)
 target_compile_definitions(${guibase_target} PRIVATE "-DRA_GUIBASE_EXPORTS")
+set_target_properties(${guibase_target} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 
 target_link_libraries(
     ${guibase_target}
