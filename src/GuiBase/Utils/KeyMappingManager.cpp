@@ -15,7 +15,10 @@ namespace Ra
             m_file(nullptr)
         {
             QSettings settings;
-            loadConfiguration();
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "RightButton", "TRACKBALLCAMERA_MANIPULATION" );
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "VIEWER_BUTTON_SELECT_PICKING_QUERY" );
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "VIEWER_BUTTON_MANIP_PICKING_QUERY" );
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "GIZMOMANAGER_MANIPULATION" );
         }
 
         void KeyMappingManager::bindKeyToAction( int keyCode, KeyMappingAction action )
