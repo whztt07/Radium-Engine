@@ -9,6 +9,8 @@
 #include <Core/Containers/MakeShared.hpp>
 #include <Engine/Renderer/RenderTechnique/ShaderProgram.hpp>
 
+extern std::string EXE_PATH;
+
 namespace Ra
 {
     namespace Engine
@@ -32,11 +34,11 @@ namespace Ra
             // Create named strings which correspond to shader files that you want to use in shaders's includes.
             // NOTE: if you want to add a named string to handle a new shader include file, be SURE that the name (first
             // parameter) begin with a "/", otherwise it won't work !
-            
-            m_files.push_back( globjects::File::create( "Shaders/Helpers.glsl" ) );
-            m_files.push_back( globjects::File::create( "Shaders/Structs.glsl" ) );
-            m_files.push_back( globjects::File::create( "Shaders/Tonemap.glsl" ) );
-            m_files.push_back( globjects::File::create( "Shaders/LightingFunctions.glsl" ) );
+
+            m_files.push_back( globjects::File::create( EXE_PATH+"Shaders/Helpers.glsl" ) );
+            m_files.push_back( globjects::File::create( EXE_PATH+"Shaders/Structs.glsl" ) );
+            m_files.push_back( globjects::File::create( EXE_PATH+"Shaders/Tonemap.glsl" ) );
+            m_files.push_back( globjects::File::create( EXE_PATH+"Shaders/LightingFunctions.glsl" ) );
 
             m_namedStrings.push_back( globjects::NamedString::create( "/Helpers.glsl", m_files[0].get() ) );
             m_namedStrings.push_back( globjects::NamedString::create( "/Structs.glsl", m_files[1].get() ) );

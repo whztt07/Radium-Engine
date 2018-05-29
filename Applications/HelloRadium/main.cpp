@@ -14,8 +14,11 @@
 classic "Spinning Cube" demo. */
 #include <minimalapp.hpp>
 
+extern std::string EXE_PATH;
+
 int main(int argc, char* argv[])
 {
+    EXE_PATH = QCoreApplication::applicationDirPath().toStdString() + "/";
 
     // Create default format for Qt.
     QSurfaceFormat format;

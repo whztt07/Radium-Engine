@@ -4,6 +4,8 @@
 
 #include <GuiBase/Utils/KeyMappingManager.hpp>
 
+extern std::string EXE_PATH;
+
 MinimalApp::MinimalApp(int &argc, char** argv)
         : QApplication(argc, argv), m_engine(nullptr),
           m_task_queue(nullptr),
@@ -23,14 +25,14 @@ MinimalApp::MinimalApp(int &argc, char** argv)
    
     // Load Blinn-Phong shader
     Ra::Engine::ShaderConfiguration bpConfig("BlinnPhong");
-    bpConfig.addShader(Ra::Engine::ShaderType_VERTEX, "Shaders/BlinnPhong.vert.glsl");
-    bpConfig.addShader(Ra::Engine::ShaderType_FRAGMENT, "Shaders/BlinnPhong.frag.glsl");
+    bpConfig.addShader(Ra::Engine::ShaderType_VERTEX, EXE_PATH+"Shaders/BlinnPhong.vert.glsl");
+    bpConfig.addShader(Ra::Engine::ShaderType_FRAGMENT, EXE_PATH+"Shaders/BlinnPhong.frag.glsl");
     Ra::Engine::ShaderConfigurationFactory::addConfiguration(bpConfig);
 
 
     Ra::Engine::ShaderConfiguration pConfig("Plain");
-    pConfig.addShader(Ra::Engine::ShaderType_VERTEX, "Shaders/Plain.vert.glsl");
-    pConfig.addShader(Ra::Engine::ShaderType_FRAGMENT, "Shaders/Plain.frag.glsl");
+    pConfig.addShader(Ra::Engine::ShaderType_VERTEX, EXE_PATH+"Shaders/Plain.vert.glsl");
+    pConfig.addShader(Ra::Engine::ShaderType_FRAGMENT, EXE_PATH+"Shaders/Plain.frag.glsl");
     Ra::Engine::ShaderConfigurationFactory::addConfiguration(pConfig);
 
     Ra::Gui::KeyMappingManager::createInstance();

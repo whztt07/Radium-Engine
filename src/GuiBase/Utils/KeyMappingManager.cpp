@@ -2,6 +2,8 @@
 
 #include <Core/Log/Log.hpp>
 
+extern std::string EXE_PATH;
+
 namespace Ra
 {
     namespace Gui
@@ -13,12 +15,7 @@ namespace Ra
             m_file(nullptr)
         {
             QSettings settings;
-            QString keymappingfilename =  settings.value("keymapping/config", "Configs/default.xml").toString();
-            if (!keymappingfilename.contains("default.xml")) {
-                LOG(logINFO) << "Loading keymapping " << keymappingfilename.toStdString() << " (from "
-                             << settings.fileName().toStdString() << ")";
-            }
-            loadConfiguration(keymappingfilename.toStdString().c_str());
+            loadConfiguration();
         }
 
         void KeyMappingManager::bindKeyToAction( int keyCode, KeyMappingAction action )
@@ -46,7 +43,7 @@ namespace Ra
             // if no filename is given, load default configuration
             if( !filename )
             {
-                filename = "Configs/default.xml";
+                filename = (EXE_PATH + "Configs/default.xml").c_str();
             }
 
             if( m_file )
@@ -54,11 +51,13 @@ namespace Ra
                 delete m_file;
             }
 
+            std::cout << "ConfigFile:" << filename << std::endl;
+
             m_file = new QFile( filename );
 
             if( !m_file->open( QIODevice::ReadOnly ) )
             {
-                if( strcmp( filename, "Configs/default.xml") )
+                if( strcmp( filename, (EXE_PATH + "Configs/default.xml").c_str()) )
                 {
                     LOG(logERROR) << "Failed to open keymapping configuration file ! " << m_file->fileName().toStdString();
                     LOG(logERROR) << "Trying to load default configuration...";
@@ -67,7 +66,7 @@ namespace Ra
                 }
                 else
                 {
-                    LOG(logERROR) << "Failed to open default keymapping configuration file !";
+                    LOG(logERROR) << "Failed to open default keymapping configuration file !" << m_file->fileName().toStdString();
                     return;
                 }
             }
@@ -129,7 +128,7 @@ namespace Ra
                 LOG(logERROR) << "Unrecognized XML keymapping configuration file tag \"" << qPrintable(node.tagName()) << "\" !";
                 LOG(logERROR) << "Trying to load default configuration...";
 
-                loadConfiguration( "Configs/default.xml" );
+                loadConfiguration( (EXE_PATH + "Configs/default.xml").c_str() );
 
                 return;
             }
@@ -150,7 +149,7 @@ namespace Ra
                     LOG(logERROR) << "Unrecognized \"" << keyString << "\" key !";
                     LOG(logERROR) << "Trying to load default configuration...";
 
-                    loadConfiguration( "Configs/default.xml" );
+                    loadConfiguration( (EXE_PATH + "Configs/default.xml").c_str() );
                 }
                 else
                 {

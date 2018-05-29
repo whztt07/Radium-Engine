@@ -4,8 +4,10 @@
 
 #include <GuiBase/Utils/KeyMappingManager.hpp>
 
+
 int main( int argc, char** argv )
 {
+
     Ra::MainApplication app( argc, argv );
 
     const uint& fpsMax = app.m_targetFPS;

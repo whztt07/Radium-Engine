@@ -48,7 +48,7 @@
 
 
 // Const parameters : TODO : make config / command line options
-
+extern std::string EXE_PATH;
 
 namespace Ra
 {
@@ -68,6 +68,8 @@ namespace Ra
         , m_recordMeshes( false )
         , m_isAboutToQuit( false )
     {
+
+        EXE_PATH = QCoreApplication::applicationDirPath().toStdString() + "/";
         // Set application and organization names in order to ensure uniform
         // QSettings configurations.
         // \see http://doc.qt.io/qt-5/qsettings.html#QSettings-4
@@ -292,34 +294,34 @@ namespace Ra
         using namespace Ra::Engine;
 
         ShaderConfiguration bpConfig("BlinnPhong");
-        bpConfig.addShader(ShaderType_VERTEX, "Shaders/BlinnPhong.vert.glsl");
-        bpConfig.addShader(ShaderType_FRAGMENT, "Shaders/BlinnPhong.frag.glsl");
+        bpConfig.addShader(ShaderType_VERTEX, EXE_PATH+"Shaders/BlinnPhong.vert.glsl");
+        bpConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/BlinnPhong.frag.glsl");
         ShaderConfigurationFactory::addConfiguration(bpConfig);
 
         ShaderConfiguration bpwConfig("BlinnPhong_wire");
-        bpwConfig.addShader(ShaderType_VERTEX, "Shaders/BlinnPhong_wire.vert.glsl");
-        bpwConfig.addShader(ShaderType_FRAGMENT, "Shaders/BlinnPhong_wire.frag.glsl");
+        bpwConfig.addShader(ShaderType_VERTEX, EXE_PATH+"Shaders/BlinnPhong_wire.vert.glsl");
+        bpwConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/BlinnPhong_wire.frag.glsl");
         ShaderConfigurationFactory::addConfiguration(bpwConfig);
 
         ShaderConfiguration pConfig("Plain");
-        pConfig.addShader(ShaderType_VERTEX, "Shaders/Plain.vert.glsl");
-        pConfig.addShader(ShaderType_FRAGMENT, "Shaders/Plain.frag.glsl");
+        pConfig.addShader(ShaderType_VERTEX, EXE_PATH+"Shaders/Plain.vert.glsl");
+        pConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/Plain.frag.glsl");
         ShaderConfigurationFactory::addConfiguration(pConfig);
 
         ShaderConfiguration lgConfig("LinesGeom");
-        lgConfig.addShader(ShaderType_VERTEX, "Shaders/Lines.vert.glsl");
-        lgConfig.addShader(ShaderType_FRAGMENT, "Shaders/Lines.frag.glsl");
-        lgConfig.addShader(ShaderType_GEOMETRY, "Shaders/Lines.geom.glsl");
+        lgConfig.addShader(ShaderType_VERTEX, EXE_PATH+"Shaders/Lines.vert.glsl");
+        lgConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/Lines.frag.glsl");
+        lgConfig.addShader(ShaderType_GEOMETRY, EXE_PATH+"Shaders/Lines.geom.glsl");
         ShaderConfigurationFactory::addConfiguration(lgConfig);
 
         ShaderConfiguration lConfig("Lines");
-        lConfig.addShader(ShaderType_VERTEX, "Shaders/Lines.vert.glsl");
-        lConfig.addShader(ShaderType_FRAGMENT, "Shaders/Lines.frag.glsl");
+        lConfig.addShader(ShaderType_VERTEX, EXE_PATH+"Shaders/Lines.vert.glsl");
+        lConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/Lines.frag.glsl");
         ShaderConfigurationFactory::addConfiguration(lConfig);
 
         ShaderConfiguration gdConfig("GradientDisplay");
-        lConfig.addShader(ShaderType_VERTEX, "Shaders/GradientDisplay.vert.glsl");
-        lConfig.addShader(ShaderType_FRAGMENT, "Shaders/GradientDisplay.frag.glsl");
+        lConfig.addShader(ShaderType_VERTEX, EXE_PATH+"Shaders/GradientDisplay.vert.glsl");
+        lConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/GradientDisplay.frag.glsl");
         ShaderConfigurationFactory::addConfiguration(gdConfig);
     }
 
