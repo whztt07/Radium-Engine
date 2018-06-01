@@ -30,6 +30,7 @@ class RA_CORE_API TopoVector3 : public Ra::Core::Vector3 {
 inline RA_CORE_API Scalar dot( const TopoVector3& a, const TopoVector3& b );
 inline RA_CORE_API TopoVector3 cross( const TopoVector3& a, const TopoVector3& b );
 inline RA_CORE_API TopoVector3& normalize( TopoVector3& v );
+inline RA_CORE_API Scalar sqrnorm( const TopoVector3& v );
 inline RA_CORE_API Scalar norm( const TopoVector3& v );
 template <typename OtherScalar>
 inline void vectorize( TopoVector3& v, const OtherScalar s );
