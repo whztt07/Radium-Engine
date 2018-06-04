@@ -1,6 +1,5 @@
 
-
-file( GLOB_RECURSE stb_headers "${CMAKE_CURRENT_SOURCE_DIR}/3rdPartyLibraries/stb/*.h"  )
+file(GLOB_RECURSE stb_headers "${CMAKE_CURRENT_SOURCE_DIR}/3rdPartyLibraries/stb/*.h")
 
 add_custom_target(stb_lib
     COMMAND ${CMAKE_COMMAND} -E make_directory ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/include/stb/

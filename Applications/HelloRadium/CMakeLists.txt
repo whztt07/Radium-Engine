@@ -5,10 +5,11 @@ set(app_target helloRadium)
 find_package(OpenGL     REQUIRED)
 find_package(Qt5 COMPONENTS Core Widgets OpenGL REQUIRED)
 
-set( Qt5_LIBRARIES
-     Qt5::Core
-     Qt5::Widgets
-     Qt5::OpenGL )
+set(Qt5_LIBRARIES
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::OpenGL
+)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -29,23 +30,32 @@ include_directories(
 
 
 # Get files
-file( GLOB file_sources *.cpp *.c )
-file( GLOB file_headers *.hpp *.h )
+file(GLOB file_sources *.cpp *.c)
+file(GLOB file_headers *.hpp *.h)
 
 
 # Generate an executable
-add_executable( ${app_target} ${file_sources} ${file_headers} )
+add_executable(${app_target} ${file_sources} ${file_headers})
 
-add_dependencies( ${app_target} radiumEngine radiumGuiBase radiumCore radium_assets)
+add_dependencies(${app_target} radiumEngine radiumGuiBase radiumCore radium_assets)
 
 
 # Link good libraries
-target_link_libraries( ${app_target} # target
-    ${RADIUM_LIBRARIES}              # Radium libs
-    ${GLBINDING_LIBRARIES}           # Radium dep
-    ${Qt5_LIBRARIES}                 # the Qt beast
+target_link_libraries(${app_target} # target
+    ${RADIUM_LIBRARIES}             # Radium libs
+    ${GLBINDING_LIBRARIES}          # Radium dep
+    ${Qt5_LIBRARIES}                # the Qt beast
 )
 
 if (MSVC)
-    set_property( TARGET ${app_target} PROPERTY IMPORTED_LOCATION "${RADIUM_BINARY_OUTPUT_PATH}" )
+    set_property(TARGET ${app_target} PROPERTY IMPORTED_LOCATION "${RADIUM_BINARY_OUTPUT_PATH}")
 endif(MSVC)
+
+install(TARGETS ${app_target} RUNTIME
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/Radium"
+)
+
+if(APPLE)
+    include(DeployQt)
+    macdeployqt(${app_target})
+endif()

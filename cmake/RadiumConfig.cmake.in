@@ -1,0 +1,26 @@
+# from https://github.com/forexample/package-example/blob/master/Foo/cmake/Config.cmake.in
+@PACKAGE_INIT@
+
+check_required_components("RadiumEngine")
+
+
+
+# from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html
+
+include(CMakeFindDependencyMacro)
+# should do that?
+#find_dependency(assimp)
+#find_dependency(tinyply)
+#find_dependency(glbindings)
+#find_dependency(globjects)
+#find_dependency(glm)
+#find_dependency(openmesh)
+#find_dependency(qt5)
+
+include("${CMAKE_CURRENT_LIST_DIR}/RadiumTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/RadiumMacros.cmake")
+
+# Compute paths
+set(RADIUM_INCLUDE_DIR "@RADIUM_INSTALL_DIR@/include/")
+set(RADIUM_LIB_DIR "@RADIUM_INSTALL_DIR@/lib/")
+set(RADIUM_LIBRARIES radiumCore radiumIO radiumEngine radiumGuiBase)

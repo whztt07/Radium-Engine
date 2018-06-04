@@ -8,18 +8,19 @@ set(CMAKE_AUTORCC ON)
 find_package(OpenGL     REQUIRED)
 find_package(Qt5 COMPONENTS Core Widgets OpenGL REQUIRED)
 
-set( Qt5_LIBRARIES
-     Qt5::Core
-     Qt5::Widgets
-     Qt5::OpenGL )
+set(Qt5_LIBRARIES
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::OpenGL
+)
 
 set(app_libs
-    ${RADIUM_LIBRARIES}             # Radium libs
-    ${GLBINDING_LIBRARIES}          # Radium dep
-    ${ASSIMP_LIBRARIES}             # Radium dep
-    ${Qt5_LIBRARIES}                # the Qt beast
-    ${OPENMESH_LIBRARIES}           # Radium dep
-    )
+    ${RADIUM_LIBRARIES}    # Radium libs
+    ${GLBINDING_LIBRARIES} # Radium dep
+    ${ASSIMP_LIBRARIES}    # Radium dep
+    ${Qt5_LIBRARIES}       # the Qt beast
+    ${OPENMESH_LIBRARIES}  # Radium dep
+)
 
 file(GLOB_RECURSE app_sources *.cpp)
 file(GLOB_RECURSE app_headers *.h *.hpp)
@@ -35,7 +36,7 @@ include_directories(
     ${RADIUM_INCLUDE_DIRS}
     ${PATATE_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR} # Moc
-    )
+)
 
 add_executable(
     ${app_target}
@@ -44,25 +45,30 @@ add_executable(
     ${app_inlines}
     ${app_uis_moc}
     ${resources}
-    )
+)
 
 target_link_libraries(
     ${app_target}
     ${app_libs}
-    )
+)
 
-add_dependencies( ${app_target} radiumEngine radiumGuiBase radiumCore radiumIO radium_assets radium_configs)
+add_dependencies(${app_target}
+    radiumEngine radiumGuiBase
+    radiumCore radiumIO
+    radium_assets radium_configs
+)
 
-#install( DIRECTORY . DESTINATION include FILES_MATCHING PATTERN "*.hpp" PATTERN "*.inl" PATTERN "*.h" )
-#install( FILES ${engine_shaders} DESTINATION Shaders )
-#install( DIRECTORY ${CMAKE_SOURCE_DIR}/Assets/. DESTINATION Assets )
-#install( TARGETS ${app_target} ${core_target} ${engine_target} ${guibase_target}
-#    RUNTIME DESTINATION bin
-#    LIBRARY DESTINATION lib
-#    ARCHIVE DESTINATION lib )
-
-if (MSVC)
+if(MSVC)
     #This will work from CMake 3.6
-    set_property( DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${app_target})
-    set_property( TARGET ${app_target} PROPERTY IMPORTED_LOCATION "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/bin" )
+    set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${app_target})
+    set_property(TARGET ${app_target} PROPERTY IMPORTED_LOCATION "${RADIUM_BINARY_OUTPUT_PATH}")
 endif(MSVC)
+
+install(TARGETS ${app_target} RUNTIME
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/Radium"
+)
+
+if(APPLE)
+    include(DeployQt)
+    macdeployqt(${app_target})
+endif()
