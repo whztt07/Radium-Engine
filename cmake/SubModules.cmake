@@ -43,3 +43,10 @@ include(submoduleSTB)
 if(RADIUM_TINYPLY_SUPPORT)
     include(submoduleTinyPly)
 endif()
+
+install(DIRECTORY ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/include/
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/include/Radium"
+)
+install(DIRECTORY ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/Radium"
+)

@@ -219,10 +219,10 @@ set_property(TARGET ${guibase_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 
 # install/package related stuff (from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html)
-set(config_install_dir "${CMAKE_INSTALL_PREFIX}/lib/cmake/")
+set(config_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium/cmake/")
 set(include_install_dir "${CMAKE_INSTALL_PREFIX}/include/Radium")
 set(bin_install_dir "${CMAKE_INSTALL_PREFIX}/bin/Radium")
-set(lib_install_dir "${CMAKE_INSTALL_PREFIX}/lib")
+set(lib_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium")
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/Radium")
 
 generate_export_header(${core_target})
