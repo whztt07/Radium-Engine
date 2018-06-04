@@ -217,18 +217,22 @@ set_property(TARGET ${core_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET ${engine_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET ${guibase_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-
+#####
 # install/package related stuff (from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html)
+#####
 set(config_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium/cmake/")
 set(include_install_dir "${CMAKE_INSTALL_PREFIX}/include/Radium")
 set(bin_install_dir "${CMAKE_INSTALL_PREFIX}/bin/Radium")
 set(lib_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium")
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/Radium")
 
-generate_export_header(${core_target})
-generate_export_header(${io_target})
-generate_export_header(${engine_target})
-generate_export_header(${guibase_target})
+# FIXME(Florian): should these 4 replace the <lib>_API macros? (like RA_CORE_API or FM_PLUGIN_API)
+#generate_export_header(${core_target})
+#generate_export_header(${io_target})
+#generate_export_header(${engine_target})
+#generate_export_header(${guibase_target})
+# then shall we split each lib for install so that the installed headers include the generated export headers?
+
 install(TARGETS ${core_target} ${io_target} ${engine_target} ${guibase_target}
     EXPORT   RadiumTargets
     LIBRARY  DESTINATION "${lib_install_dir}"
@@ -252,6 +256,7 @@ export(EXPORT RadiumTargets
     NAMESPACE Upstream::
 )
 # this specific command is from https://github.com/forexample/package-example/blob/master/Foo/CMakeLists.txt
+# and replaces "configure_file"
 configure_package_config_file("${CMAKE_SOURCE_DIR}/cmake/RadiumConfig.cmake.in"
     "${generated_dir}/RadiumConfig.cmake"
     INSTALL_DESTINATION "${config_install_dir}"
@@ -295,6 +300,11 @@ target_include_directories(${guibase_target} PUBLIC
     $<INSTALL_INTERFACE:include/>
 )
 set(ConfigPackageLocation "${config_install_dir}")
+
+# FIXME: this errors for each lib with:
+#    Target <lib> INTERFACE_INCLUDE_DIRECTORIES property contains path:
+#    "/ssd/canezin/Radium_PR/Radium-Engine/src/"
+#    which is prefixed in the source directory.
 #install(EXPORT RadiumTargets
 #    FILE        RadiumTargets.cmake
 #    NAMESPACE   Upstream::
@@ -305,7 +315,7 @@ install(FILES "${generated_dir}/RadiumConfig.cmake"
     DESTINATION ${ConfigPackageLocation}
     COMPONENT   Devel
 )
-# there might be an issue with io if interface due to target_include_directories(${io_target} INTERFACE ...)
+# FIXME: there might be an issue with io if interface due to target_include_directories(${io_target} INTERFACE ...)
 
 # Build tests
 include_directories(
