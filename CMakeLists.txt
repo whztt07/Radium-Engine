@@ -79,6 +79,11 @@ endif()
 # Set the compiler flags.
 include(CompileFlags)
 
+# on install, copy CompileFlags to Radium install dir
+install(FILES cmake/CompileFlags.cmake
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/Radium/cmake/"
+)
+
 if(NOT CMAKE_PREFIX_PATH)
     set(CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 endif()

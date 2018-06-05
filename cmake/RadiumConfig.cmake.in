@@ -5,20 +5,34 @@
 
 include(CMakeFindDependencyMacro)
 # should do that?
-#find_dependency(qt5)
+#find_dependency(qt5 REQUIRED)
 
 include("${CMAKE_CURRENT_LIST_DIR}/RadiumTargets.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/RadiumMacros.cmake")
 
-# Compute paths
+# compute paths
 set(RADIUM_INCLUDE_DIR "@RADIUM_INSTALL_DIR@/include/Radium")
 set(RADIUM_LIB_DIR "@RADIUM_INSTALL_DIR@/lib/Radium")
-set(RADIUM_LIBRARIES radiumCore radiumIO radiumEngine radiumGuiBase)
+set(RADIUM_LIBRARIES Ra::radiumCore Ra::radiumIO Ra::radiumEngine Ra::radiumGuiBase)
 set(RADIUM_BINARY_OUTPUT_PATH "@RADIUM_INSTALL_DIR@/bin/Radium")
 set(RADIUM_PLUGIN_OUTPUT_PATH "@RADIUM_INSTALL_DIR@/bin/Radium/Plugins")
+
+# compute libraries path
 set(ASSIMP_LIBRARIES @ASSIMP_LIBRARIES@)
 set(GLBINDING_LIBRARIES @GLBINDING_LIBRARIES@)
 set(GLOBJECTS_LIBRARIES @GLOBJECTS_LIBRARIES@)
+
+# export compilation options
+set(RADIUM_WITH_DOUBLE_PRECISION @RADIUM_WITH_DOUBLE_PRECISION@)
+set(RADIUM_WITH_OMP              @RADIUM_WITH_OMP@)
+set(RADIUM_WITH_FANCY_GL         @RADIUM_WITH_FANCY_GL@)
+set(RADIUM_WITH_TEXTURES         @RADIUM_WITH_TEXTURES@)
+set(RADIUM_WITH_PROFILING        @RADIUM_WITH_PROFILING@)
+set(RADIUM_WARNINGS_AS_ERRORS    @RADIUM_WARNINGS_AS_ERRORS@)
+set(RADIUM_FORCE_ASSERTS         @RADIUM_FORCE_ASSERTS@)
+set(RADIUM_ASSIMP_SUPPORT        @RADIUM_ASSIMP_SUPPORT@)
+set(RADIUM_TINYPLY_SUPPORT       @RADIUM_TINYPLY_SUPPORT@)
+set(RADIUM_BUILD_APPS            @RADIUM_BUILD_APPS@)
+set(RADIUM_FAST_MATH             @RADIUM_FAST_MATH@)
 
 # FIXME: is this mandatory / the right thing?
 check_required_components("RadiumEngine")

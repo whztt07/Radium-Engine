@@ -270,9 +270,9 @@ install(TARGETS ${core_target} ${io_target} ${engine_target} ${guibase_target}
 )
 
 # install headers
-install(FILES ${core_headers}    ${core_inlines}   ${io_headers}      ${io_inlines}
-              ${engine_headers}  ${engine_inlines} ${guibase_headers} ${guibase_inlines}
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
     DESTINATION "${include_install_dir}"
+    FILES_MATCHING PATTERN "*.h"  PATTERN "*.hpp"  PATTERN "*.inl"
 )
 
 # build Config.cmake files
