@@ -18,6 +18,14 @@ message(STATUS "Compiling Radium with 3rdparty include dirs : ${EIGEN3_INCLUDE_D
 
 include(GenerateExportHeader)
 
+include_directories(
+    ${EIGEN3_INCLUDE_DIR}
+    ${GLBINDING_INCLUDE_DIR}
+    ${GLOBJECTS_INCLUDE_DIR}
+    ${GLM_INCLUDE_DIR}
+    ${OPENMESH_INCLUDE_DIR}
+)
+
 # Build Core
 set(core_target radiumCore)
 
@@ -129,6 +137,10 @@ endif(RADIUM_ASSIMP_SUPPORT)
 if(RADIUM_TINYPLY_SUPPORT)
     add_dependencies(${io_target} tinyply)
 endif(RADIUM_TINYPLY_SUPPORT)
+
+
+include_directories( ${STB_INCLUDE_DIR} )
+
 
 # Build Engine
 set(engine_target radiumEngine)
@@ -262,60 +274,29 @@ configure_package_config_file("${CMAKE_SOURCE_DIR}/cmake/RadiumConfig.cmake.in"
     INSTALL_DESTINATION "${config_install_dir}"
 )
 target_include_directories(${core_target} PUBLIC
-    $<BUILD_INTERFACE:
-    ${EIGEN3_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${OPENMESH_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include/>
+    $<INSTALL_INTERFACE:include/Radium>
 )
 target_include_directories(${io_target} PUBLIC
-    $<BUILD_INTERFACE:
-    ${EIGEN3_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${OPENMESH_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include/>
+    $<INSTALL_INTERFACE:include/Radium>
 )
 target_include_directories(${engine_target} PUBLIC
-    $<BUILD_INTERFACE:
-    ${EIGEN3_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${OPENMESH_INCLUDE_DIR}
-    ${STB_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include/>
+    $<INSTALL_INTERFACE:include/Radium>
 )
 target_include_directories(${guibase_target} PUBLIC
-    $<BUILD_INTERFACE:
-    ${EIGEN3_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${OPENMESH_INCLUDE_DIR}
-    ${STB_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include/>
+    $<INSTALL_INTERFACE:include/Radium>
 )
-set(ConfigPackageLocation "${config_install_dir}")
 
-# FIXME: this errors for each lib with:
-#    Target <lib> INTERFACE_INCLUDE_DIRECTORIES property contains path:
-#    "/ssd/canezin/Radium_PR/Radium-Engine/src/"
-#    which is prefixed in the source directory.
-#install(EXPORT RadiumTargets
-#    FILE        RadiumTargets.cmake
-#    NAMESPACE   Upstream::
-#    DESTINATION ${ConfigPackageLocation}
-#)
+set(ConfigPackageLocation "${config_install_dir}")
+install(EXPORT RadiumTargets
+    FILE        RadiumTargets.cmake
+    NAMESPACE   Upstream::
+    DESTINATION ${ConfigPackageLocation}
+)
 install(FILES "${generated_dir}/RadiumConfig.cmake"
               "${generated_dir}/RadiumConfigVersion.cmake"
     DESTINATION ${ConfigPackageLocation}
     COMPONENT   Devel
 )
-# FIXME: there might be an issue with io if interface due to target_include_directories(${io_target} INTERFACE ...)
 
 # Build tests
 include_directories(
