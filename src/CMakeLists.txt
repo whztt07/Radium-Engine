@@ -223,9 +223,18 @@ set_property(TARGET ${core_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET ${engine_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET ${guibase_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+
+# Build tests
+include_directories(
+        .
+)
+add_subdirectory(Tests)
+
+
 #####
 # install/package related stuff (from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html)
 #####
+# set paths
 set(config_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium/cmake/")
 set(include_install_dir "${CMAKE_INSTALL_PREFIX}/include/Radium")
 set(bin_install_dir "${CMAKE_INSTALL_PREFIX}/bin/Radium")
@@ -239,34 +248,7 @@ set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/Radium")
 #generate_export_header(${guibase_target})
 # then shall we split each lib for install so that the installed headers include the generated export headers?
 
-install(TARGETS ${core_target} ${io_target} ${engine_target} ${guibase_target}
-    EXPORT   RadiumTargets
-    LIBRARY  DESTINATION "${lib_install_dir}"
-    ARCHIVE  DESTINATION "${lib_install_dir}"
-    RUNTIME  DESTINATION "${bin_install_dir}"
-    INCLUDES DESTINATION "${include_install_dir}"
-)
-install(FILES ${core_headers}    ${core_inlines}   ${io_headers}      ${io_inlines}
-              ${engine_headers}  ${engine_inlines} ${guibase_headers} ${guibase_inlines}
-    DESTINATION "${include_install_dir}"
-    COMPONENT   Devel
-)
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    "${generated_dir}/RadiumConfigVersion.cmake"
-    VERSION ${Upstream_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
-export(EXPORT RadiumTargets
-    FILE "${generated_dir}/RadiumTargets.cmake"
-    NAMESPACE Ra::
-)
-# this specific command is from https://github.com/forexample/package-example/blob/master/Foo/CMakeLists.txt
-# and replaces "configure_file"
-configure_package_config_file("${CMAKE_SOURCE_DIR}/cmake/RadiumConfig.cmake.in"
-    "${generated_dir}/RadiumConfig.cmake"
-    INSTALL_DESTINATION "${config_install_dir}"
-)
+# install targets
 target_include_directories(${core_target} PUBLIC
     $<INSTALL_INTERFACE:include/Radium>
 )
@@ -279,7 +261,35 @@ target_include_directories(${engine_target} PUBLIC
 target_include_directories(${guibase_target} PUBLIC
     $<INSTALL_INTERFACE:include/Radium>
 )
+install(TARGETS ${core_target} ${io_target} ${engine_target} ${guibase_target}
+    EXPORT   RadiumTargets
+    LIBRARY  DESTINATION "${lib_install_dir}"
+    ARCHIVE  DESTINATION "${lib_install_dir}"
+    RUNTIME  DESTINATION "${bin_install_dir}"
+    INCLUDES DESTINATION "${include_install_dir}"
+)
 
+# install headers
+install(FILES ${core_headers}    ${core_inlines}   ${io_headers}      ${io_inlines}
+              ${engine_headers}  ${engine_inlines} ${guibase_headers} ${guibase_inlines}
+    DESTINATION "${include_install_dir}"
+)
+
+# build Config.cmake files
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${generated_dir}/RadiumConfigVersion.cmake"
+    VERSION ${Upstream_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+export(EXPORT RadiumTargets
+    FILE "${generated_dir}/RadiumTargets.cmake"
+    NAMESPACE Ra::
+)
+configure_package_config_file("${CMAKE_SOURCE_DIR}/cmake/RadiumConfig.cmake.in"
+    "${generated_dir}/RadiumConfig.cmake"
+    INSTALL_DESTINATION "${config_install_dir}"
+)
 set(ConfigPackageLocation "${config_install_dir}")
 install(EXPORT RadiumTargets
     FILE        RadiumTargets.cmake
@@ -289,11 +299,4 @@ install(EXPORT RadiumTargets
 install(FILES "${generated_dir}/RadiumConfig.cmake"
               "${generated_dir}/RadiumConfigVersion.cmake"
     DESTINATION ${ConfigPackageLocation}
-    COMPONENT   Devel
 )
-
-# Build tests
-include_directories(
-        .
-)
-add_subdirectory(Tests)
