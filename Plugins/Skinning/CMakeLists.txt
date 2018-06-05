@@ -24,10 +24,6 @@ file(GLOB_RECURSE inlines src/*.inl)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-add_definitions(${Qt5Core_DEFINITIONS})
-add_definitions(${Qt5Widges_DEFINITIONS})
-add_definitions(${Qt5OpenGL_DEFINITIONS})
-
 include_directories(
     src/
     ${CMAKE_CURRENT_BINARY_DIR} # MOC

@@ -189,12 +189,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# Fixme : Really usefull ?
-add_definitions(${Qt5Core_DEFINITIONS})
-add_definitions(${Qt5Widgets_DEFINITIONS})
-add_definitions(${Qt5OpenGL_DEFINITIONS})
-add_definitions(${Qt5Xml_DEFINITIONS})
-
 file(GLOB_RECURSE guibase_sources GuiBase/*.cpp)
 file(GLOB_RECURSE guibase_headers GuiBase/*.h GuiBase/*.hpp)
 file(GLOB_RECURSE guibase_inlines GuiBase/*.inl)
@@ -265,7 +259,7 @@ write_basic_package_version_file(
 )
 export(EXPORT RadiumTargets
     FILE "${generated_dir}/RadiumTargets.cmake"
-    NAMESPACE Upstream::
+    NAMESPACE Ra::
 )
 # this specific command is from https://github.com/forexample/package-example/blob/master/Foo/CMakeLists.txt
 # and replaces "configure_file"
@@ -289,7 +283,7 @@ target_include_directories(${guibase_target} PUBLIC
 set(ConfigPackageLocation "${config_install_dir}")
 install(EXPORT RadiumTargets
     FILE        RadiumTargets.cmake
-    NAMESPACE   Upstream::
+    NAMESPACE   Ra::
     DESTINATION ${ConfigPackageLocation}
 )
 install(FILES "${generated_dir}/RadiumConfig.cmake"

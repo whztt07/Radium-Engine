@@ -28,9 +28,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-add_definitions(${Qt5Core_DEFINITIONS})
-add_definitions(${Qt5Widges_DEFINITIONS})
-
 include_directories(
     src/
     ${CMAKE_CURRENT_BINARY_DIR} # MOC

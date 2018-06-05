@@ -157,26 +157,26 @@ add_subdirectory(Plugins)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 
-  set(RADIUM_PROJECT_NUMBER ${GIT_CHANGESET})
-  set(RADIUM_DOC_DIRECTORY ${RADIUM_BUNDLE_DIRECTORY}/Docs)
-
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in ${RADIUM_BUNDLE_DIRECTORY}/Doxyfile @ONLY)
-
-  add_custom_target(doc
-     ${CMAKE_COMMAND} -E make_directory ${RADIUM_DOC_DIRECTORY}
-     COMMAND ${CMAKE_COMMAND} -E copy_directory
-         ${CMAKE_CURRENT_SOURCE_DIR}/Docs/images/
-         ${RADIUM_DOC_DIRECTORY}/html/images
-     COMMAND ${CMAKE_COMMAND} -E copy
-         ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
-         ${RADIUM_BUNDLE_DIRECTORY}/
-     COMMAND ${DOXYGEN_EXECUTABLE} ${RADIUM_BUNDLE_DIRECTORY}/Doxyfile
-     DEPENDS
-         ${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in
-         ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
-     WORKING_DIRECTORY ${RADIUM_BUNDLE_DIRECTORY}
-     COMMENT "Generating API documentation with Doxygen" VERBATIM
-  )
+    set(RADIUM_PROJECT_NUMBER ${GIT_CHANGESET})
+    set(RADIUM_DOC_DIRECTORY ${RADIUM_BUNDLE_DIRECTORY}/Docs)
+    
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in ${RADIUM_BUNDLE_DIRECTORY}/Doxyfile @ONLY)
+    
+    add_custom_target(doc
+        ${CMAKE_COMMAND} -E make_directory ${RADIUM_DOC_DIRECTORY}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_CURRENT_SOURCE_DIR}/Docs/images/
+            ${RADIUM_DOC_DIRECTORY}/html/images
+        COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
+            ${RADIUM_BUNDLE_DIRECTORY}/
+        COMMAND ${DOXYGEN_EXECUTABLE} ${RADIUM_BUNDLE_DIRECTORY}/Doxyfile
+        DEPENDS
+            ${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in
+            ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
+        WORKING_DIRECTORY ${RADIUM_BUNDLE_DIRECTORY}
+        COMMENT "Generating API documentation with Doxygen" VERBATIM
+    )
 endif(DOXYGEN_FOUND)
 
 ################################################################################
