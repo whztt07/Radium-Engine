@@ -72,7 +72,7 @@ elseif(MSVC)
     #              See https://github.com/cginternals/glbinding/blob/master/cmake/CompileOptions.cmake and
     #              and https://github.com/cginternals/glbinding/issues/141#issuecomment-174511579
     # /EHsc  : enable exceptions
-        # /bigobj: fixes C1128
+    # /bigobj: fixes C1128
 
     # disable secure CRT warnings
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -162,14 +162,12 @@ else()
     message(STATUS "${PROJECT_NAME} : Assimp loader disabled")
 endif()
 
-
 if(${RADIUM_TINYPLY_SUPPORT})
     add_definitions(-DIO_USE_TINYPLY)
     message(STATUS "${PROJECT_NAME} : Using TinyPly loader")
 else()
     message(STATUS "${PROJECT_NAME} : TinyPly loader disabled")
 endif()
-
 
 
 # Additional flags depending on system        =================================

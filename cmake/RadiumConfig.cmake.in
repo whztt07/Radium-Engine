@@ -2,9 +2,7 @@
 @PACKAGE_INIT@
 
 # from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html
-
 include(CMakeFindDependencyMacro)
-# should do that?
 find_dependency(Qt5 OPTIONAL_COMPONENTS Core Widgets OpenGL Xml)
 
 include("${CMAKE_CURRENT_LIST_DIR}/RadiumTargets.cmake")
@@ -35,4 +33,4 @@ set(RADIUM_BUILD_APPS            @RADIUM_BUILD_APPS@)
 set(RADIUM_FAST_MATH             @RADIUM_FAST_MATH@)
 
 # FIXME: is this mandatory / the right thing?
-check_required_components("RadiumEngine")
+#check_required_components("RadiumEngine")
