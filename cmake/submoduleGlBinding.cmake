@@ -17,13 +17,12 @@ if(APPLE)
 elseif(UNIX)
     set(GLBINDING_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLBINDINGLIBNAME}.so")
 elseif(MINGW)
-    set(GLBINDING_DLL            "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib${GLBINDINGLIBNAME}.dll")
+    set(GLBINDING_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib${GLBINDINGLIBNAME}.dll")
     set(GLBINDING_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLBINDINGLIBNAME}.dll.a")
 elseif(MSVC)
     set(GLBINDING_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/${GLBINDINGLIBNAME}.dll")
     set(GLBINDING_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/${GLBINDINGLIBNAME}.lib")
 endif()
-
 
 # here is defined the way we want to import glbinding
 ExternalProject_Add(
@@ -65,10 +64,12 @@ ExternalProject_Add(
     EXCLUDE_FROM_ALL TRUE
 )
 
-add_custom_target(glbinding_lib
-    DEPENDS glbinding
-)
+add_library(glbinding_lib STATIC IMPORTED)
+set_property(TARGET glbinding_lib PROPERTY IMPORTED_LOCATION ${GLBINDING_LIBRARIES})
+add_dependencies(glbinding_lib glbinding)
+
 # ----------------------------------------------------------------------------------------------------------------------
+
 if(MSVC OR MINGW)
     add_custom_target(glbinding_install_compiled_dll
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${GLBINDING_DLL} "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"

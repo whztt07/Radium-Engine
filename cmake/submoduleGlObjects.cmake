@@ -6,27 +6,28 @@ else()
 endif()
 
 if(${RADIUM_SUBMODULES_BUILD_TYPE} MATCHES Debug)
-    set(GLOBJECTLIBNAME globjectsd)
+    set(GLOBJECTSLIBNAME globjectsd)
 else()
-    set(GLOBJECTLIBNAME globjects)
+    set(GLOBJECTSLIBNAME globjects)
 endif()
 
 set(GLOBJECTS_INCLUDE_DIR ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/include)
 if(APPLE)
-    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLOBJECTLIBNAME}.dylib")
+    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLOBJECTSLIBNAME}.dylib")
 elseif(UNIX)
-    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLOBJECTLIBNAME}.so")
+    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLOBJECTSLIBNAME}.so")
 elseif(MINGW)
-    set(GLOBJECTS_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib${GLOBJECTLIBNAME}.dll")
-    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLOBJECTLIBNAME}.dll.a")
+    set(GLOBJECTS_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib${GLOBJECTSLIBNAME}.dll")
+    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/lib${GLOBJECTSLIBNAME}.dll.a")
 elseif(MSVC)
-    set(GLOBJECTS_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/${GLOBJECTLIBNAME}.dll")
-    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/${GLOBJECTLIBNAME}.lib")
+    set(GLOBJECTS_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/${GLOBJECTSLIBNAME}.dll")
+    set(GLOBJECTS_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/${GLOBJECTSLIBNAME}.lib")
 endif()
 
 # here is defined the way we want to import globjects
 ExternalProject_Add(
     globjects
+
     # Need to build glbinding_lib before configuring globjects
     DEPENDS glbinding_lib glm_lib
 
@@ -66,10 +67,10 @@ ExternalProject_Add(
     EXCLUDE_FROM_ALL TRUE
 )
 
+add_library(globjects_lib STATIC IMPORTED)
+set_property(TARGET globjects_lib PROPERTY IMPORTED_LOCATION ${GLOBJECTS_LIBRARIES})
+add_dependencies(globjects_lib globjects)
 
-add_custom_target(globjects_lib
-    DEPENDS glbinding_lib globjects
-)
 # ----------------------------------------------------------------------------------------------------------------------
 
 if(MSVC OR MINGW)

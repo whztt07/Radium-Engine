@@ -16,10 +16,10 @@ set(Qt5_LIBRARIES
 
 set(app_libs
     ${RADIUM_LIBRARIES}    # Radium libs
-    ${GLBINDING_LIBRARIES} # Radium dep
-    ${ASSIMP_LIBRARIES}    # Radium dep
+    glbinding_lib # Radium dep
+    assimp_lib    # Radium dep
+    openmesh_lib  # Radium dep
     ${Qt5_LIBRARIES}       # the Qt beast
-    ${OPENMESH_LIBRARIES}  # Radium dep
 )
 
 file(GLOB_RECURSE app_sources *.cpp)

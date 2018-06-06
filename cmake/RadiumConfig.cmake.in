@@ -4,7 +4,7 @@
 # from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html
 
 include(CMakeFindDependencyMacro)
-# should do that?
+
 find_dependency(Qt5 OPTIONAL_COMPONENTS Core Widgets OpenGL Xml)
 
 include("${CMAKE_CURRENT_LIST_DIR}/RadiumTargets.cmake")
@@ -17,9 +17,41 @@ set(RADIUM_BINARY_OUTPUT_PATH "@RADIUM_INSTALL_DIR@/bin/Radium")
 set(RADIUM_PLUGIN_OUTPUT_PATH "@RADIUM_INSTALL_DIR@/bin/Radium/Plugins")
 
 # compute libraries path
-set(ASSIMP_LIBRARIES @ASSIMP_LIBRARIES@)
-set(GLBINDING_LIBRARIES @GLBINDING_LIBRARIES@)
-set(GLOBJECTS_LIBRARIES @GLOBJECTS_LIBRARIES@)
+#if(@RADIUM_SUBMODULES_BUILD_TYPE@ MATCHES Debug)
+#    set(GLBINDINGLIBNAME globjectsd)
+#    set(GLOBJECTSLIBNAME globjectsd)
+#    set(ASSIMPLIBNAME assimpd)
+#else()
+#    set(GLBONDINGLIBNAME globjects)
+#    set(GLOBJECTSLIBNAME globjects)
+#    set(ASSIMPLIBNAME assimp)
+#endif()
+#if(APPLE)
+#    set(GLBINDING_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${GLBINDINGLIBNAME}.dylib")
+#    set(GLOBJECTS_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${GLOBJECTSLIBNAME}.dylib")
+#    set(ASSIMP_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${ASSIMPLIBNAME}.dylib")
+#elseif(UNIX)
+#    set(GLBINDING_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${GLBINDINGLIBNAME}.so")
+#    set(GLOBJECTS_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${GLOBJECTSLIBNAME}.so")
+#    set(ASSIMP_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${ASSIMPLIBNAME}.so")
+#elseif(MINGW)
+#    set(GLBINDING_DLL "@RADIUM_INSTALL_DIR@/lib${GLBINDINGLIBNAME}.dll")
+#    set(GLBINDING_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${GLBINDINGLIBNAME}.dll.a")
+#    set(GLOBJECTS_DLL "@RADIUM_INSTALL_DIR@/lib${GLOBJECTSLIBNAME}.dll")
+#    set(GLOBJECTS_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${GLOBJECTSLIBNAME}.dll.a")
+#    set(ASSIMP_DLL "@RADIUM_INSTALL_DIR@/bin/lib${ASSIMPLIBNAME}.dll")
+#    set(ASSIMP_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/lib${ASSIMPLIBNAME}.dll.a")
+#elseif(MSVC)
+#    set(GLBINDING_DLL "@RADIUM_INSTALL_DIR@/${GLBINDINGLIBNAME}.dll")
+#    set(GLBINDING_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/${GLBINDINGLIBNAME}.lib")
+#    set(GLOBJECTS_DLL "@RADIUM_INSTALL_DIR@/${GLOBJECTSLIBNAME}.dll")
+#    set(GLOBJECTS_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/${GLOBJECTSLIBNAME}.lib")
+#    set(ASSIMP_LIBRARIES "@RADIUM_INSTALL_DIR@/lib/${ASSIMPLIBNAME}.lib")
+#    set(ASSIMP_DLL "@RADIUM_INSTALL_DIR@/bin/${ASSIMPLIBNAME}.dll")
+#endif()
+#unset(GLBINDINGLIBNAME)
+#unset(GLOBJECTSLIBNAME)
+#unset(ASSIMPLIBNAME)
 
 # export compilation options
 set(RADIUM_WITH_DOUBLE_PRECISION @RADIUM_WITH_DOUBLE_PRECISION@)
@@ -35,4 +67,4 @@ set(RADIUM_BUILD_APPS            @RADIUM_BUILD_APPS@)
 set(RADIUM_FAST_MATH             @RADIUM_FAST_MATH@)
 
 # FIXME: is this mandatory / the right thing?
-check_required_components("RadiumEngine")
+#check_required_components("Radium")

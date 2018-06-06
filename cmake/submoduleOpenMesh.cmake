@@ -58,9 +58,12 @@ ExternalProject_Add(
     EXCLUDE_FROM_ALL TRUE
 )
 
-add_custom_target(openmesh_lib
-    DEPENDS openmesh
-)
+add_library(openmesh_lib STATIC IMPORTED)
+set_property(TARGET openmesh_lib PROPERTY IMPORTED_LOCATION ${OPENMESH_LIBRARIES})
+add_dependencies(openmesh_lib openmesh)
+
+# ----------------------------------------------------------------------------------------------------------------------
+
 
 if(MSVC OR MINGW)
     add_custom_target(openmesh_install_compiled_dll

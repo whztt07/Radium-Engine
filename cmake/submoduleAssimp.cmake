@@ -78,9 +78,9 @@ ExternalProject_Add(
         -DINSTALL_NAME_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY} #override rpath to solve run bug on MACOSX
 )
 
-add_custom_target(assimp_lib
-    DEPENDS assimp
-)
+add_library(assimp_lib STATIC IMPORTED)
+set_property(TARGET assimp_lib PROPERTY IMPORTED_LOCATION ${ASSIMP_LIBRARIES})
+add_dependencies(assimp_lib assimp)
 
 # ----------------------------------------------------------------------------------------------------------------------
 

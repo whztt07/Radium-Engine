@@ -52,7 +52,7 @@ file(GLOB_RECURSE core_headers Core/*.h Core/*.hpp)
 file(GLOB_RECURSE core_inlines Core/*.inl)
 
 set(core_libs
-    ${OPENMESH_LIBRARIES}
+    openmesh_lib
 )
 
 add_library(
@@ -85,7 +85,7 @@ if(RADIUM_ASSIMP_SUPPORT)
     set(io_sources ${io_sources} ${assimp_sources})
     set(io_headers ${io_headers} ${assimp_headers})
     set(io_inlines ${io_inlines} ${assimp_inlines})
-    set(io_libs    ${io_libs}    ${ASSIMP_LIBRARIES})
+    set(io_libs    ${io_libs}    assimp_lib)
 endif( RADIUM_ASSIMP_SUPPORT )
 
 if( RADIUM_TINYPLY_SUPPORT )
@@ -131,7 +131,7 @@ endif(RADIUM_IO_IS_INTERFACE)
 add_dependencies(${io_target} ${core_target} ${engine_target})
 
 if(RADIUM_ASSIMP_SUPPORT)
-    add_dependencies(${io_target} assimp_lib)
+    add_dependencies(${io_target} assimp)
 endif(RADIUM_ASSIMP_SUPPORT)
 
 if(RADIUM_TINYPLY_SUPPORT)
@@ -157,8 +157,8 @@ set(engine_libs
     radiumCore
     ${Qt5OpenGL_LIBRARIES}
     ${OPENGL_LIBRARIES}
-    ${GLBINDING_LIBRARIES}
-    ${GLOBJECTS_LIBRARIES}
+    glbinding_lib
+    globjects_lib
 )
 
 add_library(
@@ -199,8 +199,8 @@ set(guibase_libs
     radiumIO
     ${Qt5_LIBRARIES}
     ${OPENGL_LIBRARIES}
-    ${GLBINDING_LIBRARIES}
-    ${GLOBJECTS_LIBRARIES}
+    glbinding_lib
+    globjects_lib
 )
 
 add_library(
