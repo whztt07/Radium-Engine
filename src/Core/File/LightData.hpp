@@ -9,14 +9,8 @@
 #include <Core/File/AssetData.hpp>
 #include <Core/Math/LinearAlgebra.hpp>
 #include <Core/RaCore.hpp>
-#include <Engine/Entity/Entity.hpp>
 
 namespace Ra {
-#if 0
-namespace Engine {
-class Light;
-}
-#endif
 
 namespace Asset {
 
@@ -62,17 +56,6 @@ class RA_CORE_API LightData : public AssetData {
     /// FRAME
     inline Core::Matrix4 getFrame() const;
     inline void setFrame( const Core::Matrix4& frame );
-
-    /// DATA
-    /*
-    inline std::shared_ptr<Ra::Engine::Light> getLight() const;
-    inline void setLight( std::shared_ptr<Ra::Engine::Light> light );
-    */
-#if 0
-    /// Acces to the data. The returned component must be attached to an entity after that.
-    // this will add a dependence on the core to the engine. Not a good idea ...
-    Ra::Engine::Light* getLight() const;
-#endif
 
     /// construct a directional light
     inline void setLight( Core::Color color, Core::Vector3 direction );

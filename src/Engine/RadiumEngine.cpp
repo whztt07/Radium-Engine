@@ -12,6 +12,7 @@
 #include <Core/File/FileData.hpp>
 #include <Core/File/FileLoaderInterface.hpp>
 
+#include <Engine/Entity/Entity.hpp>
 #include <Engine/FrameInfo.hpp>
 #include <Engine/System/System.hpp>
 #include <Engine/Managers/EntityManager/EntityManager.hpp>

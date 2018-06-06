@@ -1,32 +1,30 @@
 set(library_version "0.1.0")
 
-set(RADIUM_IO_IS_INTERFACE TRUE)
-
+####
 # Find packages
-find_package(OpenGL     REQUIRED)
+####
 find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml REQUIRED)
 
 if(Qt5Core_VERSION VERSION_LESS 5.5 OR
-   Qt5Widgets_VERSION VERSION_LESS 5.5 OR
-   Qt5OpenGL_VERSION VERSION_LESS 5.5)
+    Qt5Widgets_VERSION VERSION_LESS 5.5 OR
+    Qt5OpenGL_VERSION VERSION_LESS 5.5)
     message(FATAL_ERROR "Qt5 or superior required (found ${Qt5Core_VERSION}).")
 else ()
     message(STATUS "QT ${Qt5Core_VERSION} found." )
 endif()
 
-message(STATUS "Compiling Radium with 3rdparty include dirs : ${EIGEN3_INCLUDE_DIR} -- ${GLBINDING_INCLUDE_DIR} -- ${GLM_INCLUDE_DIR} -- ${GLOBJECTS_INCLUDE_DIR}-- ${OPENMESH_INCLUDE_DIR}" )
-
-include(GenerateExportHeader)
-
-include_directories(
-    ${EIGEN3_INCLUDE_DIR}
-    ${GLBINDING_INCLUDE_DIR}
-    ${GLOBJECTS_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${OPENMESH_INCLUDE_DIR}
+message(STATUS "Compiling Radium with 3rdparty include dirs :
+    ${EIGEN3_INCLUDE_DIR} --
+    ${GLBINDING_INCLUDE_DIR} --
+    ${GLM_INCLUDE_DIR} --
+    ${GLOBJECTS_INCLUDE_DIR} --
+    ${OPENMESH_INCLUDE_DIR}"
 )
 
+
+####
 # Build Core
+####
 set(core_target radiumCore)
 
 set(RADIUM_VERSION_FILE ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp)
@@ -51,98 +49,99 @@ file(GLOB_RECURSE core_sources Core/*.cpp)
 file(GLOB_RECURSE core_headers Core/*.h Core/*.hpp)
 file(GLOB_RECURSE core_inlines Core/*.inl)
 
-set(core_libs
-    ${OPENMESH_LIBRARIES}
-)
+set(core_libs ${OPENMESH_LIBRARIES})
 
-add_library(
-    ${core_target} SHARED
+add_library(${core_target} SHARED
     ${core_sources}
     ${core_headers}
     ${core_inlines}
-    ${RADIUM_VERSION_FILE} #This file is build-dependant and generated in the Bundle
+    ${RADIUM_VERSION_FILE} # This file is build-dependant and generated in the Bundle
 )
 
-add_dependencies( ${core_target} eigen3 radiumVersionFile openmesh_lib)
+target_include_directories(${core_target} PUBLIC
+    "$<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>"
+    "$<BUILD_INTERFACE:${OPENMESH_INCLUDE_DIR}>"
+    "$<INSTALL_INTERFACE:include/Radium>"
+)
 target_compile_definitions(${core_target} PRIVATE "-DRA_CORE_EXPORTS")
+set_target_properties(${core_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(${core_target} ${core_libs})
 
-target_link_libraries(
-    ${core_target}
-    ${core_libs}
-)
+add_dependencies(${core_target} eigen3 radiumVersionFile openmesh_lib)
 
+
+####
 # Build IO
+####
 set(io_target radiumIO)
 
 file(GLOB io_sources IO/*.cpp)
 file(GLOB io_headers IO/*.h IO/*.hpp)
 file(GLOB io_inlines IO/*.inl)
 
-set(io_libs radiumCore radiumEngine)
+set(io_libs ${core_target})
 
+set(RADIUM_IO_IS_INTERFACE TRUE)
 if(RADIUM_ASSIMP_SUPPORT)
     add_subdirectory(IO/AssimpLoader)
     set(io_sources ${io_sources} ${assimp_sources})
     set(io_headers ${io_headers} ${assimp_headers})
     set(io_inlines ${io_inlines} ${assimp_inlines})
     set(io_libs    ${io_libs}    ${ASSIMP_LIBRARIES})
-endif( RADIUM_ASSIMP_SUPPORT )
+endif(RADIUM_ASSIMP_SUPPORT)
 
-if( RADIUM_TINYPLY_SUPPORT )
-    add_subdirectory( IO/TinyPlyLoader )
+if(RADIUM_TINYPLY_SUPPORT)
+    add_subdirectory(IO/TinyPlyLoader)
     set(io_sources ${io_sources} ${tinyply_sources})
     set(io_headers ${io_headers} ${tinyply_headers})
     set(io_inlines ${io_inlines} ${tinyply_inlines})
-endif( RADIUM_TINYPLY_SUPPORT )
+endif(RADIUM_TINYPLY_SUPPORT)
 
 if(RADIUM_IO_IS_INTERFACE)
-    add_library(
-        ${io_target} INTERFACE
-    )
-
-    target_sources(
-        ${io_target} INTERFACE
+    add_library(${io_target} INTERFACE)
+    target_sources(${io_target} INTERFACE
         ${io_sources}
         ${io_headers}
         ${io_inlines}
     )
     target_compile_definitions(${io_target} INTERFACE "-DRA_IO_STATIC")
-
-    target_link_libraries(
-        ${io_target} INTERFACE
-        ${io_libs}
-    )
+    target_link_libraries(${io_target} ${io_libs})
 else(RADIUM_IO_IS_INTERFACE)
-    add_library(
-        ${io_target} SHARED
+    add_library(${io_target} SHARED
         ${io_sources}
         ${io_headers}
         ${io_inlines}
     )
     target_compile_definitions(${io_target} PRIVATE "-DRA_IO_EXPORTS")
-
-    target_link_libraries(
-        ${io_target}
-        ${io_libs}
-    )
-    set_property(TARGET ${io_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
+    target_link_libraries(${io_target} ${io_libs})
+    set_target_properties(${io_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif(RADIUM_IO_IS_INTERFACE)
 
-add_dependencies(${io_target} ${core_target} ${engine_target})
+target_include_directories(${io_target} PUBLIC
+    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:include/Radium>
+)
+
+add_dependencies(${io_target} ${core_target})
 
 if(RADIUM_ASSIMP_SUPPORT)
+    target_include_directories(${io_target} PUBLIC
+        $<BUILD_INTERFACE:${ASSIMP_INCLUDE_DIR}>
+    )
     add_dependencies(${io_target} assimp_lib)
 endif(RADIUM_ASSIMP_SUPPORT)
 
 if(RADIUM_TINYPLY_SUPPORT)
+    target_include_directories(${io_target} PUBLIC
+        $<BUILD_INTERFACE:${TINYPLY_INCLUDE_DIR}>
+    )
     add_dependencies(${io_target} tinyply)
 endif(RADIUM_TINYPLY_SUPPORT)
 
 
-include_directories( ${STB_INCLUDE_DIR} )
-
-
+####
 # Build Engine
+####
 set(engine_target radiumEngine)
 
 file(GLOB_RECURSE engine_sources Engine/*.cpp)
@@ -154,36 +153,41 @@ file(GLOB_RECURSE engine_glsl ../Shaders/*.glsl)
 set(engine_shaders ${engine_glsl})
 
 set(engine_libs
-    radiumCore
+    ${core_target}
+    ${io_target}
     ${Qt5OpenGL_LIBRARIES}
-    ${OPENGL_LIBRARIES}
     ${GLBINDING_LIBRARIES}
     ${GLOBJECTS_LIBRARIES}
 )
 
-add_library(
-    ${engine_target} SHARED
+add_library(${engine_target} SHARED
     ${engine_sources}
     ${engine_headers}
     ${engine_inlines}
     ${engine_shaders}
 )
 
-add_dependencies(${engine_target} ${core_target} glbinding_lib globjects_lib glm_lib stb_lib)
-
-target_compile_definitions(${engine_target} PRIVATE "-DRA_ENGINE_EXPORTS")
-
-target_link_libraries(
-    ${engine_target}
-    ${engine_libs}
+target_include_directories(${engine_target} PUBLIC
+    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${GLBINDING_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${GLOBJECTS_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${GLM_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${STB_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:include/Radium>
 )
+target_compile_definitions(${engine_target} PRIVATE "-DRA_ENGINE_EXPORTS")
+set_target_properties(${engine_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(${engine_target} ${engine_libs})
+
+add_dependencies(${engine_target} ${io_target} glbinding_lib globjects_lib glm_lib stb_lib)
 
 
+####
 # Build GuiBase
+####
 set(guibase_target radiumGuiBase)
 
-
-# Qt5
+# Qt5 stuff
 set(Qt5_LIBRARIES Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -194,40 +198,49 @@ file(GLOB_RECURSE guibase_headers GuiBase/*.h GuiBase/*.hpp)
 file(GLOB_RECURSE guibase_inlines GuiBase/*.inl)
 
 set(guibase_libs
-    radiumEngine
-    radiumCore
-    radiumIO
+    ${core_target}
+    ${io_target}
+    ${engine_target}
     ${Qt5_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GLBINDING_LIBRARIES}
     ${GLOBJECTS_LIBRARIES}
 )
 
-add_library(
-    ${guibase_target} SHARED
+add_library(${guibase_target} SHARED
     ${guibase_sources}
     ${guibase_headers}
     ${guibase_inlines}
 )
 
-add_dependencies(${guibase_target} ${engine_target} ${io_target} ${core_target} glbinding_lib globjects_lib stb_lib)
+target_include_directories(${guibase_target} PUBLIC
+    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${STB_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:include/Radium>
+)
 target_compile_definitions(${guibase_target} PRIVATE "-DRA_GUIBASE_EXPORTS")
+set_target_properties(${guibase_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(${guibase_target} ${guibase_libs})
 
-target_link_libraries(
-    ${guibase_target}
-    ${guibase_libs}
+add_dependencies(${guibase_target} ${engine_target})
+
+
+#####
+# update RADIUM_LIBRARIES
+####"
+set(RADIUM_LIBRARIES
+    ${RADIUM_LIBRARIES}
+    "${core_target}"
+    "${engine_target}"
+    "${io_target}"
+    "${guibase_target}"
+    PARENT_SCOPE
 )
 
-set(RADIUM_LIBRARIES ${RADIUM_LIBRARIES} "${core_target}" "${engine_target}" "${io_target}" "${guibase_target}" PARENT_SCOPE)
-set_property(TARGET ${core_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
-set_property(TARGET ${engine_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
-set_property(TARGET ${guibase_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-
+#####
 # Build tests
-include_directories(
-        .
-)
+#####
 add_subdirectory(Tests)
 
 
@@ -242,6 +255,7 @@ set(lib_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium")
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/Radium")
 
 # FIXME(Florian): should these 4 replace the <lib>_API macros? (like RA_CORE_API or FM_PLUGIN_API)
+#include(GenerateExportHeader)
 #generate_export_header(${core_target})
 #generate_export_header(${io_target})
 #generate_export_header(${engine_target})
@@ -249,18 +263,6 @@ set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/Radium")
 # then shall we split each lib for install so that the installed headers include the generated export headers?
 
 # install targets
-target_include_directories(${core_target} PUBLIC
-    $<INSTALL_INTERFACE:include/Radium>
-)
-target_include_directories(${io_target} PUBLIC
-    $<INSTALL_INTERFACE:include/Radium>
-)
-target_include_directories(${engine_target} PUBLIC
-    $<INSTALL_INTERFACE:include/Radium>
-)
-target_include_directories(${guibase_target} PUBLIC
-    $<INSTALL_INTERFACE:include/Radium>
-)
 install(TARGETS ${core_target} ${io_target} ${engine_target} ${guibase_target}
     EXPORT   RadiumTargets
     LIBRARY  DESTINATION "${lib_install_dir}"

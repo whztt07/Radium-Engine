@@ -11,6 +11,8 @@ add_executable(
  ${inlines}
 )
 
+target_include_directories( ${target} PRIVATE ${RADIUM_SRC_DIR} )
+
 target_link_libraries(
  ${target}
  radiumCore
