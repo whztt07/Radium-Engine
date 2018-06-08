@@ -5,13 +5,18 @@
 #include <Core/Mesh/HalfEdge.hpp>
 #include <Core/Mesh/MeshUtils.hpp>
 #include <Engine/Renderer/OpenGL/OpenGL.hpp>
-namespace Ra {
-namespace Engine {
+
+#include <Core/Log/Log.hpp>
+namespace Ra
+{
+namespace Engine
+{
 
 // Template parameter must be a Core::VectorNArray
 template <typename ContainedType>
 inline void sendGLData( Ra::Engine::Mesh* mesh, const Ra::Core::VectorArray<ContainedType>& arr,
-                        const uint vboIdx ) {
+                        const uint vboIdx )
+{
     using VecArray = Ra::Core::VectorArray<ContainedType>;
 #ifdef CORE_USE_DOUBLE
     GLenum type = GL_DOUBLE;
@@ -37,7 +42,7 @@ inline void sendGLData( Ra::Engine::Mesh* mesh, const Ra::Core::VectorArray<Cont
         mesh->m_dataDirty[vboIdx] = true;
     }
 
-    if ( mesh->m_dataDirty[vboIdx] == true && mesh->m_vbos[vboIdx] != 0 && arr.size() > 0 )
+    if ( mesh->m_dataDirty[vboIdx] == true && mesh->m_vbos[vboIdx] != 0 )
     {
         GL_ASSERT( glBindBuffer( GL_ARRAY_BUFFER, mesh->m_vbos[vboIdx] ) );
         GL_ASSERT( glBufferData( GL_ARRAY_BUFFER, arr.size() * sizeof( typename VecArray::Vector ),
@@ -49,7 +54,9 @@ inline void sendGLData( Ra::Engine::Mesh* mesh, const Ra::Core::VectorArray<Cont
             GL_ASSERT( glEnableVertexAttribArray( vboIdx - 1 ) );
         }
         else
-        { GL_ASSERT( glDisableVertexAttribArray( vboIdx - 1 ) ); }
+        {
+            GL_ASSERT( glDisableVertexAttribArray( vboIdx - 1 ) );
+        }
     }
 } // sendGLData
 
@@ -60,7 +67,8 @@ Mesh::Mesh( const std::string& name, MeshRenderMode renderMode ) :
     m_vao( 0 ),
     m_renderMode( renderMode ),
     m_numElements( 0 ),
-    m_isDirty( false ) {
+    m_isDirty( false )
+{
     CORE_ASSERT( m_renderMode == RM_POINTS || m_renderMode == RM_LINES ||
                      m_renderMode == RM_LINE_LOOP || m_renderMode == RM_LINE_STRIP ||
                      m_renderMode == RM_TRIANGLES || m_renderMode == RM_TRIANGLE_STRIP ||
@@ -69,7 +77,8 @@ Mesh::Mesh( const std::string& name, MeshRenderMode renderMode ) :
                  "Unsupported render mode" );
 }
 
-Mesh::~Mesh() {
+Mesh::~Mesh()
+{
     if ( m_vao != 0 )
     {
         GL_ASSERT( glDeleteVertexArrays( 1, &m_vao ) );
@@ -84,7 +93,8 @@ Mesh::~Mesh() {
     }
 }
 
-void Mesh::render() {
+void Mesh::render()
+{
     if ( m_vao != 0 )
     {
         GL_ASSERT( glBindVertexArray( m_vao ) );
@@ -93,7 +103,8 @@ void Mesh::render() {
     }
 }
 
-void Mesh::loadGeometry( const Core::TriangleMesh& mesh ) {
+void Mesh::loadGeometry( const Core::TriangleMesh& mesh )
+{
     m_mesh = mesh;
 
     if ( m_mesh.m_triangles.empty() )
@@ -111,16 +122,16 @@ void Mesh::loadGeometry( const Core::TriangleMesh& mesh ) {
     m_isDirty = true;
 }
 
-void Mesh::updateMeshGeometry( MeshData type, const Core::Vector3Array& data ) {
-    if ( type == VERTEX_POSITION )
-        m_mesh.vertices() = data;
-    if ( type == VERTEX_NORMAL )
-        m_mesh.normals() = data;
+void Mesh::updateMeshGeometry( MeshData type, const Core::Vector3Array& data )
+{
+    if ( type == VERTEX_POSITION ) m_mesh.vertices() = data;
+    if ( type == VERTEX_NORMAL ) m_mesh.normals() = data;
     m_dataDirty[static_cast<uint>( type )] = true;
     m_isDirty = true;
 }
 
-void Mesh::loadGeometry( const Core::Vector3Array& vertices, const std::vector<uint>& indices ) {
+void Mesh::loadGeometry( const Core::Vector3Array& vertices, const std::vector<uint>& indices )
+{
     // Do not remove this function to force everyone to use triangle mesh.
     //  ... because we have some line meshes as well...
     const uint nIdx = indices.size();
@@ -157,7 +168,8 @@ void Mesh::loadGeometry( const Core::Vector3Array& vertices, const std::vector<u
     m_isDirty = true;
 }
 
-void Mesh::addData( const Vec3Data& type, const Core::Vector3Array& data ) {
+void Mesh::addData( const Vec3Data& type, const Core::Vector3Array& data )
+{
     const int index = static_cast<uint>( type );
     auto& handle = m_v3DataHandle[index];
 
@@ -178,10 +190,11 @@ void Mesh::addData( const Vec3Data& type, const Core::Vector3Array& data ) {
     }
 }
 
-void Mesh::addData( const Vec4Data& type, const Core::Vector4Array& data ) {
+void Mesh::addData( const Vec4Data& type, const Core::Vector4Array& data )
+{
 
     const int index = static_cast<uint>( type );
-    auto handle = m_v4DataHandle[index];
+    auto& handle = m_v4DataHandle[index];
 
     // if it's the first time this handle is used, add it to m_mesh.
     if ( data.size() != 0 && !handle.isValid() )
@@ -199,7 +212,8 @@ void Mesh::addData( const Vec4Data& type, const Core::Vector4Array& data ) {
     }
 }
 
-void Mesh::updateGL() {
+void Mesh::updateGL()
+{
     if ( m_isDirty )
     {
         // Check that our dirty bits are consistent.
@@ -246,35 +260,46 @@ void Mesh::updateGL() {
         sendGLData( this, m_mesh.normals(), VERTEX_NORMAL );
 
         // Vec3 data
-
         if ( m_v3DataHandle[VERTEX_TANGENT].isValid() )
+        {
             sendGLData( this,
                         m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_TANGENT] ).data(),
                         MAX_MESH + VERTEX_TANGENT );
+        }
         if ( m_v3DataHandle[VERTEX_BITANGENT].isValid() )
+        {
+
             sendGLData( this,
                         m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_BITANGENT] ).data(),
                         MAX_MESH + VERTEX_BITANGENT );
+        }
         if ( m_v3DataHandle[VERTEX_TEXCOORD].isValid() )
+        {
             sendGLData( this,
                         m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_TEXCOORD] ).data(),
                         MAX_MESH + VERTEX_TEXCOORD );
+        }
 
         // Vec4 data
         if ( m_v4DataHandle[VERTEX_COLOR].isValid() )
+        {
             sendGLData( this,
                         m_mesh.attribManager().getAttrib( m_v4DataHandle[VERTEX_COLOR] ).data(),
                         MAX_MESH + MAX_VEC3 + VERTEX_COLOR );
+        }
 
         if ( m_v4DataHandle[VERTEX_WEIGHTS].isValid() )
+        {
             sendGLData( this,
                         m_mesh.attribManager().getAttrib( m_v4DataHandle[VERTEX_WEIGHTS] ).data(),
                         MAX_MESH + MAX_VEC3 + VERTEX_WEIGHTS );
-
+        }
         if ( m_v4DataHandle[VERTEX_WEIGHT_IDX].isValid() )
+        {
             sendGLData(
                 this, m_mesh.attribManager().getAttrib( m_v4DataHandle[VERTEX_WEIGHT_IDX] ).data(),
                 MAX_MESH + MAX_VEC3 + VERTEX_WEIGHT_IDX );
+        }
         GL_ASSERT( glBindVertexArray( 0 ) );
         GL_CHECK_ERROR;
         m_isDirty = false;
