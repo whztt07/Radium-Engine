@@ -259,47 +259,24 @@ void Mesh::updateGL()
         sendGLData( this, m_mesh.vertices(), VERTEX_POSITION );
         sendGLData( this, m_mesh.normals(), VERTEX_NORMAL );
 
-        // Vec3 data
-        if ( m_v3DataHandle[VERTEX_TANGENT].isValid() )
+        for ( int i = 0; i < MAX_VEC3; i++ )
         {
-            sendGLData( this,
-                        m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_TANGENT] ).data(),
-                        MAX_MESH + VERTEX_TANGENT );
-        }
-        if ( m_v3DataHandle[VERTEX_BITANGENT].isValid() )
-        {
-
-            sendGLData( this,
-                        m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_BITANGENT] ).data(),
-                        MAX_MESH + VERTEX_BITANGENT );
-        }
-        if ( m_v3DataHandle[VERTEX_TEXCOORD].isValid() )
-        {
-            sendGLData( this,
-                        m_mesh.attribManager().getAttrib( m_v3DataHandle[VERTEX_TEXCOORD] ).data(),
-                        MAX_MESH + VERTEX_TEXCOORD );
+            if ( m_v3DataHandle[i].isValid() )
+            {
+                sendGLData( this, m_mesh.attribManager().getAttrib( m_v3DataHandle[i] ).data(),
+                            MAX_MESH + i );
+            }
         }
 
-        // Vec4 data
-        if ( m_v4DataHandle[VERTEX_COLOR].isValid() )
+        for ( int i = 0; i < MAX_VEC4; i++ )
         {
-            sendGLData( this,
-                        m_mesh.attribManager().getAttrib( m_v4DataHandle[VERTEX_COLOR] ).data(),
-                        MAX_MESH + MAX_VEC3 + VERTEX_COLOR );
+            if ( m_v4DataHandle[i].isValid() )
+            {
+                sendGLData( this, m_mesh.attribManager().getAttrib( m_v4DataHandle[i] ).data(),
+                            MAX_MESH + MAX_VEC3 + i );
+            }
         }
 
-        if ( m_v4DataHandle[VERTEX_WEIGHTS].isValid() )
-        {
-            sendGLData( this,
-                        m_mesh.attribManager().getAttrib( m_v4DataHandle[VERTEX_WEIGHTS] ).data(),
-                        MAX_MESH + MAX_VEC3 + VERTEX_WEIGHTS );
-        }
-        if ( m_v4DataHandle[VERTEX_WEIGHT_IDX].isValid() )
-        {
-            sendGLData(
-                this, m_mesh.attribManager().getAttrib( m_v4DataHandle[VERTEX_WEIGHT_IDX] ).data(),
-                MAX_MESH + MAX_VEC3 + VERTEX_WEIGHT_IDX );
-        }
         GL_ASSERT( glBindVertexArray( 0 ) );
         GL_CHECK_ERROR;
         m_isDirty = false;
