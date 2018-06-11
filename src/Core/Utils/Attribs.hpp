@@ -170,7 +170,9 @@ class AttribManager {
         Container::const_iterator m_end;
     };
 
+    /// const acces to attrib vector
     const Container& attribs() const { return m_attribs; }
+
     /// clear all attribs, invalidate handles !
     void clear() {
         for ( auto a : m_attribs )

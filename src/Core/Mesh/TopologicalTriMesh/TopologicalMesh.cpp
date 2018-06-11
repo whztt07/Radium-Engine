@@ -17,84 +17,82 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
     };
 
     using vMap = std::unordered_map<Vector3, TopologicalMesh::VertexHandle, hash_vec>;
+    using Vec3PropPair = std::pair<TriangleMesh::Vec3AttribHandle, OpenMesh::HPropHandleT<Vector3>>;
+
     vMap vertexHandles;
 
-    std::vector<TopologicalMesh::VertexHandle> face_vhandles;
-    std::vector<TopologicalMesh::Normal> face_normals;
-    std::vector<unsigned int> face_vertexIndex;
-    ///\todo handle other TriangleMesh attribs.
+    std::vector<Vec3PropPair> vprop_vec3;
 
-    std::vector<OpenMesh::HPropHandleT<float>> vprop_float;
-    std::vector<OpenMesh::HPropHandleT<Vector2>> vprop_vec2;
-    std::vector<std::pair<TriangleMesh::Vec3AttribHandle, OpenMesh::HPropHandleT<Vector3>>>
-        vprop_vec3;
-    std::vector<OpenMesh::HPropHandleT<Vector4>> vprop_vec4;
-
-    for ( AttribManager::Vec3Iterator itr = triMesh.attribManager().vec3begin();
-          itr != triMesh.attribManager().vec3end(); ++itr )
+    // loop over all attribs and build correspondance pair
+    for ( auto attr : triMesh.attribManager().attribs() )
     {
-        LOG( logINFO ) << "find attrib " << ( *itr ).getName() << "\n";
-        if ( ( *itr ).getName() != std::string( "in_position" ) &&
-             ( *itr ).getName() != std::string( "in_normal" ) )
+        LOG( logINFO ) << "found attrib " << attr->getName() << "\n";
+        // skip builtin attribs
+        if ( attr->getName() != std::string( "in_position" ) &&
+             attr->getName() != std::string( "in_normal" ) )
         {
-            TriangleMesh::Vec3AttribHandle h =
-                triMesh.attribManager().getAttribHandle<Vector3>( ( *itr ).getName() );
-            OpenMesh::HPropHandleT<Vector3> oh;
-            this->add_property( oh );
-            vprop_vec3.push_back( std::make_pair( h, oh ) );
-        }
-    }
-
-    uint num_halfedge = triMesh.m_triangles.size() * 3;
-    for ( unsigned int i = 0; i < num_halfedge; i++ )
-    {
-        unsigned int inMeshVertexIndex = triMesh.m_triangles[i / 3][i % 3];
-        Vector3 p = triMesh.vertices()[inMeshVertexIndex];
-        Vector3 n = triMesh.normals()[inMeshVertexIndex];
-
-        vMap::iterator vtr = vertexHandles.find( p );
-
-        TopologicalMesh::VertexHandle vh;
-        if ( vtr == vertexHandles.end() )
-        {
-            vh = this->add_vertex( p );
-            vertexHandles.insert( vtr, vMap::value_type( p, vh ) );
-            this->set_normal( vh, TopologicalMesh::Normal( n[0], n[1], n[2] ) );
-        }
-        else
-        { vh = vtr->second; }
-
-        face_vhandles.push_back( vh );
-        face_normals.push_back( n );
-        face_vertexIndex.push_back( inMeshVertexIndex );
-
-        ///\todo also consider non triangular faces
-        if ( ( ( i + 1 ) % 3 ) == 0 )
-        {
-
-            // Add the face, then add attribs to vh
-            TopologicalMesh::FaceHandle fh = this->add_face( face_vhandles );
-
-            for ( int vindex = 0; vindex < face_vhandles.size(); vindex++ )
+            if ( attr->isVec3() )
             {
-                TopologicalMesh::HalfedgeHandle heh =
-                    this->halfedge_handle( face_vhandles[vindex], fh );
-                this->property( this->halfedge_normals_pph(), heh ) = face_normals[vindex];
-
-                for ( auto pp : vprop_vec3 )
-                {
-                    this->property( pp.second, heh ) = triMesh.attribManager()
-                                                           .getAttrib( pp.first )
-                                                           .data()[face_vertexIndex[vindex]];
-                }
+                TriangleMesh::Vec3AttribHandle h =
+                    triMesh.attribManager().getAttribHandle<Vector3>( attr->getName() );
+                OpenMesh::HPropHandleT<Vector3> oh;
+                this->add_property( oh );
+                vprop_vec3.push_back( std::make_pair( h, oh ) );
             }
-
-            face_vhandles.clear();
         }
     }
-    ///\todo also consider non triangular faces
-    CORE_ASSERT( this->n_faces() == num_halfedge / 3,
-                 "Inconsistent number of faces in generated TopologicalMesh." );
+
+    uint num_triangles = triMesh.m_triangles.size();
+
+    for ( unsigned int i = 0; i < num_triangles; i++ )
+    {
+        std::vector<TopologicalMesh::VertexHandle> face_vhandles;
+        std::vector<TopologicalMesh::Normal> face_normals;
+        std::vector<unsigned int> face_vertexIndex;
+
+        for ( int j = 0; j < 3; ++j )
+        {
+            unsigned int inMeshVertexIndex = triMesh.m_triangles[i][j];
+            Vector3 p = triMesh.vertices()[inMeshVertexIndex];
+            Vector3 n = triMesh.normals()[inMeshVertexIndex];
+
+            vMap::iterator vtr = vertexHandles.find( p );
+
+            TopologicalMesh::VertexHandle vh;
+            if ( vtr == vertexHandles.end() )
+            {
+                vh = this->add_vertex( p );
+                vertexHandles.insert( vtr, vMap::value_type( p, vh ) );
+                this->set_normal( vh, TopologicalMesh::Normal( n[0], n[1], n[2] ) );
+            }
+            else
+            { vh = vtr->second; }
+
+            face_vhandles.push_back( vh );
+            face_normals.push_back( n );
+            face_vertexIndex.push_back( inMeshVertexIndex );
+        }
+
+        // Add the face, then add attribs to vh
+        TopologicalMesh::FaceHandle fh = this->add_face( face_vhandles );
+
+        for ( int vindex = 0; vindex < face_vhandles.size(); vindex++ )
+        {
+            TopologicalMesh::HalfedgeHandle heh =
+                this->halfedge_handle( face_vhandles[vindex], fh );
+            this->property( this->halfedge_normals_pph(), heh ) = face_normals[vindex];
+
+            for ( auto pp : vprop_vec3 )
+            {
+                this->property( pp.second, heh ) =
+                    triMesh.attribManager().getAttrib( pp.first ).data()[face_vertexIndex[vindex]];
+            }
+        }
+
+        face_vhandles.clear();
+        face_normals.clear();
+        face_vertexIndex.clear();
+    }
 }
 
 TriangleMesh TopologicalMesh::toTriangleMesh() {
