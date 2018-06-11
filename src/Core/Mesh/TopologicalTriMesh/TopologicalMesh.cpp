@@ -5,23 +5,17 @@
 
 #include <Core/Log/Log.hpp>
 
-namespace Ra
-{
-namespace Core
-{
+namespace Ra {
+namespace Core {
 
-TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
-{
-    struct hash_vec
-    {
-        size_t operator()( const Vector3& lvalue ) const
-        {
+TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
+    struct hash_vec {
+        size_t operator()( const Vector3& lvalue ) const {
             return lvalue[0] + lvalue[1] + lvalue[2] + floor( lvalue[0] ) * 1000.f +
                    floor( lvalue[1] ) * 1000.f + floor( lvalue[2] ) * 1000.f;
         }
     };
 
-    // Delete old data in out mesh
     using vMap = std::unordered_map<Vector3, TopologicalMesh::VertexHandle, hash_vec>;
     vMap vertexHandles;
 
@@ -30,17 +24,25 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
     std::vector<unsigned int> face_vertexIndex;
     ///\todo handle other TriangleMesh attribs.
 
-    std::vector<OpenMesh::VPropHandleT<float>> vprop_float;
-    std::vector<OpenMesh::VPropHandleT<Vector2>> vprop_vec2;
-    std::vector<OpenMesh::VPropHandleT<Vector3>> vprop_vec3;
-    std::vector<OpenMesh::VPropHandleT<Vector4>> vprop_vec4;
+    std::vector<OpenMesh::HPropHandleT<float>> vprop_float;
+    std::vector<OpenMesh::HPropHandleT<Vector2>> vprop_vec2;
+    std::vector<std::pair<TriangleMesh::Vec3AttribHandle, OpenMesh::HPropHandleT<Vector3>>>
+        vprop_vec3;
+    std::vector<OpenMesh::HPropHandleT<Vector4>> vprop_vec4;
 
-    LOG( logINFO ) << "hello "
-                   << "\n";
     for ( AttribManager::Vec3Iterator itr = triMesh.attribManager().vec3begin();
           itr != triMesh.attribManager().vec3end(); ++itr )
     {
         LOG( logINFO ) << "find attrib " << ( *itr ).getName() << "\n";
+        if ( ( *itr ).getName() != std::string( "in_position" ) &&
+             ( *itr ).getName() != std::string( "in_normal" ) )
+        {
+            TriangleMesh::Vec3AttribHandle h =
+                triMesh.attribManager().getAttribHandle<Vector3>( ( *itr ).getName() );
+            OpenMesh::HPropHandleT<Vector3> oh;
+            this->add_property( oh );
+            vprop_vec3.push_back( std::make_pair( h, oh ) );
+        }
     }
 
     uint num_halfedge = triMesh.m_triangles.size() * 3;
@@ -60,9 +62,7 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
             this->set_normal( vh, TopologicalMesh::Normal( n[0], n[1], n[2] ) );
         }
         else
-        {
-            vh = vtr->second;
-        }
+        { vh = vtr->second; }
 
         face_vhandles.push_back( vh );
         face_normals.push_back( n );
@@ -80,6 +80,13 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
                 TopologicalMesh::HalfedgeHandle heh =
                     this->halfedge_handle( face_vhandles[vindex], fh );
                 this->property( this->halfedge_normals_pph(), heh ) = face_normals[vindex];
+
+                for ( auto pp : vprop_vec3 )
+                {
+                    this->property( pp.second, heh ) = triMesh.attribManager()
+                                                           .getAttrib( pp.first )
+                                                           .data()[face_vertexIndex[vindex]];
+                }
             }
 
             face_vhandles.clear();
@@ -90,20 +97,16 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
                  "Inconsistent number of faces in generated TopologicalMesh." );
 }
 
-TriangleMesh TopologicalMesh::toTriangleMesh()
-{
-    struct vertexData
-    {
+TriangleMesh TopologicalMesh::toTriangleMesh() {
+    struct vertexData {
         Vector3 _vertex;
         Vector3 _normal;
 
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 
-    struct comp_vec
-    {
-        bool operator()( const vertexData& lhv, const vertexData& rhv ) const
-        {
+    struct comp_vec {
+        bool operator()( const vertexData& lhv, const vertexData& rhv ) const {
             if ( lhv._vertex[0] < rhv._vertex[0] ||
                  ( lhv._vertex[0] == rhv._vertex[0] && lhv._vertex[1] < rhv._vertex[1] ) ||
                  ( lhv._vertex[0] == rhv._vertex[0] && lhv._vertex[1] == rhv._vertex[1] &&
@@ -158,9 +161,7 @@ TriangleMesh TopologicalMesh::toTriangleMesh()
                 out.normals().push_back( v._normal );
             }
             else
-            {
-                vi = vtr->second;
-            }
+            { vi = vtr->second; }
             indices[i] = vi;
             i++;
         }
