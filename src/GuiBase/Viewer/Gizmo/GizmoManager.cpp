@@ -95,7 +95,9 @@ namespace Ra
 
         bool GizmoManager::handleMousePressEvent(QMouseEvent* event)
         {
-            if( !( Gui::KeyMappingManager::getInstance()->actionTriggered( event, Gui::KeyMappingManager::GIZMOMANAGER_MANIPULATION ) ) || !canEdit() || m_currentGizmoType == NONE)
+            auto keyMap = Gui::KeyMappingManager::getInstance();
+            if( !( event->buttons() & keyMap->getKeyFromAction( Gui::KeyMappingManager::GIZMOMANAGER_MANIPULATION ) )
+                || !canEdit() || m_currentGizmoType == NONE)
             {
                 return false;
             }

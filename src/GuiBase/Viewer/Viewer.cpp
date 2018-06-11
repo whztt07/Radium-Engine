@@ -303,21 +303,9 @@ namespace Ra
         }
 
         auto keyMap = Gui::KeyMappingManager::getInstance();
-        if( keyMap->actionTriggered( event, Gui::KeyMappingManager::VIEWER_BUTTON_MANIP_PICKING_QUERY ) )
+        if( event->buttons() & keyMap->getKeyFromAction( Gui::KeyMappingManager::VIEWER_BUTTON_MANIP_PICKING_QUERY ) )
         {
-            if ( isKeyPressed( keyMap->getKeyFromAction(Gui::KeyMappingManager::VIEWER_RAYCAST_QUERY ) ) )
-            {
-                LOG( logINFO ) << "Raycast query launched";
-                Core::Ray r = m_camera->getCamera()->getRayFromScreen(Core::Vector2(event->x(), event->y()));
-                RA_DISPLAY_POINT(r.origin(), Core::Colors::Cyan(), 0.1f);
-                RA_DISPLAY_RAY(r, Core::Colors::Yellow());
-                auto ents = Engine::RadiumEngine::getInstance()->getEntityManager()->getEntities();
-                for (auto e : ents)
-                {
-                    e->rayCastQuery(r);
-                }
-            }
-            else if (getPickingMode() == Ra::Engine::Renderer::RO)
+            if (getPickingMode() == Ra::Engine::Renderer::RO)
             {
                 m_currentRenderer->addPickingRequest({ Core::Vector2(event->x(), height() - event->y()),
                                                        Core::MouseButton::RA_MOUSE_LEFT_BUTTON,
@@ -328,7 +316,7 @@ namespace Ra
                 }
             }
         }
-        else if ( keyMap->actionTriggered( event, Gui::KeyMappingManager::TRACKBALLCAMERA_MANIPULATION ) )
+        else if( event->buttons() & keyMap->getKeyFromAction( Gui::KeyMappingManager::TRACKBALLCAMERA_MANIPULATION ) )
         {
             m_camera->handleMousePressEvent(event);
         }

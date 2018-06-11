@@ -33,7 +33,7 @@ namespace Ra
 
         bool KeyMappingManager::actionTriggered( QMouseEvent * event, KeyMappingAction action )
         {
-            return event->button() == getKeyFromAction( action );
+            return ( int(event->button()) | event->modifiers() ) == getKeyFromAction( action );
         }
 
         bool KeyMappingManager::actionTriggered( QKeyEvent * event, KeyMappingAction action )
@@ -43,6 +43,7 @@ namespace Ra
 
         void KeyMappingManager::loadConfiguration( const char * filename )
         {
+            m_mapping.clear();
             // if no filename is given, load default configuration
             if( !filename )
             {
@@ -162,7 +163,7 @@ namespace Ra
             else if( typeString == "mouse" )
             {
                 int buttonValue = getQtMouseButtonValue( keyString );
-                bindKeyToAction( buttonValue, actionValue );
+                bindKeyToAction( buttonValue | modifierValue, actionValue );
             }
         }
 
