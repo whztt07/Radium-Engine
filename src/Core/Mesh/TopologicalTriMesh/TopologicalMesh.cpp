@@ -1,14 +1,21 @@
 #include <Core/RaCore.hpp>
 
-#include <unordered_map>
 #include <Core/Mesh/TopologicalTriMesh/TopologicalMesh.hpp>
+#include <unordered_map>
 
-namespace Ra {
-namespace Core {
+#include <Core/Log/Log.hpp>
 
-TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
-    struct hash_vec {
-        size_t operator()( const Vector3& lvalue ) const {
+namespace Ra
+{
+namespace Core
+{
+
+TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
+{
+    struct hash_vec
+    {
+        size_t operator()( const Vector3& lvalue ) const
+        {
             return lvalue[0] + lvalue[1] + lvalue[2] + floor( lvalue[0] ) * 1000.f +
                    floor( lvalue[1] ) * 1000.f + floor( lvalue[2] ) * 1000.f;
         }
@@ -20,15 +27,31 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
 
     std::vector<TopologicalMesh::VertexHandle> face_vhandles;
     std::vector<TopologicalMesh::Normal> face_normals;
+    std::vector<unsigned int> face_vertexIndex;
     ///\todo handle other TriangleMesh attribs.
+
+    std::vector<OpenMesh::VPropHandleT<float>> vprop_float;
+    std::vector<OpenMesh::VPropHandleT<Vector2>> vprop_vec2;
+    std::vector<OpenMesh::VPropHandleT<Vector3>> vprop_vec3;
+    std::vector<OpenMesh::VPropHandleT<Vector4>> vprop_vec4;
+
+    LOG( logINFO ) << "hello "
+                   << "\n";
+    for ( AttribManager::Vec3Iterator itr = triMesh.attribManager().vec3begin();
+          itr != triMesh.attribManager().vec3end(); ++itr )
+    {
+        LOG( logINFO ) << "find attrib " << ( *itr ).getName() << "\n";
+    }
 
     uint num_halfedge = triMesh.m_triangles.size() * 3;
     for ( unsigned int i = 0; i < num_halfedge; i++ )
     {
-        Vector3 p = triMesh.vertices()[triMesh.m_triangles[i / 3][i % 3]];
-        Vector3 n = triMesh.normals()[triMesh.m_triangles[i / 3][i % 3]];
+        unsigned int inMeshVertexIndex = triMesh.m_triangles[i / 3][i % 3];
+        Vector3 p = triMesh.vertices()[inMeshVertexIndex];
+        Vector3 n = triMesh.normals()[inMeshVertexIndex];
 
         vMap::iterator vtr = vertexHandles.find( p );
+
         TopologicalMesh::VertexHandle vh;
         if ( vtr == vertexHandles.end() )
         {
@@ -37,15 +60,21 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
             this->set_normal( vh, TopologicalMesh::Normal( n[0], n[1], n[2] ) );
         }
         else
-        { vh = vtr->second; }
+        {
+            vh = vtr->second;
+        }
 
         face_vhandles.push_back( vh );
         face_normals.push_back( n );
+        face_vertexIndex.push_back( inMeshVertexIndex );
 
         ///\todo also consider non triangular faces
         if ( ( ( i + 1 ) % 3 ) == 0 )
         {
+
+            // Add the face, then add attribs to vh
             TopologicalMesh::FaceHandle fh = this->add_face( face_vhandles );
+
             for ( int vindex = 0; vindex < face_vhandles.size(); vindex++ )
             {
                 TopologicalMesh::HalfedgeHandle heh =
@@ -61,17 +90,20 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
                  "Inconsistent number of faces in generated TopologicalMesh." );
 }
 
-
-TriangleMesh TopologicalMesh::toTriangleMesh() {
-    struct vertexData {
+TriangleMesh TopologicalMesh::toTriangleMesh()
+{
+    struct vertexData
+    {
         Vector3 _vertex;
         Vector3 _normal;
 
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 
-    struct comp_vec {
-        bool operator()( const vertexData& lhv, const vertexData& rhv ) const {
+    struct comp_vec
+    {
+        bool operator()( const vertexData& lhv, const vertexData& rhv ) const
+        {
             if ( lhv._vertex[0] < rhv._vertex[0] ||
                  ( lhv._vertex[0] == rhv._vertex[0] && lhv._vertex[1] < rhv._vertex[1] ) ||
                  ( lhv._vertex[0] == rhv._vertex[0] && lhv._vertex[1] == rhv._vertex[1] &&
@@ -126,7 +158,9 @@ TriangleMesh TopologicalMesh::toTriangleMesh() {
                 out.normals().push_back( v._normal );
             }
             else
-            { vi = vtr->second; }
+            {
+                vi = vtr->second;
+            }
             indices[i] = vi;
             i++;
         }
@@ -137,5 +171,5 @@ TriangleMesh TopologicalMesh::toTriangleMesh() {
 
     return out;
 }
-}
-}
+} // namespace Core
+} // namespace Ra
