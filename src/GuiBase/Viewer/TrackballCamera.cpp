@@ -76,11 +76,12 @@ namespace Ra
             handled = true;
         }
 
-        if ( event->modifiers().testFlag( Qt::ControlModifier ) )
-        {
-            m_cameraZoomMode = true;
-            handled = true;
-        }
+        // there seems to be an issue on macos!!!
+//        if ( event->modifiers().testFlag( Qt::ControlModifier ) )
+//        {
+//            m_cameraZoomMode = true;
+//            handled = true;
+//        }
 
         return handled;
     }

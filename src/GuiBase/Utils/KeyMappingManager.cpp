@@ -15,10 +15,16 @@ namespace Ra
             m_file(nullptr)
         {
             QSettings settings;
-            loadConfigurationMappingInternal( "mouse", "NoModifier", "RightButton", "TRACKBALLCAMERA_MANIPULATION" );
+            // first user interaction models (also see Gizmo Manager for stepped manip)
+//            loadConfigurationMappingInternal( "mouse", "NoModifier", "RightButton", "TRACKBALLCAMERA_MANIPULATION" );
+//            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "VIEWER_BUTTON_SELECT_PICKING_QUERY" );
+//            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "VIEWER_BUTTON_MANIP_PICKING_QUERY" );
+//            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "GIZMOMANAGER_MANIPULATION" );
+            // After discussion with Mathias, changed to that one (to check: beware that ctrl+left might result in right)
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "TRACKBALLCAMERA_MANIPULATION" );
             loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "VIEWER_BUTTON_SELECT_PICKING_QUERY" );
-            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "VIEWER_BUTTON_MANIP_PICKING_QUERY" );
-            loadConfigurationMappingInternal( "mouse", "NoModifier", "LeftButton", "GIZMOMANAGER_MANIPULATION" );
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "RightButton", "VIEWER_BUTTON_MANIP_PICKING_QUERY" );
+            loadConfigurationMappingInternal( "mouse", "NoModifier", "RightButton", "GIZMOMANAGER_MANIPULATION" );
         }
 
         void KeyMappingManager::bindKeyToAction( int keyCode, KeyMappingAction action )
