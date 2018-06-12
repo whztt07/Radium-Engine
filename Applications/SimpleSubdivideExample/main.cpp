@@ -128,6 +128,21 @@ int main( int argc, char* argv[] )
                         topologicalMesh.triangulate();
         */
         mesh = topologicalMesh.toTriangleMesh();
+        /*
+                LOG( logINFO ) << "out Vec4";
+                auto out_handle2 = mesh.attribManager().getAttribHandle<Ra::Core::Vector4>( "test
+           vec4" ); for ( auto v : mesh.attribManager().getAttrib( out_handle2 ).data() )
+                {
+                    LOG( logINFO ) << v;
+                }
+        */
+        LOG( logINFO ) << "out Vec3";
+
+        auto out_handle = mesh.attribManager().getAttribHandle<Ra::Core::Vector3>( "test vec3" );
+        for ( auto& v : mesh.attribManager().getAttrib( out_handle ).data() )
+        {
+            LOG( logINFO ) << v;
+        }
 
         // obj.save( a.outputFilename, mesh );
     }
