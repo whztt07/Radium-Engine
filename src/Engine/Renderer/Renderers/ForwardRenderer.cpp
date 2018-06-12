@@ -461,20 +461,7 @@ namespace Ra
                 {
                     if ( ro->isVisible() )
                     {
-                        shader = ro->getRenderTechnique()->shader;
-
-                        // bind data
-                        shader->bind();
-
-                        Core::Matrix4 M = ro->getTransformAsMatrix();
-                        shader->setUniform( "transform.proj", renderData.projMatrix );
-                        shader->setUniform( "transform.view", renderData.viewMatrix );
-                        shader->setUniform( "transform.model", M );
-
-                        ro->getRenderTechnique()->material->bind( shader );
-
-                        // render
-                        ro->getMesh()->render();
+                        ro->render(RenderParameters{}, renderData);
                     }
                 }
 
