@@ -42,7 +42,7 @@
 #include <GuiBase/Utils/Keyboard.hpp>
 #include <GuiBase/Utils/KeyMappingManager.hpp>
 
-extern std::string EXE_PATH;
+#include <Engine/EXE_PATH.hpp>
 
 namespace Ra
 {
@@ -140,8 +140,8 @@ namespace Ra
         m_camera.reset( new Gui::TrackballCamera( width(), height() ) );
 
         LOG( logINFO ) << "*** Radium Engine Viewer ***";
-        Engine::ShaderProgramManager::createInstance(EXE_PATH+"Shaders/Default.vert.glsl",
-                                                     EXE_PATH+"Shaders/Default.frag.glsl");
+        Engine::ShaderProgramManager::createInstance(EXE_PATH()+"Shaders/Default.vert.glsl",
+                                                     EXE_PATH()+"Shaders/Default.frag.glsl");
 
         auto light = Ra::Core::make_shared<Engine::DirectionalLight>();
         m_camera->attachLight( light );

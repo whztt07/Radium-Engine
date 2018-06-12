@@ -1,7 +1,7 @@
 #include <Engine/Renderer/RenderTechnique/ShaderConfiguration.hpp>
 
 
-extern std::string EXE_PATH;
+#include <Engine/EXE_PATH.hpp>
 
 /**
  * @todo : make default shader configuration/default shader programm usable
@@ -146,8 +146,8 @@ static const std::string defaultFragmentShader(
 );
 
 #else
-static const std::string defaultVertexShader(EXE_PATH+"Shaders/Default.vert.glsl");
-static const std::string defaultFragmentShader(EXE_PATH+"Shaders/Default.frag.glsl");
+static const std::string defaultVertexShader(EXE_PATH()+"Shaders/Default.vert.glsl");
+static const std::string defaultFragmentShader(EXE_PATH()+"Shaders/Default.frag.glsl");
 #endif
 
 
