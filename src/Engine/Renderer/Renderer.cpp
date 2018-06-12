@@ -732,7 +732,7 @@ namespace Ra
                     writtenPixels[ou + 0] = (uchar)Ra::Core::Math::clamp<Scalar>(pixels[in + 0] * 255.f, 0, 255);
                     writtenPixels[ou + 1] = (uchar)Ra::Core::Math::clamp<Scalar>(pixels[in + 1] * 255.f, 0, 255);
                     writtenPixels[ou + 2] = (uchar)Ra::Core::Math::clamp<Scalar>(pixels[in + 2] * 255.f, 0, 255);
-                    writtenPixels[ou + 3] = 0xff;
+                    writtenPixels[ou + 3] = (uchar)Ra::Core::Math::clamp<Scalar>(pixels[in + 3] * 255.f, 0, 255);
                 }
             }
             delete[] pixels;
