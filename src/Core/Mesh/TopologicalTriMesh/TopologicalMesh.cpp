@@ -5,19 +5,25 @@
 
 #include <Core/Log/Log.hpp>
 
-namespace Ra {
-namespace Core {
+namespace Ra
+{
+namespace Core
+{
 
-TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
-    struct hash_vec {
-        size_t operator()( const Vector3& lvalue ) const {
+using Vec3PropPair = std::pair<TriangleMesh::Vec3AttribHandle, OpenMesh::HPropHandleT<Vector3>>;
+
+TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
+{
+    struct hash_vec
+    {
+        size_t operator()( const Vector3& lvalue ) const
+        {
             return lvalue[0] + lvalue[1] + lvalue[2] + floor( lvalue[0] ) * 1000.f +
                    floor( lvalue[1] ) * 1000.f + floor( lvalue[2] ) * 1000.f;
         }
     };
 
     using vMap = std::unordered_map<Vector3, TopologicalMesh::VertexHandle, hash_vec>;
-    using Vec3PropPair = std::pair<TriangleMesh::Vec3AttribHandle, OpenMesh::HPropHandleT<Vector3>>;
 
     vMap vertexHandles;
 
@@ -26,18 +32,19 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
     // loop over all attribs and build correspondance pair
     for ( auto attr : triMesh.attribManager().attribs() )
     {
-        LOG( logINFO ) << "found attrib " << attr->getName() << "\n";
         // skip builtin attribs
         if ( attr->getName() != std::string( "in_position" ) &&
              attr->getName() != std::string( "in_normal" ) )
         {
+            LOG( logINFO ) << "to TOPO found attrib " << attr->getName() << "\n;";
             if ( attr->isVec3() )
             {
                 TriangleMesh::Vec3AttribHandle h =
                     triMesh.attribManager().getAttribHandle<Vector3>( attr->getName() );
                 OpenMesh::HPropHandleT<Vector3> oh;
-                this->add_property( oh );
+                this->add_property( oh, attr->getName() );
                 vprop_vec3.push_back( std::make_pair( h, oh ) );
+                m_vec3Pph.push_back( oh );
             }
         }
     }
@@ -66,7 +73,9 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
                 this->set_normal( vh, TopologicalMesh::Normal( n[0], n[1], n[2] ) );
             }
             else
-            { vh = vtr->second; }
+            {
+                vh = vtr->second;
+            }
 
             face_vhandles.push_back( vh );
             face_normals.push_back( n );
@@ -95,16 +104,20 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh ) {
     }
 }
 
-TriangleMesh TopologicalMesh::toTriangleMesh() {
-    struct vertexData {
+TriangleMesh TopologicalMesh::toTriangleMesh()
+{
+    struct vertexData
+    {
         Vector3 _vertex;
         Vector3 _normal;
 
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 
-    struct comp_vec {
-        bool operator()( const vertexData& lhv, const vertexData& rhv ) const {
+    struct comp_vec
+    {
+        bool operator()( const vertexData& lhv, const vertexData& rhv ) const
+        {
             if ( lhv._vertex[0] < rhv._vertex[0] ||
                  ( lhv._vertex[0] == rhv._vertex[0] && lhv._vertex[1] < rhv._vertex[1] ) ||
                  ( lhv._vertex[0] == rhv._vertex[0] && lhv._vertex[1] == rhv._vertex[1] &&
@@ -121,6 +134,17 @@ TriangleMesh TopologicalMesh::toTriangleMesh() {
                           Eigen::aligned_allocator<std::pair<const vertexData, int>>>;
 
     vMap vertexHandles;
+
+    std::vector<Vec3PropPair> vprop_vec3;
+
+    // loop over all attribs and build correspondance pair
+    for ( auto oh : m_vec3Pph )
+    {
+        LOG( logINFO ) << "to Core found attrib " << property( oh ).name() << "\n";
+        TriangleMesh::Vec3AttribHandle h{
+            out.attribManager().addAttrib<Vector3>( property( oh ).name() )};
+        vprop_vec3.push_back( std::make_pair( h, oh ) );
+    }
 
     request_face_normals();
     request_vertex_normals();
@@ -157,9 +181,18 @@ TriangleMesh TopologicalMesh::toTriangleMesh() {
                 vertexHandles.insert( vtr, vMap::value_type( v, vi ) );
                 out.vertices().push_back( v._vertex );
                 out.normals().push_back( v._normal );
+                for ( auto pp : vprop_vec3 )
+                {
+                    out.attribManager()
+                        .getAttrib( pp.first )
+                        .data()
+                        .push_back( property( pp.second, *fv_it ) );
+                }
             }
             else
-            { vi = vtr->second; }
+            {
+                vi = vtr->second;
+            }
             indices[i] = vi;
             i++;
         }

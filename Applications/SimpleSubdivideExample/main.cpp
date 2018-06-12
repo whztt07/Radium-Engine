@@ -4,7 +4,8 @@
 #include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
 #include <OpenMesh/Tools/Subdivider/Uniform/LoopT.hh>
 #include <memory>
-struct args {
+struct args
+{
     bool valid;
     int iteration;
     std::string outputFilename;
@@ -13,7 +14,8 @@ struct args {
         subdivider;
 };
 
-void printHelp( char* argv[] ) {
+void printHelp( char* argv[] )
+{
     std::cout << "Usage :\n"
               << argv[0] << " -i input.obj -o output -s type -n iteration  \n\n"
               << " .obj extension is added automatically to output filename\n"
@@ -24,7 +26,8 @@ void printHelp( char* argv[] ) {
                  "iteration of subdivision\n";
 }
 
-args processArgs( int argc, char* argv[] ) {
+args processArgs( int argc, char* argv[] )
+{
     args ret;
     bool outputFilenameSet{false};
     bool subdividerSet{false};
@@ -32,8 +35,7 @@ args processArgs( int argc, char* argv[] ) {
 
     for ( int i = 1; i < argc; i += 2 )
     {
-        if ( i >= argc )
-            break;
+        if ( i >= argc ) break;
         if ( std::string( argv[i] ) == std::string( "-i" ) )
         {
             if ( i + 1 < argc )
@@ -66,7 +68,9 @@ args processArgs( int argc, char* argv[] ) {
                         OpenMesh::Subdivider::Uniform::LoopT<Ra::Core::TopologicalMesh>>();
                 }
                 else
-                { subdividerSet = false; }
+                {
+                    subdividerSet = false;
+                }
             }
         }
         else if ( std::string( argv[i] ) == std::string( "-n" ) )
@@ -81,7 +85,8 @@ args processArgs( int argc, char* argv[] ) {
     return ret;
 }
 
-int main( int argc, char* argv[] ) {
+int main( int argc, char* argv[] )
+{
     args a = processArgs( argc, argv );
     if ( !a.valid )
     {
@@ -96,31 +101,35 @@ int main( int argc, char* argv[] ) {
             mesh = Ra::Core::MeshUtils::makeBox();
         }
         else
-        { obj.load( a.inputFilename, mesh ); }
+        {
+            obj.load( a.inputFilename, mesh );
+        }
 
         auto test_handle2 = mesh.attribManager().addAttrib<Ra::Core::Vector4>( "test vec4" );
         mesh.attribManager().getAttrib( test_handle2 ).resize( mesh.vertices().size() );
+        for ( auto& v : mesh.attribManager().getAttrib( test_handle2 ).data() )
+        {
+            v = Ra::Core::Vector4( 1, 0, 1, 1 );
+        }
 
         auto test_handle = mesh.attribManager().addAttrib<Ra::Core::Vector3>( "test vec3" );
         mesh.attribManager().getAttrib( test_handle ).resize( mesh.vertices().size() );
 
-        for ( auto itr = mesh.attribManager().vec3begin(); itr != mesh.attribManager().vec3end();
-              ++itr )
+        for ( auto& v : mesh.attribManager().getAttrib( test_handle ).data() )
         {
-            LOG( logINFO ) << "find attrib " << ( *itr ).getName() << "\n";
+            v = Ra::Core::Vector3( 1, 0, 1 );
         }
 
+        Ra::Core::TopologicalMesh topologicalMesh( mesh );
         /*
-                Ra::Core::TopologicalMesh topologicalMesh( mesh );
+                        a.subdivider->attach( topologicalMesh );
+                        ( *a.subdivider )( a.iteration );
+                        a.subdivider->detach();
+                        topologicalMesh.triangulate();
+        */
+        mesh = topologicalMesh.toTriangleMesh();
 
-                a.subdivider->attach( topologicalMesh );
-                ( *a.subdivider )( a.iteration );
-                a.subdivider->detach();
-                topologicalMesh.triangulate();
-
-                mesh = topologicalMesh.toTriangleMesh();
-
-                obj.save( a.outputFilename, mesh );*/
+        // obj.save( a.outputFilename, mesh );
     }
     return 0;
 }

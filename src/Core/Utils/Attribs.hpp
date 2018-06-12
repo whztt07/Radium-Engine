@@ -5,8 +5,10 @@
 #include <Core/Log/Log.hpp>
 #include <Core/RaCore.hpp>
 
-namespace Ra {
-namespace Core {
+namespace Ra
+{
+namespace Core
+{
 
 template <typename T>
 class Attrib;
@@ -15,7 +17,8 @@ class Attrib;
 /// An Attrib is data linked to Vertices of a mesh.
 /// In the future, it is expected to allow automatic binding between the CPU
 /// and the rendered data on the GPU.
-class AttribBase {
+class AttribBase
+{
   public:
     /// attrib name is used to automatic location binding when using shaders.
     virtual ~AttribBase() {}
@@ -29,12 +32,14 @@ class AttribBase {
     bool inline operator==( const AttribBase& rhs ) { return m_name == rhs.getName(); }
 
     template <typename T>
-    inline Attrib<T>& cast() {
+    inline Attrib<T>& cast()
+    {
         return static_cast<Attrib<T>&>( *this );
     }
 
     template <typename T>
-    inline const Attrib<T>& cast() const {
+    inline const Attrib<T>& cast() const
+    {
         return static_cast<const Attrib<T>&>( *this );
     }
 
@@ -48,7 +53,8 @@ class AttribBase {
 };
 
 template <typename T>
-class Attrib : public AttribBase {
+class Attrib : public AttribBase
+{
   public:
     using value_type = T;
     using Container = VectorArray<T>;
@@ -76,7 +82,8 @@ class Attrib : public AttribBase {
 };
 
 template <typename T>
-class AttribHandle {
+class AttribHandle
+{
   public:
     typedef T value_type;
     using Container = typename Attrib<T>::Container;
@@ -117,79 +124,23 @@ class AttribHandle {
  * \warning There is no error check on the handles attribute type
  *
  */
-class AttribManager {
+class AttribManager
+{
   public:
     using value_type = AttribBase*;
     using Container = std::vector<value_type>;
-
-    /// Iterator to iterate over Vector3 Attribs only
-    class Vec3Iterator {
-        using reference = AttribBase&;
-
-      public:
-        Vec3Iterator( Container::const_iterator begin, Container::const_iterator end ) :
-            m_current{begin},
-            m_end{end} {
-
-            /*            if ( m_current != m_end )
-                        {
-                            LOG( logINFO ) << "CTR   " << ( *m_current )->getName() << ( *m_current
-               )->isVec3()
-                                           << "\n";
-                        }
-                        else
-                        { LOG( logINFO ) << "CTR  END\n"; }
-            */
-            while ( m_current != m_end && !( *m_current )->isVec3() )
-            {
-                LOG( logINFO ) << "CTR current " << ( *m_current )->getName() << "  "
-                               << ( *m_current )->isVec3() << "\n";
-                ++m_current;
-            }
-        }
-
-        Vec3Iterator& operator++() {
-            do
-            {
-                LOG( logINFO ) << "INC current before " << ( *m_current )->getName() << "  "
-                               << ( m_current != m_end ) << ( *m_current )->isVec3() << "\n";
-                ++m_current;
-                LOG( logINFO ) << "INC current after " << ( *m_current )->getName()
-                               << ( m_current != m_end ) << ( *m_current )->isVec3() << "\n";
-            } while ( m_current != m_end && !( *m_current )->isVec3() );
-            return *this;
-        }
-
-        bool operator==( const Vec3Iterator& rhs ) { return m_current == rhs.m_current; }
-        bool operator!=( const Vec3Iterator& rhs ) { return !( *this == rhs ); }
-
-        reference operator*() const { return **m_current; }
-
-      private:
-        Container::const_iterator m_current;
-        Container::const_iterator m_end;
-    };
 
     /// const acces to attrib vector
     const Container& attribs() const { return m_attribs; }
 
     /// clear all attribs, invalidate handles !
-    void clear() {
+    void clear()
+    {
         for ( auto a : m_attribs )
         {
             delete a;
         }
         m_attribs.clear();
-    }
-
-    Vec3Iterator vec3begin() const {
-        Vec3Iterator ret{m_attribs.cbegin(), m_attribs.cend()};
-        return ret;
-    }
-
-    Vec3Iterator vec3end() const {
-        Vec3Iterator ret{m_attribs.cend(), m_attribs.cend()};
-        return ret;
     }
 
     /*!
@@ -212,7 +163,8 @@ class AttribManager {
      * \warning There is no error check on the attribute type
      */
     template <typename T>
-    inline AttribHandle<T> getAttribHandle( const std::string& name ) const {
+    inline AttribHandle<T> getAttribHandle( const std::string& name ) const
+    {
         auto c = m_attribsIndex.find( name );
         AttribHandle<T> handle;
         if ( c != m_attribsIndex.end() )
@@ -224,20 +176,22 @@ class AttribManager {
 
     /// Get attribute by handle
     template <typename T>
-    inline Attrib<T>& getAttrib( AttribHandle<T> h ) {
+    inline Attrib<T>& getAttrib( AttribHandle<T> h )
+    {
         return *static_cast<Attrib<T>*>( m_attribs[h.m_idx] );
     }
 
     /// Get attribute by handle (const)
     template <typename T>
-    inline const Attrib<T>& getAttrib( AttribHandle<T> h ) const {
+    inline const Attrib<T>& getAttrib( AttribHandle<T> h ) const
+    {
         return *static_cast<Attrib<T>*>( m_attribs[h.m_idx] );
     }
 
     /// Add attribute by name
     template <typename T>
-    AttribHandle<T> addAttrib( const std::string& name ) {
-        LOG( logINFO ) << "add attrib " << name << "\n";
+    AttribHandle<T> addAttrib( const std::string& name )
+    {
         AttribHandle<T> h;
         Attrib<T>* attrib = new Attrib<T>;
         attrib->setName( name );
@@ -248,7 +202,8 @@ class AttribManager {
     }
 
     /// Remove attribute by name, invalidate all the handles
-    void removeAttrib( const std::string& name ) {
+    void removeAttrib( const std::string& name )
+    {
         auto c = m_attribsIndex.find( name );
         if ( c != m_attribsIndex.end() )
         {
@@ -270,7 +225,8 @@ class AttribManager {
 
     /// Remove attribute by handle, invalidate all the handles
     template <typename T>
-    void removeAttrib( AttribHandle<T> h ) {
+    void removeAttrib( AttribHandle<T> h )
+    {
         const auto& att = getAttrib( h ); // check the attribute exists
         removeAttrib( att.getName() );
     }
