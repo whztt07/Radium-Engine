@@ -69,7 +69,7 @@ namespace Core
 
 struct RA_CORE_API TopologicalMeshTraits : public OpenMesh::DefaultTraits
 {
-    using Point = TopoVector3;
+    using Point  = TopoVector3;
     using Normal = TopoVector3;
 
     VertexAttributes( OpenMesh::Attributes::Status | OpenMesh::Attributes::Normal );
@@ -111,7 +111,10 @@ class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<Topol
     using base = OpenMesh::PolyMesh_ArrayKernelT<TopologicalMeshTraits>;
     using base::PolyMesh_ArrayKernelT;
 
+    std::vector<OpenMesh::HPropHandleT<float>> m_floatPph;
+    std::vector<OpenMesh::HPropHandleT<Vector2>> m_vec2Pph;
     std::vector<OpenMesh::HPropHandleT<Vector3>> m_vec3Pph;
+    std::vector<OpenMesh::HPropHandleT<Vector4>> m_vec4Pph;
 
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW

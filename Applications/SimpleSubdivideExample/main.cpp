@@ -48,7 +48,7 @@ args processArgs( int argc, char* argv[] )
             if ( i + 1 < argc )
             {
                 ret.outputFilename = argv[i + 1];
-                outputFilenameSet = true;
+                outputFilenameSet  = true;
             }
         }
         else if ( std::string( argv[i] ) == std::string( "-s" ) )
@@ -118,6 +118,7 @@ int main( int argc, char* argv[] )
         for ( auto& v : mesh.attribManager().getAttrib( test_handle ).data() )
         {
             v = Ra::Core::Vector3( 1, 0, 1 );
+            LOG( logINFO ) << v.transpose();
         }
 
         Ra::Core::TopologicalMesh topologicalMesh( mesh );
@@ -139,9 +140,15 @@ int main( int argc, char* argv[] )
         LOG( logINFO ) << "out Vec3";
 
         auto out_handle = mesh.attribManager().getAttribHandle<Ra::Core::Vector3>( "test vec3" );
-        for ( auto& v : mesh.attribManager().getAttrib( out_handle ).data() )
+        for ( auto v : mesh.attribManager().getAttrib( out_handle ).data() )
         {
-            LOG( logINFO ) << v;
+            LOG( logINFO ) << v.transpose();
+        }
+
+        auto out_handle2 = mesh.attribManager().getAttribHandle<Ra::Core::Vector4>( "test vec4" );
+        for ( auto v : mesh.attribManager().getAttrib( out_handle2 ).data() )
+        {
+            LOG( logINFO ) << v.transpose();
         }
 
         // obj.save( a.outputFilename, mesh );
