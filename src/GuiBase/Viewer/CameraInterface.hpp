@@ -39,6 +39,7 @@ namespace Ra
             Q_OBJECT
 
         public:
+
             // FIXME(Charly): width / height ?
             CameraInterface( uint width, uint height );
             virtual ~CameraInterface();
@@ -70,12 +71,14 @@ namespace Ra
 
             Engine::Camera* getCamera()  { return m_camera.get();}
 
-            void attachLight( const std::shared_ptr<Engine::Light>& light );
+            void attachLight( const std::shared_ptr<Engine::Light>& keyLight,
+                              const std::shared_ptr<Engine::Light>& fillLight,
+                              const std::shared_ptr<Engine::Light>& backLight );
             bool hasLightAttached() const { return m_hasLightAttached; }
             /// pointer acces to the attached light, the caller has to check if
             /// hasLightAttached is true, it return a shared_ptr, so the light
             /// could be attached to another camera
-            std::shared_ptr<Engine::Light> getLight(){ return m_light; }
+            std::array<std::shared_ptr<Engine::Light>,3> getLight(){ return m_lights; }
                 
 
             virtual void update( Scalar dt ) {}
@@ -105,6 +108,9 @@ namespace Ra
             void cameraTargetChanged( const Core::Vector3& );
 
         protected:
+            void setupLights();
+
+        protected:
             Core::Aabb m_targetedAabb;
 
             Scalar m_targetedAabbVolume;
@@ -113,7 +119,7 @@ namespace Ra
             std::unique_ptr<Engine::Camera> m_camera;
             bool m_mapCameraBahaviourToAabb;
 
-            std::shared_ptr<Engine::Light> m_light;
+            std::array<std::shared_ptr<Engine::Light>,3> m_lights;
             bool m_hasLightAttached;
         };
     } // namespace Ra

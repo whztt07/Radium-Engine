@@ -62,7 +62,7 @@ vec3 blinnPhongPoint()
 
 vec3 blinnPhongDirectional()
 {
-    return blinnPhongInternal(light.directional.direction, getNormal()) + getKd() * 0.1;
+    return blinnPhongInternal(light.directional.direction, getNormal()) + getKd() * 0.05;
 }
 
 vec3 computeLighting()
