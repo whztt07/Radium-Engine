@@ -1,9 +1,12 @@
+#include <Core/Log/Log.hpp>
+#include <Core/Mesh/TopologicalTriMesh/TopologicalMesh.hpp>
 #include <Core/RaCore.hpp>
 
-#include <Core/Mesh/TopologicalTriMesh/TopologicalMesh.hpp>
-#include <unordered_map>
+#include <Eigen/StdVector>
 
-#include <Core/Log/Log.hpp>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace Ra
 {
@@ -14,10 +17,8 @@ template <typename T>
 using PropPair = std::pair<AttribHandle<T>, OpenMesh::HPropHandleT<T>>;
 
 template <typename T>
-void addAttribPairToTopo( const TriangleMesh& triMesh,
-                          TopologicalMesh* topoMesh,
-                          AttribManager::value_type attr,
-                          std::vector<PropPair<T>>& vprop,
+void addAttribPairToTopo( const TriangleMesh& triMesh, TopologicalMesh* topoMesh,
+                          AttribManager::value_type attr, std::vector<PropPair<T>>& vprop,
                           std::vector<OpenMesh::HPropHandleT<T>>& pph )
 {
     AttribHandle<T> h = triMesh.attribManager().getAttribHandle<T>( attr->getName() );
@@ -28,20 +29,16 @@ void addAttribPairToTopo( const TriangleMesh& triMesh,
 }
 
 template <typename T>
-void addAttribPairToCore( TriangleMesh& triMesh,
-                          TopologicalMesh* topoMesh,
-                          OpenMesh::HPropHandleT<T> oh,
-                          std::vector<PropPair<T>>& vprop )
+void addAttribPairToCore( TriangleMesh& triMesh, TopologicalMesh* topoMesh,
+                          OpenMesh::HPropHandleT<T> oh, std::vector<PropPair<T>>& vprop )
 {
     AttribHandle<T> h{triMesh.attribManager().addAttrib<T>( topoMesh->property( oh ).name() )};
     vprop.push_back( std::make_pair( h, oh ) );
 }
 
 template <typename T>
-void copyAttribToTopo( const TriangleMesh& triMesh,
-                       TopologicalMesh* topoMesh,
-                       std::vector<PropPair<T>>& vprop,
-                       TopologicalMesh::HalfedgeHandle heh,
+void copyAttribToTopo( const TriangleMesh& triMesh, TopologicalMesh* topoMesh,
+                       std::vector<PropPair<T>>& vprop, TopologicalMesh::HalfedgeHandle heh,
                        unsigned int vindex )
 {
     for ( auto pp : vprop )
@@ -50,27 +47,14 @@ void copyAttribToTopo( const TriangleMesh& triMesh,
             triMesh.attribManager().getAttrib( pp.first ).data()[vindex];
     }
 }
-/*
+
 template <typename T>
-void copyAttribToCore( TriangleMesh& triMesh,
-                       TopologicalMesh* topoMesh,
-                       std::vector<PropPair<T>>& vprop,
-                       TopologicalMesh::HalfedgeHandle heh )
-{
-    for ( auto pp : vprop )
-    {
-        triMesh.attribManager()
-            .getAttrib( pp.first )
-            .data()
-            .push_back( topoMesh->property( pp.second, heh ) );
-    }
-}
-*/
+using HandleAndValueVector = std::vector<std::pair<AttribHandle<T>, T>,
+                                         Eigen::aligned_allocator<std::pair<AttribHandle<T>, T>>>;
+
 template <typename T>
-void copyAttribToCoreVertex( std::vector<std::pair<AttribHandle<T>, T>>& data,
-                             TopologicalMesh* topoMesh,
-                             std::vector<PropPair<T>>& vprop,
-                             TopologicalMesh::HalfedgeHandle heh )
+void copyAttribToCoreVertex( HandleAndValueVector<T>& data, TopologicalMesh* topoMesh,
+                             std::vector<PropPair<T>>& vprop, TopologicalMesh::HalfedgeHandle heh )
 {
     for ( auto pp : vprop )
     {
@@ -79,7 +63,7 @@ void copyAttribToCoreVertex( std::vector<std::pair<AttribHandle<T>, T>>& data,
 }
 
 template <typename T>
-void copyAttribToCore( TriangleMesh& triMesh, std::vector<std::pair<AttribHandle<T>, T>>& data )
+void copyAttribToCore( TriangleMesh& triMesh, HandleAndValueVector<T>& data )
 {
     for ( auto pp : data )
     {
@@ -124,7 +108,7 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
             else
                 LOG( logWARNING )
                     << "Warning, mesh attribute " << attr->getName()
-                    << " type is not supported (only float, vec2, vec3 nor vec4 are supported";
+                    << " type is not supported (only float, vec2, vec3 nor vec4 are supported)";
         }
     }
 
@@ -139,8 +123,8 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
         for ( int j = 0; j < 3; ++j )
         {
             unsigned int inMeshVertexIndex = triMesh.m_triangles[i][j];
-            Vector3 p                      = triMesh.vertices()[inMeshVertexIndex];
-            Vector3 n                      = triMesh.normals()[inMeshVertexIndex];
+            Vector3 p = triMesh.vertices()[inMeshVertexIndex];
+            Vector3 n = triMesh.normals()[inMeshVertexIndex];
 
             VertexMap::iterator vtr = vertexHandles.find( p );
 
@@ -190,12 +174,13 @@ TriangleMesh TopologicalMesh::toTriangleMesh()
     {
         Vector3 _vertex;
         Vector3 _normal;
-        std::vector<std::pair<AttribHandle<float>, float>> _float;
-        std::vector<std::pair<AttribHandle<Vector2>, Vector2>> _vec2;
-        std::vector<std::pair<AttribHandle<Vector3>, Vector3>> _vec3;
-        std::vector<std::pair<AttribHandle<Vector4>, Vector4>> _vec4;
-        ///\todo ask nico ?!
-        //        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+        HandleAndValueVector<float> _float;
+        HandleAndValueVector<Vector2> _vec2;
+        HandleAndValueVector<Vector3> _vec3;
+        HandleAndValueVector<Vector4> _vec4;
+
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
         bool operator==( const VertexData& lhs ) const
         {
@@ -258,10 +243,10 @@ TriangleMesh TopologicalMesh::toTriangleMesh()
         {
             VertexData v;
             CORE_ASSERT( i < 3, "Non-triangular face found." );
-            TopologicalMesh::Point p  = point( to_vertex_handle( *fh_it ) );
+            TopologicalMesh::Point p = point( to_vertex_handle( *fh_it ) );
             TopologicalMesh::Normal n = normal( to_vertex_handle( *fh_it ), *f_it );
-            v._vertex                 = p;
-            v._normal                 = n;
+            v._vertex = p;
+            v._normal = n;
 
             copyAttribToCoreVertex( v._float, this, vprop_float, *fh_it );
             copyAttribToCoreVertex( v._vec2, this, vprop_vec2, *fh_it );
