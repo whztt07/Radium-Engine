@@ -168,8 +168,6 @@ TopologicalMesh::TopologicalMesh( const TriangleMesh& triMesh )
 
 TriangleMesh TopologicalMesh::toTriangleMesh()
 {
-
-    ///\todo use normal and other attrib to compare vertex data...
     struct VertexData
     {
         Vector3 _vertex;

@@ -26,7 +26,7 @@ class AttribBase
     void setName( std::string name ) { m_name = name; }
     virtual void resize( size_t s ) = 0;
 
-    virtual uint getSize()  = 0;
+    virtual uint getSize() = 0;
     virtual int getStride() = 0;
 
     bool inline operator==( const AttribBase& rhs ) { return m_name == rhs.getName(); }
@@ -44,9 +44,9 @@ class AttribBase
     }
 
     virtual bool isFloat() const = 0;
-    virtual bool isVec2() const  = 0;
-    virtual bool isVec3() const  = 0;
-    virtual bool isVec4() const  = 0;
+    virtual bool isVec2() const = 0;
+    virtual bool isVec3() const = 0;
+    virtual bool isVec4() const = 0;
 
   private:
     std::string m_name;
@@ -57,7 +57,7 @@ class Attrib : public AttribBase
 {
   public:
     using value_type = T;
-    using Container  = VectorArray<T>;
+    using Container = VectorArray<T>;
 
     /// resize the container (value_type must have a default ctor).
     void resize( size_t s ) override { m_data.resize( s ); }
@@ -138,7 +138,7 @@ class AttribManager
 {
   public:
     using value_type = AttribBase*;
-    using Container  = std::vector<value_type>;
+    using Container = std::vector<value_type>;
 
     /// const acces to attrib vector
     const Container& attribs() const { return m_attribs; }
@@ -205,13 +205,26 @@ class AttribManager
         AttribHandle<T> h;
         Attrib<T>* attrib = new Attrib<T>;
         attrib->setName( name );
-        m_attribs.push_back( attrib );
-        h.m_idx              = m_attribs.size() - 1;
+
+        auto itr = std::find_if( m_attribs.begin(), m_attribs.end(),
+                                 []( AttribBase* b ) { return b == nullptr; } );
+        if ( itr != m_attribs.end() )
+        {
+
+            *itr = attrib;
+            h.m_idx = std::distance( m_attribs.begin(), itr );
+        }
+        else
+        {
+
+            m_attribs.push_back( attrib );
+            h.m_idx = m_attribs.size() - 1;
+        }
         m_attribsIndex[name] = h.m_idx;
         return h;
     }
 
-    /// Remove attribute by name, invalidate all the handles
+    /// Remove attribute by name
     void removeAttrib( const std::string& name )
     {
         auto c = m_attribsIndex.find( name );
@@ -219,17 +232,18 @@ class AttribManager
         {
             int idx = c->second;
             delete m_attribs[idx];
-            m_attribs.erase( m_attribs.begin() + idx );
+            m_attribs[idx] = nullptr;
+            //            m_attribs.erase( m_attribs.begin() + idx );
             m_attribsIndex.erase( c );
 
             // reindex attribs with index superior to removed index
-            for ( auto& d : m_attribsIndex )
-            {
-                if ( d.second > idx )
-                {
-                    --d.second;
-                }
-            }
+            //            for ( auto& d : m_attribsIndex )
+            //            {
+            //                if ( d.second > idx )
+            //                {
+            //                    --d.second;
+            //                }
+            //            }
         }
     }
 
