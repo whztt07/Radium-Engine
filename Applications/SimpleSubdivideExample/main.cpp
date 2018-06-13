@@ -105,11 +105,24 @@ int main( int argc, char* argv[] )
             obj.load( a.inputFilename, mesh );
         }
 
+        LOG( logINFO ) << "in Mesh";
+        for ( auto v : mesh.vertices() )
+        {
+            LOG( logINFO ) << v.transpose();
+        }
+        LOG( logINFO ) << "in Normals";
+        for ( auto v : mesh.normals() )
+        {
+            LOG( logINFO ) << v.transpose();
+        }
+
+        float i           = 0;
         auto test_handle2 = mesh.attribManager().addAttrib<Ra::Core::Vector4>( "test vec4" );
         mesh.attribManager().getAttrib( test_handle2 ).resize( mesh.vertices().size() );
         for ( auto& v : mesh.attribManager().getAttrib( test_handle2 ).data() )
         {
-            v = Ra::Core::Vector4( 1, 0, 1, 1 );
+            v = Ra::Core::Vector4( i, i, i, i );
+            i += 1.f;
         }
 
         auto test_handle = mesh.attribManager().addAttrib<Ra::Core::Vector3>( "test vec3" );
@@ -117,11 +130,13 @@ int main( int argc, char* argv[] )
 
         for ( auto& v : mesh.attribManager().getAttrib( test_handle ).data() )
         {
-            v = Ra::Core::Vector3( 1, 0, 1 );
+            v = Ra::Core::Vector3( i, i, i );
             LOG( logINFO ) << v.transpose();
+            i += 1.f;
         }
 
         Ra::Core::TopologicalMesh topologicalMesh( mesh );
+
         /*
                         a.subdivider->attach( topologicalMesh );
                         ( *a.subdivider )( a.iteration );
@@ -137,6 +152,18 @@ int main( int argc, char* argv[] )
                     LOG( logINFO ) << v;
                 }
         */
+
+        LOG( logINFO ) << "out Mesh";
+        for ( auto v : mesh.vertices() )
+        {
+            LOG( logINFO ) << v.transpose();
+        }
+        LOG( logINFO ) << "out Normals";
+        for ( auto v : mesh.normals() )
+        {
+            LOG( logINFO ) << v.transpose();
+        }
+
         LOG( logINFO ) << "out Vec3";
 
         auto out_handle = mesh.attribManager().getAttribHandle<Ra::Core::Vector3>( "test vec3" );
