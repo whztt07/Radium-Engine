@@ -69,7 +69,7 @@ namespace Core
 
 struct RA_CORE_API TopologicalMeshTraits : public OpenMesh::DefaultTraits
 {
-    using Point  = TopoVector3;
+    using Point = TopoVector3;
     using Normal = TopoVector3;
 
     VertexAttributes( OpenMesh::Attributes::Status | OpenMesh::Attributes::Normal );
@@ -121,17 +121,26 @@ class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<Topol
 
     /// Construct a topological mesh from a triangle mesh
     /// this is a costly operation.
+    /// This operation merge vertex with same position, but keep vertex
+    /// attributes on halfedge, so that triMesh vertex with same 3D position are
+    /// represented only once in the topological mesh.
     explicit TopologicalMesh( const Ra::Core::TriangleMesh& triMesh );
+
+    /// Construct an empty topological mesh
+    explicit TopologicalMesh(){};
 
     /// Obtain a triangleMesh from a topological mesh.
     /// This is a costly operation.
     /// This function is non-const because of the computation of face normals.
     TriangleMesh toTriangleMesh();
 
+    // import other version of halfedge_handle method
     using base::halfedge_handle;
     /// Return the half-edge associated with a given vertex and face.
     inline HalfedgeHandle halfedge_handle( VertexHandle vh, FaceHandle fh );
 
+    /// return the normal of the vertex vh, when considering its membership to
+    /// the face fh
     inline Normal& normal( VertexHandle vh, FaceHandle fh );
 };
 } // namespace Core
