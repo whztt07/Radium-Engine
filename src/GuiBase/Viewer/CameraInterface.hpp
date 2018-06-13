@@ -2,6 +2,7 @@
 #define RADIUMENGINE_CAMERAINTERFACE_HPP
 
 #include <memory>
+#include <array>
 
 #include <QObject>
 #include <QKeyEvent>
@@ -10,6 +11,7 @@
 #include <Core/CoreMacros.hpp>
 #include <Core/Math/LinearAlgebra.hpp>
 #include <Core/Log/Log.hpp>
+
 
 namespace Ra
 {
@@ -21,7 +23,7 @@ namespace Ra
 }
 
 namespace Ra
-{
+{	
     namespace Engine
     {
         class  Camera;
@@ -71,15 +73,14 @@ namespace Ra
 
             Engine::Camera* getCamera()  { return m_camera.get();}
 
-            void attachLight( const std::shared_ptr<Engine::Light>& keyLight,
-                              const std::shared_ptr<Engine::Light>& fillLight,
-                              const std::shared_ptr<Engine::Light>& backLight );
+            void attachLights( const std::shared_ptr<Engine::Light>& keyLight,
+                               const std::shared_ptr<Engine::Light>& fillLight,
+                               const std::shared_ptr<Engine::Light>& backLight );
             bool hasLightAttached() const { return m_hasLightAttached; }
             /// pointer acces to the attached light, the caller has to check if
             /// hasLightAttached is true, it return a shared_ptr, so the light
             /// could be attached to another camera
-            std::array<std::shared_ptr<Engine::Light>,3> getLight(){ return m_lights; }
-                
+            std::array<std::shared_ptr<Engine::Light>,3> getLights() { return m_lights; }
 
             virtual void update( Scalar dt ) {}
 
@@ -108,7 +109,7 @@ namespace Ra
             void cameraTargetChanged( const Core::Vector3& );
 
         protected:
-            void setupLights();
+            void updateLight();
 
         protected:
             Core::Aabb m_targetedAabb;

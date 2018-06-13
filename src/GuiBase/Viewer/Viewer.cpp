@@ -42,7 +42,7 @@
 #include <GuiBase/Utils/Keyboard.hpp>
 #include <GuiBase/Utils/KeyMappingManager.hpp>
 
-extern std::string EXE_PATH;
+#include <Engine/EXE_PATH.hpp>
 
 namespace Ra
 {
@@ -139,14 +139,14 @@ namespace Ra
 
         m_camera.reset( new Gui::TrackballCamera( width(), height() ) );
 
-        LOG( logINFO ) << "*** Radium Engine Viewer ***";
-        Engine::ShaderProgramManager::createInstance(EXE_PATH+"Shaders/Default.vert.glsl",
-                                                     EXE_PATH+"Shaders/Default.frag.glsl");
+        LOG( logINFO ) << "*** Radium Engine Viewer ***";;
+        Engine::ShaderProgramManager::createInstance(EXE_PATH()+"Shaders/Default.vert.glsl",
+                                                     EXE_PATH()+"Shaders/Default.frag.glsl");
 
         auto keyLight = Ra::Core::make_shared<Engine::DirectionalLight>();
         auto fillLight = Ra::Core::make_shared<Engine::DirectionalLight>();
         auto backLight = Ra::Core::make_shared<Engine::DirectionalLight>();
-        m_camera->attachLight( keyLight, fillLight, backLight );
+        m_camera->attachLights( keyLight, fillLight, backLight );
 
         // initialize renderers added before GL was ready
         if( ! m_renderers.empty() )
@@ -243,9 +243,9 @@ namespace Ra
         renderer->initialize(width(), height());
         if( m_camera->hasLightAttached() )
         {
-            renderer->addLight( m_camera->getLight()[0]);
-            renderer->addLight( m_camera->getLight()[1]);
-            renderer->addLight( m_camera->getLight()[2]);
+            renderer->addLight( m_camera->getLights()[0] );
+            renderer->addLight( m_camera->getLights()[1] );
+            renderer->addLight( m_camera->getLights()[2] );
         }
 		renderer->lockRendering();
     }
@@ -676,9 +676,9 @@ namespace Ra
 
     void Gui::Viewer::resetCamera()
     {
-        auto light = m_camera->getLight();
+        auto lights = m_camera->getLights();
         m_camera.reset( new Gui::TrackballCamera( width(), height() ) );
-        m_camera->attachLight( light[0], light[1], light[2] );
+        m_camera->attachLights( lights[0], lights[1], lights[2] );
     }
 
 } // namespace Ra

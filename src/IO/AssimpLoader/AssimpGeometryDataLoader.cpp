@@ -231,7 +231,7 @@ namespace Ra {
             auto &edge = data.getEdges();
             edge.resize( size );
             #pragma omp parallel for
-            for( uint i = 0; i < size; ++i ) {
+            for( int i = 0; i < size; ++i ) {
                 edge[i] = assimpToCore( mesh.mFaces[i].mIndices, mesh.mFaces[i].mNumIndices ).cast<uint>();
                 if( !data.isLoadingDuplicates() ) {
                     edge[i][0] = data.getDuplicateTable().at( edge[i][0] );
@@ -245,7 +245,7 @@ namespace Ra {
             auto &face = data.getFaces();
             face.resize( size );
             #pragma omp parallel for
-            for( uint i = 0; i < size; ++i ) {
+            for( int i = 0; i < size; ++i ) {
                 face[i] = assimpToCore( mesh.mFaces[i].mIndices, mesh.mFaces[i].mNumIndices ).cast<uint>();
                 if( !data.isLoadingDuplicates() ) {
                     const uint face_vertices = mesh.mFaces[i].mNumIndices;
@@ -265,13 +265,13 @@ namespace Ra {
             normal.resize( data.getVerticesSize(), Core::Vector3::Zero() );
 
             #pragma omp parallel for if (data.isLoadingDuplicates())
-            for( uint i = 0; i < mesh.mNumVertices; ++i )
+            for( int i = 0; i < mesh.mNumVertices; ++i )
             {
                 normal.at( data.getDuplicateTable().at( i ) ) += assimpToCore( mesh.mNormals[i] );
             }
 
             #pragma omp parallel for
-            for( uint i = 0; i < uint( normal.size() ); ++i )
+            for( int i = 0; i < uint( normal.size() ); ++i )
             {
                 normal[i].normalize();
             }
@@ -283,7 +283,7 @@ namespace Ra {
             auto &tangent = data.getTangents();
             tangent.resize( size, Core::Vector3::Zero() );
             #pragma omp parallel for
-            for( uint i = 0; i < size; ++i )
+            for( int i = 0; i < size; ++i )
             {
                 tangent[i] = assimpToCore( mesh.mTangents[i] );
             }
@@ -296,7 +296,7 @@ namespace Ra {
             auto &bitangent = data.getBiTangents();
             bitangent.resize( size );
             #pragma omp parallel for
-            for( uint i = 0; i < size; ++i )
+            for( int i = 0; i < size; ++i )
             {
                 bitangent[i] = assimpToCore( mesh.mBitangents[i] );
             }
@@ -309,7 +309,7 @@ namespace Ra {
             auto &texcoord = data.getTexCoords();
             texcoord.resize( data.getVerticesSize() );
             #pragma omp parallel for
-            for ( uint i = 0; i < size; ++i )
+            for ( int i = 0; i < size; ++i )
             {
                 // FIXME(Charly): Is it safe to only consider texcoords[0] ?
                 texcoord.at( i ) = assimpToCore( mesh.mTextureCoords[0][i] );

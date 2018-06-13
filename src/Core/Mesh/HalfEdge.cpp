@@ -104,7 +104,7 @@ namespace Ra
                 // in halfEdgeList.
                 VectorNui faceHalfEdges( fs );
                 #pragma omp parallel for
-                for (uint i=0; i<fs; ++i)
+                for (int i=0; i<fs; ++i)
                 {
                     faceHalfEdges[i] = InvalidIdx;
                 }

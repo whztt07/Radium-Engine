@@ -29,7 +29,7 @@
 // Only for debug purpose, not needed here
 #include <globjects/Program.h>
 
-extern std::string EXE_PATH;
+#include <Engine/EXE_PATH.hpp>
 
 //#define NO_TRANSPARENCY
 namespace Ra
@@ -77,13 +77,13 @@ namespace Ra
 
         void ForwardRenderer::initShaders()
         {
-            m_shaderMgr->addShaderProgram("DepthMap", EXE_PATH+"Shaders/DepthMap.vert.glsl", EXE_PATH+"Shaders/DepthMap.frag.glsl");
-            m_shaderMgr->addShaderProgram("DepthAmbientPass", EXE_PATH+"Shaders/BlinnPhong.vert.glsl", EXE_PATH+"Shaders/DepthAmbientPass.frag.glsl");
-            m_shaderMgr->addShaderProgram("FinalCompose", EXE_PATH+"Shaders/Basic2D.vert.glsl", EXE_PATH+"Shaders/FinalCompose.frag.glsl");
+            m_shaderMgr->addShaderProgram("DepthMap", EXE_PATH()+"Shaders/DepthMap.vert.glsl", EXE_PATH()+"Shaders/DepthMap.frag.glsl");
+            m_shaderMgr->addShaderProgram("DepthAmbientPass", EXE_PATH()+"Shaders/BlinnPhong.vert.glsl", EXE_PATH()+"Shaders/DepthAmbientPass.frag.glsl");
+            m_shaderMgr->addShaderProgram("FinalCompose", EXE_PATH()+"Shaders/Basic2D.vert.glsl", EXE_PATH()+"Shaders/FinalCompose.frag.glsl");
 #ifndef NO_TRANSPARENCY
-            m_shaderMgr->addShaderProgram("LitOIT", EXE_PATH+"Shaders/BlinnPhong.vert.glsl", EXE_PATH+"Shaders/LitOIT.frag.glsl");
-            m_shaderMgr->addShaderProgram("UnlitOIT", EXE_PATH+"Shaders/Plain.vert.glsl", EXE_PATH+"Shaders/UnlitOIT.frag.glsl");
-            m_shaderMgr->addShaderProgram("ComposeOIT", EXE_PATH+"Shaders/Basic2D.vert.glsl", EXE_PATH+"Shaders/ComposeOIT.frag.glsl");
+            m_shaderMgr->addShaderProgram("LitOIT", EXE_PATH()+"Shaders/BlinnPhong.vert.glsl", EXE_PATH()+"Shaders/LitOIT.frag.glsl");
+            m_shaderMgr->addShaderProgram("UnlitOIT", EXE_PATH()+"Shaders/Plain.vert.glsl", EXE_PATH()+"Shaders/UnlitOIT.frag.glsl");
+            m_shaderMgr->addShaderProgram("ComposeOIT", EXE_PATH()+"Shaders/Basic2D.vert.glsl", EXE_PATH()+"Shaders/ComposeOIT.frag.glsl");
 #endif
         }
 

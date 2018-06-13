@@ -26,7 +26,7 @@
 #include <Engine/Renderer/RenderObject/RenderObjectManager.hpp>
 #include <Engine/Renderer/RenderObject/RenderObject.hpp>
 
-extern std::string EXE_PATH;
+#include <Engine/EXE_PATH.hpp>
 
 namespace Ra
 {
@@ -77,28 +77,28 @@ namespace Ra
             m_roMgr = RadiumEngine::getInstance()->getRenderObjectManager();
             TextureManager::createInstance();
 
-            m_shaderMgr->addShaderProgram("DrawScreen", EXE_PATH+"Shaders/Basic2D.vert.glsl", EXE_PATH+"Shaders/DrawScreen.frag.glsl");
-            m_shaderMgr->addShaderProgram("DrawScreenI", EXE_PATH+"Shaders/Basic2D.vert.glsl", EXE_PATH+"Shaders/DrawScreenI.frag.glsl");
-//            m_shaderMgr->addShaderProgram("CircleBrush", EXE_PATH+"Shaders/Basic2D.vert.glsl", EXE_PATH+"Shaders/CircleBrush.frag.glsl");
+            m_shaderMgr->addShaderProgram("DrawScreen", EXE_PATH()+"Shaders/Basic2D.vert.glsl", EXE_PATH()+"Shaders/DrawScreen.frag.glsl");
+            m_shaderMgr->addShaderProgram("DrawScreenI", EXE_PATH()+"Shaders/Basic2D.vert.glsl", EXE_PATH()+"Shaders/DrawScreenI.frag.glsl");
+//            m_shaderMgr->addShaderProgram("CircleBrush", EXE_PATH()+"Shaders/Basic2D.vert.glsl", EXE_PATH()+"Shaders/CircleBrush.frag.glsl");
 
             ShaderConfiguration pickingPointsConfig( "PickingPoints" );
-            pickingPointsConfig.addShader(ShaderType_VERTEX  , EXE_PATH+"Shaders/Picking.vert.glsl");
-            pickingPointsConfig.addShader(ShaderType_GEOMETRY, EXE_PATH+"Shaders/PickingPoints.geom.glsl");
-            pickingPointsConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/Picking.frag.glsl");
+            pickingPointsConfig.addShader(ShaderType_VERTEX  , EXE_PATH()+"Shaders/Picking.vert.glsl");
+            pickingPointsConfig.addShader(ShaderType_GEOMETRY, EXE_PATH()+"Shaders/PickingPoints.geom.glsl");
+            pickingPointsConfig.addShader(ShaderType_FRAGMENT, EXE_PATH()+"Shaders/Picking.frag.glsl");
             ShaderConfigurationFactory::addConfiguration( pickingPointsConfig );
             m_pickingShaders[0] = m_shaderMgr->addShaderProgram( pickingPointsConfig );
 
             ShaderConfiguration pickingLinesConfig( "PickingLines" );
-            pickingLinesConfig.addShader(ShaderType_VERTEX  , EXE_PATH+"Shaders/Picking.vert.glsl");
-            pickingLinesConfig.addShader(ShaderType_GEOMETRY, EXE_PATH+"Shaders/PickingLines.geom.glsl");
-            pickingLinesConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/Picking.frag.glsl");
+            pickingLinesConfig.addShader(ShaderType_VERTEX  , EXE_PATH()+"Shaders/Picking.vert.glsl");
+            pickingLinesConfig.addShader(ShaderType_GEOMETRY, EXE_PATH()+"Shaders/PickingLines.geom.glsl");
+            pickingLinesConfig.addShader(ShaderType_FRAGMENT, EXE_PATH()+"Shaders/Picking.frag.glsl");
             ShaderConfigurationFactory::addConfiguration( pickingLinesConfig );
             m_pickingShaders[1] = m_shaderMgr->addShaderProgram( pickingLinesConfig );
 
             ShaderConfiguration pickingTrianglesConfig( "PickingTriangles" );
-            pickingTrianglesConfig.addShader(ShaderType_VERTEX  , EXE_PATH+"Shaders/Picking.vert.glsl");
-            pickingTrianglesConfig.addShader(ShaderType_GEOMETRY, EXE_PATH+"Shaders/PickingTriangles.geom.glsl");
-            pickingTrianglesConfig.addShader(ShaderType_FRAGMENT, EXE_PATH+"Shaders/Picking.frag.glsl");
+            pickingTrianglesConfig.addShader(ShaderType_VERTEX  , EXE_PATH()+"Shaders/Picking.vert.glsl");
+            pickingTrianglesConfig.addShader(ShaderType_GEOMETRY, EXE_PATH()+"Shaders/PickingTriangles.geom.glsl");
+            pickingTrianglesConfig.addShader(ShaderType_FRAGMENT, EXE_PATH()+"Shaders/Picking.frag.glsl");
             ShaderConfigurationFactory::addConfiguration( pickingTrianglesConfig );
             m_pickingShaders[2] = m_shaderMgr->addShaderProgram( pickingTrianglesConfig );
 

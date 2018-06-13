@@ -120,7 +120,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            setupLights();
+            updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
@@ -145,7 +145,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            setupLights();
+            updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
@@ -218,7 +218,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            setupLights();
+            updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
@@ -286,7 +286,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            setupLights();
+            updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );

@@ -87,7 +87,7 @@ namespace FancyMeshPlugin
 
         mesh.m_vertices.resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
         #pragma omp parallel for
-        for (uint i = 0; i < data->getVerticesSize(); ++i)
+        for (int i = 0; i < data->getVerticesSize(); ++i)
         {
             mesh.m_vertices[i] = T * data->getVertices()[i];
         }
@@ -96,7 +96,7 @@ namespace FancyMeshPlugin
         {
             mesh.m_normals.resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
             #pragma omp parallel for
-            for (uint i = 0; i < data->getVerticesSize(); ++i)
+            for (int i = 0; i < data->getVerticesSize(); ++i)
             {
                 mesh.m_normals[i] = (N * data->getNormals()[i]).normalized();
             }

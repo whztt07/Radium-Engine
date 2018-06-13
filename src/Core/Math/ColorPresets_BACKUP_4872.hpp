@@ -27,7 +27,12 @@ namespace Ra{
 
             template <typename C = Color> inline C Grey( Scalar f = 0.5f) { return Color(f,f,f,1);}
 
-            template <typename C = Color> inline C Skin() { return Color(1.0*0.57, 0.87*0.57, 0.74*0.57, 1.0);}            // Convert to/from various int formats
+<<<<<<< HEAD
+            template <typename C = Color> inline C Skin() { return Color(1.0*0.57, 0.87*0.57, 0.74*0.57, 1.0);}
+=======
+            template <typename C = Color> inline C Skin() { return Color(1.0*0.57,0.87*0.57,0.74*0.57,1.0);}
+>>>>>>> demo_windows
+            // Convert to/from various int formats
             template <typename C = Color>
             inline C FromChars(uchar r, uchar g, uchar b, uchar a = 0xff)
             {

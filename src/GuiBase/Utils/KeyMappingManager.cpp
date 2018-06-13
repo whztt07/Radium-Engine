@@ -2,7 +2,7 @@
 
 #include <Core/Log/Log.hpp>
 
-extern std::string EXE_PATH;
+#include <Engine/EXE_PATH.hpp>
 
 namespace Ra
 {
@@ -53,7 +53,7 @@ namespace Ra
             // if no filename is given, load default configuration
             if( !filename )
             {
-                filename = (EXE_PATH + "Configs/default.xml").c_str();
+                filename = (EXE_PATH() + "Configs/default.xml").c_str();
             }
 
             if( m_file )
@@ -67,7 +67,7 @@ namespace Ra
 
             if( !m_file->open( QIODevice::ReadOnly ) )
             {
-                if( strcmp( filename, (EXE_PATH + "Configs/default.xml").c_str()) )
+                if( strcmp( filename, (EXE_PATH() + "Configs/default.xml").c_str()) )
                 {
                     LOG(logERROR) << "Failed to open keymapping configuration file ! " << m_file->fileName().toStdString();
                     LOG(logERROR) << "Trying to load default configuration...";
@@ -138,7 +138,7 @@ namespace Ra
                 LOG(logERROR) << "Unrecognized XML keymapping configuration file tag \"" << qPrintable(node.tagName()) << "\" !";
                 LOG(logERROR) << "Trying to load default configuration...";
 
-                loadConfiguration( (EXE_PATH + "Configs/default.xml").c_str() );
+                loadConfiguration( (EXE_PATH() + "Configs/default.xml").c_str() );
 
                 return;
             }
@@ -159,7 +159,7 @@ namespace Ra
                     LOG(logERROR) << "Unrecognized \"" << keyString << "\" key !";
                     LOG(logERROR) << "Trying to load default configuration...";
 
-                    loadConfiguration( (EXE_PATH + "Configs/default.xml").c_str() );
+                    loadConfiguration( (EXE_PATH() + "Configs/default.xml").c_str() );
                 }
                 else
                 {

@@ -30,8 +30,6 @@
 
 #include <Engine/Renderer/RenderTechnique/ShaderProgramManager.hpp>
 
-std::string EXE_PATH = "./";
-
 namespace Ra
 {
     namespace Engine
