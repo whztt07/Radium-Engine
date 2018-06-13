@@ -75,14 +75,35 @@ namespace Ra
         m_mapCameraBahaviourToAabb = false;
     }
 
-    void Gui::CameraInterface::attachLight(const std::shared_ptr<Engine::Light>& light)
-    {
-        m_light = light;
-        m_hasLightAttached = true;
+	void Gui::CameraInterface::attachLights(const std::shared_ptr<Engine::Light>& keyLight,
+											const std::shared_ptr<Engine::Light>& fillLight,
+											const std::shared_ptr<Engine::Light>& backLight)
+	{
+		m_lights[0] = keyLight;
+		m_lights[1] = fillLight;
+		m_lights[2] = backLight;
+		m_hasLightAttached = true;
+		updateLight();
+	}
 
-        m_light->setPosition(m_camera->getPosition());
-        m_light->setDirection(m_camera->getDirection());
-    }
+	void Gui::CameraInterface::updateLight()
+	{
+		m_lights[0]->setPosition(m_camera->getPosition());
+		m_lights[0]->setDirection(m_camera->getDirection());
+		Ra::Core::Transform t, td;
+		t = Ra::Core::Transform::Identity();
+		t.translate(-0.2*m_camera->getUpVector());
+		t.rotate(Eigen::AngleAxis<Scalar>(90, m_camera->getUpVector()));
+		td.matrix() = (t.matrix()).inverse().transpose();
+		m_lights[1]->setPosition(t * m_camera->getPosition());
+		m_lights[1]->setDirection(td * m_camera->getDirection());
+		t = Ra::Core::Transform::Identity();
+		t.translate(0.2*m_camera->getUpVector());
+		t.rotate(Eigen::AngleAxis<Scalar>(-90, m_camera->getUpVector()));
+		td.matrix() = (t.matrix()).inverse().transpose();
+		m_lights[2]->setPosition(t * m_camera->getPosition());
+		m_lights[2]->setDirection(td * m_camera->getDirection());
+	}
 
     const Engine::Camera& Gui::CameraInterface::getCameraFromViewer(QObject *v)
     {

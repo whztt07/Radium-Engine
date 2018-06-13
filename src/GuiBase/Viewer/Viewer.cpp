@@ -143,8 +143,10 @@ namespace Ra
         Engine::ShaderProgramManager::createInstance(EXE_PATH()+"Shaders/Default.vert.glsl",
                                                      EXE_PATH()+"Shaders/Default.frag.glsl");
 
-        auto light = Ra::Core::make_shared<Engine::DirectionalLight>();
-        m_camera->attachLight( light );
+		auto keyLight = Ra::Core::make_shared<Engine::DirectionalLight>();
+		auto fillLight = Ra::Core::make_shared<Engine::DirectionalLight>();
+		auto backLight = Ra::Core::make_shared<Engine::DirectionalLight>();
+        m_camera->attachLights( keyLight, fillLight, backLight );
 
         // initialize renderers added before GL was ready
         if( ! m_renderers.empty() )
@@ -241,7 +243,9 @@ namespace Ra
         renderer->initialize(width(), height());
         if( m_camera->hasLightAttached() )
         {
-            renderer->addLight( m_camera->getLight() );
+			renderer->addLight( m_camera->getLights()[0] );
+			renderer->addLight( m_camera->getLights()[1] );
+			renderer->addLight( m_camera->getLights()[2] );
         }
 		renderer->lockRendering();
     }
@@ -672,9 +676,9 @@ namespace Ra
 
     void Gui::Viewer::resetCamera()
     {
-        auto light = m_camera->getLight();
+        auto lights = m_camera->getLights();
         m_camera.reset( new Gui::TrackballCamera( width(), height() ) );
-        m_camera->attachLight( light );
+        m_camera->attachLights( lights[0], lights[1], lights[2] );
     }
 
 } // namespace Ra

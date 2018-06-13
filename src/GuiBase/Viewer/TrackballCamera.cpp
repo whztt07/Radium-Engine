@@ -120,8 +120,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            m_light->setPosition( m_camera->getPosition() );
-            m_light->setDirection( m_camera->getDirection() );
+            updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
@@ -146,8 +145,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            m_light->setPosition( m_camera->getPosition() );
-            m_light->setDirection( m_camera->getDirection() );
+			updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
@@ -220,8 +218,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            m_light->setPosition( m_camera->getPosition() );
-            m_light->setDirection( m_camera->getDirection() );
+			updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
@@ -289,8 +286,7 @@ namespace Ra
 
         if ( m_hasLightAttached )
         {
-            m_light->setPosition( m_camera->getPosition() );
-            m_light->setDirection( m_camera->getDirection() );
+			updateLight();
         }
 
         emit cameraPositionChanged( m_camera->getPosition() );
