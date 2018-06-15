@@ -126,8 +126,7 @@ namespace Ra
             {
                 Core::Vector2 currentXY(event->x(), event->y());
                 const Engine::Camera& cam = CameraInterface::getCameraFromViewer(parent());
-//                Core::Transform newTransform = currentGizmo()->mouseMove(cam, currentXY, event->modifiers().testFlag( Qt::ControlModifier ) );
-                Core::Transform newTransform = currentGizmo()->mouseMove(cam, currentXY, event->modifiers().testFlag( Qt::AltModifier ) );
+                Core::Transform newTransform = currentGizmo()->mouseMove(cam, currentXY, event->modifiers().testFlag( Qt::ShiftModifier ) );
                 setTransform( newTransform );
             }
             return (currentGizmo() != nullptr);
