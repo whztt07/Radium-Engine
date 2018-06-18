@@ -74,7 +74,7 @@ MeshPartition partition( const TriangleMesh& mesh, const Animation::WeightMatrix
     const uint v_size = mesh.m_vertices.size();
     MeshPartition part( size );
     #pragma omp parallel for
-    for( uint n = 0; n < size; ++n ) {
+    for( int n = 0; n < size; ++n ) {
         const VertexSegment   v = extractVertexSegment( weight, n, use_max );
         const BitSet          b = extractBitSet( v, v_size );
         const TriangleSegment t = extractTriangleSegment( b, mesh.m_triangles );

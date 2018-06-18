@@ -52,7 +52,7 @@ namespace Ra
             {
                 ArrayT temp( v.size() );
                 #pragma omp parallel for
-                for (uint i=0; i<v.size(); ++i)
+                for (int i=0; i<v.size(); ++i)
                 {
                     temp[ order[i] ] = v[i];
                 }
@@ -97,7 +97,7 @@ namespace Ra
                 {
                     const auto& ws = skel->getComponent( i ).m_weight;
                     #pragma omp parallel for
-                    for( uint j = 0; j<ws.size(); ++j )
+                    for( int j = 0; j<ws.size(); ++j )
                     {
                         if( wmax[ ws[j].first ] < ws[j].second )
                         {
@@ -174,7 +174,7 @@ namespace Ra
                 // apply vertices reordering to skel and geom data
                 auto comps = skel->getComponentData();
                 #pragma omp parallel for
-                for (uint i = 0; i<comps.size(); ++i)
+                for (int i = 0; i<comps.size(); ++i)
                 {
                     auto& comp = comps[i];
                     for (auto& w : comp.m_weight)
@@ -188,7 +188,7 @@ namespace Ra
                 geom->setVertices( vertices );
                 auto edges = geom->getEdges();
                 #pragma omp parallel for
-                for (uint i = 0; i<edges.size(); ++i)
+                for (int i = 0; i<edges.size(); ++i)
                 {
                     edges[i][0] = vmap[ edges[i][0] ];
                     edges[i][1] = vmap[ edges[i][1] ];
@@ -196,7 +196,7 @@ namespace Ra
                 geom->setEdges( edges );
                 auto faces = geom->getFaces();
                 #pragma omp parallel for
-                for (uint i = 0; i<faces.size(); ++i)
+                for (int i = 0; i<faces.size(); ++i)
                 {
                     for (uint j=0; j<faces[i].size(); ++j)
                     {
@@ -206,7 +206,7 @@ namespace Ra
                 geom->setFaces( faces );
                 auto polyhedra = geom->getPolyhedra();
                 #pragma omp parallel for
-                for (uint i = 0; i<polyhedra.size(); ++i)
+                for (int i = 0; i<polyhedra.size(); ++i)
                 {
                     for (uint j=0; j<polyhedra[i].size(); ++j)
                     {

@@ -79,7 +79,7 @@ namespace Algorithm {
         mesh.m_normals.resize( N + F );
         uint nb_quads = 0;
         #pragma omp parallel for
-        for (uint f = 0; f < F; ++f)
+        for (int f = 0; f < F; ++f)
         {
             const VectorNui& face = mesh.m_faces[ f ];
             uint fs = face.size();
@@ -118,7 +118,7 @@ namespace Algorithm {
         // third: move original vertices
         Vector3Array new_pos( N );
         #pragma omp parallel for
-        for (VertexIdx v = 0; v < N; ++v)
+        for (int v = 0; v < N; ++v)
         {
             // check if vertex on hole
             bool hole = false;
@@ -203,7 +203,7 @@ namespace Algorithm {
             }
         }
         #pragma omp parallel for
-        for (VertexIdx v = 0; v < N; ++v)
+        for (int v = 0; v < N; ++v)
         {
             mesh.m_vertices[ v ] = new_pos[ v ];
         }

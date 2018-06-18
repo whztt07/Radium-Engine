@@ -32,7 +32,7 @@ void uniformNormal( const VectorArray< Vector3 >& p, const VectorArray< Triangle
     }
 
     #pragma omp parallel for
-    for( uint i = 0; i < N; ++i ) {
+    for( int i = 0; i < N; ++i ) {
         if( !normal[i].isApprox( Vector3::Zero() ) ) {
             normal[i].normalize();
         }
@@ -60,14 +60,14 @@ void uniformNormal( const VectorArray< Vector3 >& p, const VectorArray< Triangle
     }
 
     #pragma omp parallel for
-    for( uint i = 0; i < N; ++i ) {
+    for( int i = 0; i < N; ++i ) {
         if( !normal[i].isApprox( Vector3::Zero() ) ) {
             normal[i].normalize();
         }
     }
 
     #pragma omp parallel for
-    for( uint i = 0; i < N; ++i ) {
+    for( int i = 0; i < N; ++i ) {
         normal[i] = normal[ duplicateTable[i] ];
     }
 }
