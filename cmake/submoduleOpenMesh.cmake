@@ -1,22 +1,5 @@
-if(${RADIUM_SUBMODULES_BUILD_TYPE} MATCHES Debug)
-    set(OPENMESHLIBNAME OpenMeshCored)
-else()
-    set(OPENMESHLIBNAME OpenMeshCore)
-endif()
 
-# ----------------------------------------------------------------------------------------------------------------------
-set(OPENMESH_INCLUDE_DIR ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/include)
-if(APPLE)
-    set(OPENMESH_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshCore.dylib")
-elseif(UNIX)
-    set(OPENMESH_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshCore.so")
-elseif(MINGW)
-    set(OPENMESH_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/libOpenMeshCore.dll")
-    set(OPENMESH_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshCore.dll.a")
-elseif(MSVC)
-    set(OPENMESH_DLL "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/${OPENMESHLIBNAME}.dll")
-    set(OPENMESH_LIBRARIES "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/${OPENMESHLIBNAME}.lib")
-endif()
+message(STATUS "Subproject: OpenMesh...")
 
 if(MSVC OR MINGW)
     set(PLATFORM_ARGS "-DOPENMESH_BUILD_SHARED=TRUE")
@@ -24,49 +7,105 @@ else()
     set(PLATFORM_ARGS "")
 endif()
 
+# write cmake config
+file( WRITE "${CMAKE_BINARY_DIR}/OpenMesh/CMakeLists.txt"
+"
+cmake_minimum_required(VERSION 3.5)
 
-# here is defined the way we want to import assimp
+project(OpenMesh_install NONE)
+
+set(RADIUM_SUBMODULES_BUILD_TYPE ${RADIUM_SUBMODULES_BUILD_TYPE})
+set(RADIUM_SUBMODULES_INSTALL_DIRECTORY \"${RADIUM_SUBMODULES_INSTALL_DIRECTORY}\")
+set(CMAKE_C_COMPILER \"${CMAKE_C_COMPILER}\")
+set(CMAKE_CXX_COMPILER \"${CMAKE_CXX_COMPILER}\")
+set(CMAKE_CXX_STANDARD ${CMAKE_CXX_STANDARD})
+set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS}\")
+set(CMAKE_CXX_FLAGS_DEBUG \"${CMAKE_CXX_FLAGS_DEBUG}\")
+set(CMAKE_CXX_FLAGS_RELEASE \"${CMAKE_CXX_FLAGS_RELEASE}\")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO \"${CMAKE_CXX_FLAGS_RELWITHDEBINFO}\")
+set(CMAKE_SHARED_LINKER_FLAGS \"${CMAKE_SHARED_LINKER_FLAGS}\")
+set(CMAKE_PREFIX_PATH \"${CMAKE_PREFIX_PATH}\")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY \"${CMAKE_RUNTIME_OUTPUT_DIRECTORY}\")
+set(PLATFORM_ARGS \"${PLATFORM_ARGS}\")
+
+if(\${RADIUM_SUBMODULES_BUILD_TYPE} MATCHES Debug)
+    set(OPENMESHLIBNAME OpenMeshCored)
+    set(OPENMESHTOOLLIBNAME OpenMeshToold)
+else()
+    set(OPENMESHLIBNAME OpenMeshCore)
+    set(OPENMESHTOOLLIBNAME OpenMeshTools)
+endif()
+if( APPLE )
+    set( OPENMESH_LIBRARIES \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshCore.dylib\"
+                            \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshTools.dylib\")
+elseif ( UNIX )
+    set( OPENMESH_LIBRARIES \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshCore.so\"
+                            \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshTools.so\")
+elseif (MINGW)
+    set( OPENMESH_CORE_DLL  \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/libOpenMeshCore.dll\")
+    set( OPENMESH_TOOLS_DLL \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshTools.dll\")
+    set( OPENMESH_LIBRARIES \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshCore.dll.a\"
+                            \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/libOpenMeshTools.dll.a\")
+elseif( MSVC )
+    set(OPENMESH_CORE_DLL  \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/\${OPENMESHLIBNAME}.dll\")
+    set(OPENMESH_TOOLS_DLL \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/\${OPENMESHTOOLLIBNAME}.dll\")
+    set(OPENMESH_LIBRARIES \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/\${OPENMESHLIBNAME}.lib\"
+                           \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/\${OPENMESHTOOLLIBNAME}.lib\")
+endif()
+
+include(ExternalProject)
 ExternalProject_Add(
     openmesh
     # where the source will live
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdPartyLibraries/OpenMesh"
+    SOURCE_DIR \"${CMAKE_SOURCE_DIR}/3rdPartyLibraries/OpenMesh\"
 
     # override default behaviours
-    UPDATE_COMMAND ""
-
+    UPDATE_COMMAND \"\"
     GIT_SUBMODULES 3rdPartyLibraries/OpenMesh
 
-    # set the installatin to installed/openmesh
-    INSTALL_DIR "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}"
-    BUILD_BYPRODUCTS "${OPENMESH_LIBRARIES}"
-    CMAKE_GENERATOR ${CMAKE_GENERATOR}
-    CMAKE_GENERATOR_TOOLSET ${CMAKE_GENERATOR_TOOLSET}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+    # set the installation to installed/openmesh
+    INSTALL_DIR \"\${RADIUM_SUBMODULES_INSTALL_DIRECTORY}\"
+    BUILD_BYPRODUCTS \"\${OPENMESH_LIBRARIES}\"
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DBUILD_APPS=OFF
-        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-        -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}
-        -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-        -DCMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}
-        -DCMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}
-        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}
-        -DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}
-        -DCMAKE_BUILD_TYPE=${RADIUM_SUBMODULES_BUILD_TYPE}
-        -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
-        -DINSTALL_NAME_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY} #override rpath to solve run bug on MACOSX
-        ${PLATFORM_ARGS}
-    EXCLUDE_FROM_ALL TRUE
+        -DCMAKE_C_COMPILER=\${CMAKE_C_COMPILER}
+        -DCMAKE_CXX_COMPILER=\${CMAKE_CXX_COMPILER}
+        -DCMAKE_CXX_STANDARD=\${CMAKE_CXX_STANDARD}
+        -DCMAKE_CXX_FLAGS=\${CMAKE_CXX_FLAGS}
+        -DCMAKE_CXX_FLAGS_DEBUG=\${CMAKE_CXX_FLAGS_DEBUG}
+        -DCMAKE_CXX_FLAGS_RELEASE=\${CMAKE_CXX_FLAGS_RELEASE}
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=\${CMAKE_CXX_FLAGS_RELWITHDEBINFO}
+        -DCMAKE_SHARED_LINKER_FLAGS=\${CMAKE_SHARED_LINKER_FLAGS}
+        -DCMAKE_BUILD_TYPE=\${RADIUM_SUBMODULES_BUILD_TYPE}
+        -DCMAKE_PREFIX_PATH=\${CMAKE_PREFIX_PATH}
+        -DINSTALL_NAME_DIR=\${CMAKE_RUNTIME_OUTPUT_DIRECTORY} #override rpath to solve run bug on MACOSX
+        \${PLATFORM_ARGS}
+)
+"
 )
 
-add_custom_target(openmesh_lib
-    DEPENDS openmesh
+# run cmake, build and install
+execute_process(COMMAND ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} .
+    RESULT_VARIABLE result
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/OpenMesh"
 )
-
-if(MSVC OR MINGW)
-    add_custom_target(openmesh_install_compiled_dll
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENMESH_DLL} "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-        COMMENT "copy openmesh dlls to bin dir" VERBATIM
-        DEPENDS openmesh create_bin_dir
-    )
-    add_dependencies(openmesh_lib openmesh_install_compiled_dll)
+if(result)
+    message(FATAL_ERROR "CMake step for OpenMesh failed: ${result}")
 endif()
+
+execute_process(COMMAND ${CMAKE_COMMAND} --build . -- -j8
+    RESULT_VARIABLE result
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/OpenMesh"
+)
+if(result)
+    message(FATAL_ERROR "Build step for OpenMesh failed: ${result}")
+endif()
+
+# copy FindOpenMesh.cmake => path should be in CMAKE_MODULE_PATH
+set(OPENMESH_LIBRARY_DIR "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}")
+file(COPY "${CMAKE_SOURCE_DIR}/3rdPartyLibraries/OpenMesh/cmake/FindOpenMesh.cmake"
+    DESTINATION "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/cmake/"
+)
+
+message(STATUS "Subproject: OpenMesh...Done")

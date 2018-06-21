@@ -24,6 +24,7 @@ project(RadiumEngine LANGUAGES CXX VERSION 1.0)
 # CMake setups
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+# ------------------------------------------------------------------------------
 # Build options options.
 option(RADIUM_WITH_DOUBLE_PRECISION "Use double precision" OFF)
 option(RADIUM_WITH_OMP              "Use OpenMP" OFF)
@@ -42,6 +43,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 
+# ------------------------------------------------------------------------------
 # These paths need to be synchronized with FindRadium.cmake
 set(RADIUM_BUNDLE_DIRECTORY        "${CMAKE_CURRENT_SOURCE_DIR}/Bundle-${CMAKE_CXX_COMPILER_ID}")
 set(RADIUM_SRC_DIR                 "${CMAKE_CURRENT_SOURCE_DIR}/src")
@@ -54,6 +56,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYP
 # This path is used by RadiumConfig.cmake.in
 set(RADIUM_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
 
+# ------------------------------------------------------------------------------
 # get changeset id
 find_package(Git)
 
@@ -70,12 +73,14 @@ endif()
 message("Git Changeset: ${GIT_CHANGESET}")
 
 
+# ------------------------------------------------------------------------------
 # guard against in-source builds (source: Eigen)
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
 endif()
 
 
+# ------------------------------------------------------------------------------
 # Set the compiler flags.
 include(CompileFlags)
 
@@ -89,6 +94,7 @@ if(NOT CMAKE_PREFIX_PATH)
 endif()
 
 
+# ------------------------------------------------------------------------------
 # Win32 stuff
 if(MSVC OR MSVC_IDE)
     # Use November CTP 2013 (constexpr and other non implemented stuff in the 2013 version)
@@ -117,20 +123,40 @@ if(MSVC OR MSVC_IDE)
 endif(MSVC OR MSVC_IDE)
 
 
-# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# Use find_package everywhere, no-op if it's a target
+#macro(find_package)
+#    if(NOT TARGET ${ARGV0} AND NOT TARGET ${ARGV0}::${ARGV0})
+#        _find_package(${ARGV})
+#    else()
+#        if(TARGET ${ARGV0}::${ARGV0})
+#            get_target_property(TGT_VER ${ARGV0}::${ARGV0} VERSION)
+#            set(TGT ${ARGV0}::${ARGV0})
+#        else()
+#            get_target_property(TGT_VER ${ARGV0} VERSION)
+#            set(TGT ${ARGV0})
+#        endif()
+#        message(STATUS "Found ${ARGV0}: CMake Target ${TGT} (found version \"${TGT_VER}\")")
+#        set(${ARGV0}_FOUND TRUE)
+#    endif()
+#endmacro()
+
+
+# ------------------------------------------------------------------------------
 #   SUBMODULES : assimp, glbinding, ....
 include(SubModules)
 set(RADIUM_INCLUDE_DIRS)
 list(APPEND RADIUM_INCLUDE_DIRS
     "${RADIUM_SRC_DIR}"
     "${EIGEN3_INCLUDE_DIR}"
-    "${ASSIMP_INCLUDE_DIR}"
+    "${ASSIMP_INCLUDE_DIRS}"
     "${GLBINDING_INCLUDE_DIR}"
     "${GLOBJECTS_INCLUDE_DIR}"
-    "${OPENMESH_INCLUDE_DIR}"
+    "${OPENMESH_INCLUDE_DIRS}"
 )
 
-# ----------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 #   Main Libraries
 # Configure RPath once submodules are configured
 #include(ConfigureRPath)
@@ -143,14 +169,16 @@ set(RADIUM_LIBRARIES)
 # Radium libraries are set in RADIUM_SRC_DIR
 add_subdirectory(${RADIUM_SRC_DIR})
 
-# ----------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 #   Applications
 #   Set Base directories for dependencies
 if(RADIUM_BUILD_APPS)
     add_subdirectory(Applications)
 endif(RADIUM_BUILD_APPS)
 
-# ----------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 #   External plugins
 add_subdirectory(Plugins)
 
@@ -165,7 +193,9 @@ if(DOXYGEN_FOUND)
     set(RADIUM_PROJECT_NUMBER ${GIT_CHANGESET})
     set(RADIUM_DOC_DIRECTORY ${RADIUM_BUNDLE_DIRECTORY}/Docs)
     
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in ${RADIUM_BUNDLE_DIRECTORY}/Doxyfile @ONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in
+        ${RADIUM_BUNDLE_DIRECTORY}/Doxyfile @ONLY
+    )
     
     add_custom_target(doc
         ${CMAKE_COMMAND} -E make_directory ${RADIUM_DOC_DIRECTORY}
@@ -184,6 +214,7 @@ if(DOXYGEN_FOUND)
     )
 endif(DOXYGEN_FOUND)
 
+
 ################################################################################
 # Assets                                                                       #
 ################################################################################
@@ -192,16 +223,21 @@ set(SHADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Shaders")
 
 if(MSVC OR MSVC_IDE OR MINGW)
     add_custom_target(radium_assets
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${SHADER_DIR} "${EXECUTABLE_OUTPUT_PATH}/Shaders"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${SHADER_DIR}"
+            "${EXECUTABLE_OUTPUT_PATH}/Shaders"
         COMMENT "Copying shaders and other ressources" VERBATIM
     )
 else()
     add_custom_target(radium_assets
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${SHADER_DIR} "${EXECUTABLE_OUTPUT_PATH}/Shaders"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+            "${SHADER_DIR}"
+            "${EXECUTABLE_OUTPUT_PATH}/Shaders"
         COMMENT "Linking (symlink) shaders and other ressources" VERBATIM
     )
 endif()
 add_dependencies(radium_assets radiumCore)
+
 
 ################################################################################
 # Configs                                                                      #
@@ -210,19 +246,24 @@ set(CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Configs")
 
 if(MSVC OR MSVC_IDE OR MINGW)
     add_custom_target(radium_configs
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CONFIG_DIR} "${EXECUTABLE_OUTPUT_PATH}/Configs"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CONFIG_DIR}"
+            "${EXECUTABLE_OUTPUT_PATH}/Configs"
         COMMENT "Copying configs (keymapping)" VERBATIM
     )
 else()
     add_custom_target(radium_configs
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CONFIG_DIR} "${EXECUTABLE_OUTPUT_PATH}/Configs"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+            "${CONFIG_DIR}"
+            "${EXECUTABLE_OUTPUT_PATH}/Configs"
         COMMENT "Linking (symlink) configs (keymapping)" VERBATIM
     )
 endif()
 add_dependencies(radium_configs radiumCore)
 
 
-# install both
+# ------------------------------------------------------------------------------
+# install both Assets and Configs
 install(DIRECTORY ${SHADER_DIR} ${CONFIG_DIR}
     DESTINATION "${CMAKE_INSTALL_PREFIX}/bin/Radium"
 )

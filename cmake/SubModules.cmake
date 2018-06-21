@@ -12,7 +12,7 @@ else()
     set(RADIUM_SUBMODULES_BUILD_TYPE Release)
 endif()
 
-# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 if(MSVC OR MINGW)
     add_custom_target(create_bin_dir
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
@@ -50,3 +50,6 @@ install(DIRECTORY ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/include/
 install(DIRECTORY ${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/lib/
     DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/Radium"
 )
+
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/cmake")
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" "${RADIUM_SUBMODULES_INSTALL_DIRECTORY}/cmake")

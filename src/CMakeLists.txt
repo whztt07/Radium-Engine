@@ -1,13 +1,24 @@
 set(library_version "0.1.0")
 
+message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
 ####
 # Find packages
 ####
 find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml REQUIRED)
+find_package(OpenMesh REQUIRED)
+find_package(Eigen3 REQUIRED)
+if(RADIUM_ASSIMP_SUPPORT)
+    find_package(Assimp REQUIRED)
+    find_library(ASSIMP_LIBS NAMES ${ASSIMP_LIBRARIES} PATHS ${ASSIMP_LIBRARY_DIRS})
+    set(ASSIMP_LIBRARIES ${ASSIMP_LIBS})
+    unset(ASSIMP_LIBS)
+endif(RADIUM_ASSIMP_SUPPORT)
 
 if(Qt5Core_VERSION VERSION_LESS 5.5 OR
-    Qt5Widgets_VERSION VERSION_LESS 5.5 OR
-    Qt5OpenGL_VERSION VERSION_LESS 5.5)
+   Qt5Widgets_VERSION VERSION_LESS 5.5 OR
+   Qt5OpenGL_VERSION VERSION_LESS 5.5)
     message(FATAL_ERROR "Qt5 or superior required (found ${Qt5Core_VERSION}).")
 else ()
     message(STATUS "QT ${Qt5Core_VERSION} found." )
@@ -18,7 +29,7 @@ message(STATUS "Compiling Radium with 3rdparty include dirs :
     ${GLBINDING_INCLUDE_DIR} --
     ${GLM_INCLUDE_DIR} --
     ${GLOBJECTS_INCLUDE_DIR} --
-    ${OPENMESH_INCLUDE_DIR}"
+    ${OPENMESH_INCLUDE_DIRS}"
 )
 
 
@@ -60,14 +71,14 @@ add_library(${core_target} SHARED
 
 target_include_directories(${core_target} PUBLIC
     "$<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>"
-    "$<BUILD_INTERFACE:${OPENMESH_INCLUDE_DIR}>"
+    "$<BUILD_INTERFACE:${OPENMESH_INCLUDE_DIRS}>"
     "$<INSTALL_INTERFACE:include/Radium>"
 )
 target_compile_definitions(${core_target} PRIVATE "-DRA_CORE_EXPORTS")
 set_target_properties(${core_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(${core_target} ${core_libs})
 
-add_dependencies(${core_target} eigen3 radiumVersionFile openmesh_lib)
+add_dependencies(${core_target} radiumVersionFile)
 
 
 ####
@@ -126,9 +137,8 @@ add_dependencies(${io_target} ${core_target})
 
 if(RADIUM_ASSIMP_SUPPORT)
     target_include_directories(${io_target} PUBLIC
-        $<BUILD_INTERFACE:${ASSIMP_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${ASSIMP_INCLUDE_DIRS}>
     )
-    add_dependencies(${io_target} assimp_lib)
 endif(RADIUM_ASSIMP_SUPPORT)
 
 if(RADIUM_TINYPLY_SUPPORT)
