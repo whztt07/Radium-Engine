@@ -80,3 +80,6 @@ if(MSVC OR MINGW)
     )
     add_dependencies(globjects_lib globjects_install_compiled_dll)
 endif()
+
+# ------------------------------------------------------------------------------
+get_filename_component(GLOBJECTS_LIB_NAME "${GLOBJECTS_LIBRARIES}" NAME)

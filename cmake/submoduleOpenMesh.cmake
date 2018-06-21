@@ -70,3 +70,6 @@ if(MSVC OR MINGW)
     )
     add_dependencies(openmesh_lib openmesh_install_compiled_dll)
 endif()
+
+# ------------------------------------------------------------------------------
+get_filename_component(OPENMESH_LIB_NAME "${OPENMESH_LIBRARIES}" NAME)

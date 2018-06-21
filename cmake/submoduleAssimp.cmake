@@ -109,3 +109,6 @@ if( MINGW )
     )
     add_dependencies(assimp_lib assimp_install_compiled_dll)
 endif()
+
+# ------------------------------------------------------------------------------
+get_filename_component(ASSIMP_LIB_NAME "${ASSIMP_LIBRARIES}" NAME)
