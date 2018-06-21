@@ -1,8 +1,7 @@
 set(library_version "0.1.0")
 
-####
+# ------------------------------------------------------------------------------
 # Find packages
-####
 find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml REQUIRED)
 
 if(Qt5Core_VERSION VERSION_LESS 5.5 OR
@@ -22,9 +21,8 @@ message(STATUS "Compiling Radium with 3rdparty include dirs :
 )
 
 
-####
+# ------------------------------------------------------------------------------
 # Build Core
-####
 set(core_target radiumCore)
 
 set(RADIUM_VERSION_FILE ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp)
@@ -70,9 +68,8 @@ target_link_libraries(${core_target} ${core_libs})
 add_dependencies(${core_target} eigen3 radiumVersionFile openmesh_lib)
 
 
-####
+# ------------------------------------------------------------------------------
 # Build IO
-####
 set(io_target radiumIO)
 
 file(GLOB io_sources IO/*.cpp)
@@ -139,9 +136,8 @@ if(RADIUM_TINYPLY_SUPPORT)
 endif(RADIUM_TINYPLY_SUPPORT)
 
 
-####
+# ------------------------------------------------------------------------------
 # Build Engine
-####
 set(engine_target radiumEngine)
 
 file(GLOB_RECURSE engine_sources Engine/*.cpp)
@@ -182,9 +178,8 @@ target_link_libraries(${engine_target} ${engine_libs})
 add_dependencies(${engine_target} ${io_target} glbinding_lib globjects_lib glm_lib stb_lib)
 
 
-####
+# ------------------------------------------------------------------------------
 # Build GuiBase
-####
 set(guibase_target radiumGuiBase)
 
 # Qt5 stuff
@@ -225,9 +220,8 @@ target_link_libraries(${guibase_target} ${guibase_libs})
 add_dependencies(${guibase_target} ${engine_target})
 
 
-#####
+# ------------------------------------------------------------------------------
 # update RADIUM_LIBRARIES
-####"
 set(RADIUM_LIBRARIES
     ${RADIUM_LIBRARIES}
     "${core_target}"
@@ -238,16 +232,15 @@ set(RADIUM_LIBRARIES
 )
 
 
-#####
+# ------------------------------------------------------------------------------
 # Build tests
-#####
 add_subdirectory(Tests)
 
 
-#####
+# ------------------------------------------------------------------------------
 # install/package related stuff (from https://cmake.org/cmake/help/v3.10/manual/cmake-packages.7.html)
-#####
-# set paths
+
+# set install paths
 set(config_install_dir "${CMAKE_INSTALL_PREFIX}/lib/Radium/cmake/")
 set(include_install_dir "${CMAKE_INSTALL_PREFIX}/include/Radium")
 set(bin_install_dir "${CMAKE_INSTALL_PREFIX}/bin/Radium")

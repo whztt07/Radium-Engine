@@ -77,3 +77,6 @@ if(MSVC OR MINGW)
     )
     add_dependencies(glbinding_lib glbinding_install_compiled_dll)
 endif()
+
+# ------------------------------------------------------------------------------
+get_filename_component(GLBINDING_LIB_NAME "${GLBINDING_LIBRARIES}" NAME)
