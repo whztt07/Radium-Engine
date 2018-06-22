@@ -1,4 +1,74 @@
-set(library_version "0.1.0")
+
+cmake_minimum_required(VERSION 3.8)
+
+if(APPLE)
+    cmake_policy(SET CMP0042 NEW)
+endif(APPLE)
+
+cmake_policy(SET CMP0048 NEW)
+project(RadiumLibraries LANGUAGES CXX VERSION 1.0)
+
+# ------------------------------------------------------------------------------
+# CMake setups
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+# ------------------------------------------------------------------------------
+# Build options options.
+option(RADIUM_WITH_DOUBLE_PRECISION "Use double precision" OFF)
+option(RADIUM_WITH_OMP              "Use OpenMP" OFF)
+option(RADIUM_WITH_FANCY_GL         "Enable Fancy OpenGL effects" ON)
+option(RADIUM_WITH_TEXTURES         "Compile Radium enabling texture loading stuff" ON)
+option(RADIUM_WITH_PROFILING        "Enable functions profiling." OFF)
+option(RADIUM_WARNINGS_AS_ERRORS    "Treat compiler warning as errors" OFF)
+option(RADIUM_FORCE_ASSERTS         "Enable asserts regardless of build type" OFF)
+option(RADIUM_ASSIMP_SUPPORT        "Enable assimp loader" ON)
+option(RADIUM_TINYPLY_SUPPORT       "Enable TinyPly loader" ON)
+option(RADIUM_BUILD_APPS            "Choose to build or not radium applications" ON)
+option(RADIUM_FAST_MATH             "Enable Fast Math optimizations in Release Mode (ignored with MVSC)" OFF)
+
+# ------------------------------------------------------------------------------
+# These paths need to be synchronized with FindRadium.cmake
+set(RADIUM_BUNDLE_DIRECTORY        "${CMAKE_CURRENT_SOURCE_DIR}/Bundle-${CMAKE_CXX_COMPILER_ID}")
+set(RADIUM_SRC_DIR                 "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(RADIUM_PLUGIN_OUTPUT_PATH      "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYPE}/bin/Plugins")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYPE}/bin")
+set(EXECUTABLE_OUTPUT_PATH         "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYPE}/bin")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYPE}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${RADIUM_BUNDLE_DIRECTORY}/${CMAKE_BUILD_TYPE}/lib")
+set(RADIUM_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+
+# ------------------------------------------------------------------------------
+# Set the compiler flags.
+include(CompileFlags)
+
+# ------------------------------------------------------------------------------
+# Win32 stuff
+if(MSVC OR MSVC_IDE)
+    # Use November CTP 2013 (constexpr and other non implemented stuff in the 2013 version)
+    if(MSVC_VERSION LESS 1800)
+        message(FATAL_ERROR
+                "This project requires C++11 stuff provided only with "
+                "Microsoft Visual C++ Compiler Nov 2013 CTP (v120_CTP_Nov2013)."
+        )
+    endif(MSVC_VERSION LESS 1800)
+
+    if(MSVC_VERSION EQUAL 1800)
+        #set(CMAKE_GENERATOR_TOOLSET "CTP_Nov2013" CACHE STRING "Platform Toolset" FORCE)
+    endif(MSVC_VERSION EQUAL 1800)
+
+    # Copy libs / targets in the correct directories
+    if("${CMAKE_GENERATOR}" STREQUAL "NMake Makefiles")
+        set(PDB_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+    else()
+        foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+            string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+            set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+            set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
+            set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+        endforeach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+    endif()
+endif(MSVC OR MSVC_IDE)
+
 
 # ------------------------------------------------------------------------------
 # Find packages

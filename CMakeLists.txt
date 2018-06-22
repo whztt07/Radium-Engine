@@ -152,19 +152,20 @@ set(CMAKE_INSTALL_RPATH "../../lib/Radium")
 
 set(RADIUM_LIBRARIES)
 # Radium libraries are set in RADIUM_SRC_DIR
-add_subdirectory(${RADIUM_SRC_DIR})
+#add_subdirectory(${RADIUM_SRC_DIR})
+include(RadiumLibs)
 
 # ------------------------------------------------------------------------------
 #   Applications
 #   Set Base directories for dependencies
-if(RADIUM_BUILD_APPS)
-    add_subdirectory(Applications)
-endif(RADIUM_BUILD_APPS)
+#if(RADIUM_BUILD_APPS)
+#    add_subdirectory(Applications)
+#endif(RADIUM_BUILD_APPS)
 
 
 # ------------------------------------------------------------------------------
 #   External plugins
-add_subdirectory(Plugins)
+#add_subdirectory(Plugins)
 
 
 # ------------------------------------------------------------------------------
@@ -212,7 +213,7 @@ else()
         COMMENT "Linking (symlink) shaders and other ressources" VERBATIM
     )
 endif()
-add_dependencies(radium_assets radiumCore)
+add_dependencies(radium_assets radium_libraries)
 
 
 # ------------------------------------------------------------------------------
@@ -232,7 +233,7 @@ else()
         COMMENT "Linking (symlink) configs (keymapping)" VERBATIM
     )
 endif()
-add_dependencies(radium_configs radiumCore)
+add_dependencies(radium_configs radium_libraries)
 
 
 # ------------------------------------------------------------------------------
