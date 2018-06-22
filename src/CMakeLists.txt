@@ -47,8 +47,6 @@ file(GLOB_RECURSE core_sources Core/*.cpp)
 file(GLOB_RECURSE core_headers Core/*.h Core/*.hpp)
 file(GLOB_RECURSE core_inlines Core/*.inl)
 
-set(core_libs ${OPENMESH_LIBRARIES})
-
 add_library(${core_target} SHARED
     ${core_sources}
     ${core_headers}
@@ -63,7 +61,7 @@ target_include_directories(${core_target} PUBLIC
 )
 target_compile_definitions(${core_target} PRIVATE "-DRA_CORE_EXPORTS")
 set_target_properties(${core_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(${core_target} ${core_libs})
+target_link_libraries(${core_target} PRIVATE ${OPENMESH_LIBRARIES})
 
 add_dependencies(${core_target} eigen3 radiumVersionFile openmesh_lib)
 
@@ -76,15 +74,12 @@ file(GLOB io_sources IO/*.cpp)
 file(GLOB io_headers IO/*.h IO/*.hpp)
 file(GLOB io_inlines IO/*.inl)
 
-set(io_libs ${core_target})
-
 set(RADIUM_IO_IS_INTERFACE TRUE)
 if(RADIUM_ASSIMP_SUPPORT)
     add_subdirectory(IO/AssimpLoader)
     set(io_sources ${io_sources} ${assimp_sources})
     set(io_headers ${io_headers} ${assimp_headers})
     set(io_inlines ${io_inlines} ${assimp_inlines})
-    set(io_libs    ${io_libs}    ${ASSIMP_LIBRARIES})
 endif(RADIUM_ASSIMP_SUPPORT)
 
 if(RADIUM_TINYPLY_SUPPORT)
@@ -110,7 +105,8 @@ else(RADIUM_IO_IS_INTERFACE)
         ${io_inlines}
     )
     target_compile_definitions(${io_target} PRIVATE "-DRA_IO_EXPORTS")
-    target_link_libraries(${io_target} ${io_libs})
+    target_link_libraries(${io_target} PUBLIC ${core_target})
+    target_link_libraries(${io_target} PRIVATE ${ASSIMP_LIBRARIES})
     set_target_properties(${io_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif(RADIUM_IO_IS_INTERFACE)
 
@@ -173,7 +169,8 @@ target_include_directories(${engine_target} PUBLIC
 )
 target_compile_definitions(${engine_target} PRIVATE "-DRA_ENGINE_EXPORTS")
 set_target_properties(${engine_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(${engine_target} ${engine_libs})
+target_link_libraries(${engine_target} PUBLIC ${io_target} ${Qt5OpenGL_LIBRARIES})
+target_link_libraries(${engine_target} PRIVATE ${GLBINDING_LIBRARIES} ${GL_OBJECTS_LIBRARIES})
 
 add_dependencies(${engine_target} ${io_target} glbinding_lib globjects_lib glm_lib stb_lib)
 
@@ -215,7 +212,8 @@ target_include_directories(${guibase_target} PUBLIC
 )
 target_compile_definitions(${guibase_target} PRIVATE "-DRA_GUIBASE_EXPORTS")
 set_target_properties(${guibase_target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(${guibase_target} ${guibase_libs})
+target_link_libraries(${guibase_target} PUBLIC ${engine_target} ${Qt5_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(${guibase_target} PRIVATE ${GLBINDING_LIBRARIES} ${GLOBJECTS_LIBRARIES})
 
 add_dependencies(${guibase_target} ${engine_target})
 

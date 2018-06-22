@@ -58,7 +58,6 @@ add_dependencies(${app_target}
     radiumEngine radiumGuiBase
     radiumCore radiumIO
     radium_assets radium_configs
-    glbinding_lib
 )
 
 if(MSVC)
