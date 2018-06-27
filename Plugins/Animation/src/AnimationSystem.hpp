@@ -1,55 +1,91 @@
 #ifndef ANIMPLUGIN_ANIMATION_SYSTEM_HPP_
 #define ANIMPLUGIN_ANIMATION_SYSTEM_HPP_
 
-#include <Engine/System/System.hpp>
+#include <Engine/System/CouplingSystem.hpp>
 
 #include <AnimationPluginMacros.hpp>
 #include <Engine/ItemModel/ItemEntry.hpp>
 
 namespace AnimationPlugin {
-class ANIM_PLUGIN_API AnimationSystem : public Ra::Engine::System {
-  public:
+
+/// The AnimationSystem is the main system for coupling TimedSystems.
+/// On one hand, it manages the AnimationComponents, i.e. skeleton animation and display.
+/// On the other hand, it is responsible for transmitting calls to animation-related systems,
+/// for example physics systems that must play with the animation.
+class ANIM_PLUGIN_API AnimationSystem : public Ra::Engine::CouplingSystem<Ra::Engine::TimedSystem> {
+public:
     /// Create a new animation system
     AnimationSystem();
 
-    /// Create a task for each animation component to advance the current animation.
-    virtual void generateTasks( Ra::Core::TaskQueue* taskQueue,
-                                const Ra::Engine::FrameInfo& frameInfo ) override;
+    // System Interface
+    void generateTasks( Ra::Core::TaskQueue* taskQueue,
+                        const Ra::Engine::FrameInfo& frameInfo ) override;
 
-    /// Load a skeleton and an animation from a file.
     void handleAssetLoading( Ra::Engine::Entity* entity,
                              const Ra::Asset::FileData* fileData ) override;
 
+    // Also Coupling Timed Systems
     /// Toggle on/off playing of animations.
-    void play( bool isPlaying ) override;
+    void play( bool isPlaying );
 
-    /// Advance the animation next frame, then pauses.
-    void step() override;
+    /// Toggle playing of animations only for the next frame.
+    void step();
 
     /// Resets the skeleton to its rest pose.
     void reset();
 
+    /// Saves all the state data related to the current frame into a cache file.
+    void cacheFrame() const;
+
+    /// Restores the state data related to the \p frameID -th frame from the cache file.
+    /// \returns true if the frame has been successfully restored, false otherwise.
+    bool restoreFrame( uint frame);
+
+    /// @returns true if the AnimationSystem is currently playing.
+    bool isPlaying() const { return m_isPlaying; }
+
+    /// @returns true if the AnimationSystem has been asked to step once.
+    bool isStepping() const { return m_isStepping; }
+
+    // Animation Plugin related calls
     /// Set on or off xray bone display.
     void setXray( bool on );
 
-    bool isXrayOn();
+    /// Is xray bone display on.
+    bool isXrayOn() const { return m_xrayOn; }
 
+    /// Display the skeleton.
     void toggleSkeleton( const bool status );
+
+    /// Set the animation to play.
     void setAnimation( const uint i );
+
+    /// If \p status is TRUE, then use the animation time step if available;
+    /// else, use the application timestep.
     void toggleAnimationTimeStep( const bool status );
+
+    /// Set animation speed factor.
     void setAnimationSpeed( const Scalar value );
+
+    /// Toggle the slow motion speed (speed x0.1).
     void toggleSlowMotion( const bool status );
 
+    /// @returns the animation time corresponding to the \p entry 's entity.
     Scalar getTime( const Ra::Engine::ItemEntry& entry ) const;
 
-    bool isPlaying() const { return m_isPlaying; }
-    bool isStepping() const { return m_isStepping; }
+    uint getAnimFrame() const { return m_animFrame; }
 
-  private:
-    bool m_isPlaying; /// See if animation is playing or paused
-    bool m_oneStep;   /// True if one step has been required to play.
-    bool m_isStepping; /// True if one step has been required to play.
-    bool m_xrayOn;    /// True if we want to show xray-bones
+private:
+    /// See if animation is playing or paused
+    bool m_isPlaying;
+    /// True if one step has been required to play.
+    bool m_oneStep;
+    /// True if one step has been required to play.
+    bool m_isStepping;
+    /// True if we want to show xray-bones
+    bool m_xrayOn;
+    /// current frame rate
+    uint m_animFrame;
 };
 } // namespace AnimationPlugin
 

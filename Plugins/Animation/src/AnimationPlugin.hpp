@@ -52,6 +52,8 @@ class AnimationPluginC : public QObject, Ra::Plugins::RadiumPluginInterface {
     void setAnimationSpeed( Scalar value );
     void toggleSlowMotion( bool status );
     void updateAnimTime();
+    void cacheFrame();
+    void restoreFrame( int frame );
 
   private:
     class AnimationSystem* m_system;

@@ -14,41 +14,175 @@
 #include <Drawing/SkeletonBoneDrawable.hpp>
 
 namespace AnimationPlugin {
+
 AnimationSystem::AnimationSystem() {
     m_isPlaying = false;
     m_oneStep = false;
     m_xrayOn = false;
 }
 
+// Calls to be also transmitted to coupled systems
+
 void AnimationSystem::generateTasks( Ra::Core::TaskQueue* taskQueue,
                                      const Ra::Engine::FrameInfo& frameInfo ) {
     const bool playFrame = m_isPlaying || m_oneStep;
-
-    Scalar currentDelta = playFrame ? frameInfo.m_dt : 0;
-
-    for ( auto compEntry : this->m_components )
+    if ( playFrame )
     {
-        AnimationComponent* component = static_cast<AnimationComponent*>( compEntry.second );
-        Ra::Core::FunctionTask* task = new Ra::Core::FunctionTask(
-            std::bind( &AnimationComponent::update, component, currentDelta ), "AnimatorTask" );
-        taskQueue->registerTask( task );
+        ++m_animFrame;
     }
-
     m_isStepping = m_oneStep;
     m_oneStep = false;
+
+    // deal with AnimationComponents
+    Scalar currentDelta = playFrame ? frameInfo.m_dt : 0;
+    for ( auto compEntry : this->m_components )
+    {
+        auto component = static_cast<AnimationComponent*>( compEntry.second );
+        auto animFunc = std::bind( &AnimationComponent::update, component, currentDelta );
+        auto animTask = new Ra::Core::FunctionTask( animFunc, "AnimatorTask" );
+        taskQueue->registerTask( animTask );
+    }
+
+    // deal with coupled systems
+    for ( auto s : this->m_systems )
+    {
+        s->generateTasks( taskQueue, frameInfo );
+    }
+}
+
+void AnimationSystem::handleAssetLoading( Ra::Engine::Entity* entity,
+                                          const Ra::Asset::FileData* fileData ) {
+    auto geomData = fileData->getGeometryData();
+    auto skelData = fileData->getHandleData();
+    auto animData = fileData->getAnimationData();
+
+    // deal with AnimationComponents
+    for ( const auto& skel : skelData )
+    {
+        uint geomID = uint( -1 );
+        for ( uint i = 0; i < geomData.size(); ++i )
+        {
+            if ( skel->getName() == geomData[i]->getName() )
+            {
+                geomID = i;
+            }
+        }
+
+        // FIXME(Charly): Certainly not the best way to do this
+        AnimationComponent* component = new AnimationComponent( "AC_" + skel->getName(), entity );
+        std::vector<Ra::Core::Index> dupliTable;
+        uint nbMeshVertices = 0;
+        if ( geomID != uint( -1 ) )
+        {
+            dupliTable = geomData[geomID]->getDuplicateTable();
+            nbMeshVertices = geomData[geomID]->getVerticesSize();
+        }
+        component->handleSkeletonLoading( skel, dupliTable, nbMeshVertices );
+        component->handleAnimationLoading( animData );
+
+        component->setXray( m_xrayOn );
+        registerComponent( entity, component );
+    }
+
+    // deal with coupled systems
+    for ( auto s : this->m_systems )
+    {
+        s->handleAssetLoading( entity, fileData );
+    }
+}
+
+void AnimationSystem::step() {
+    m_oneStep = true;
+
+    // deal with coupled systems
+    for ( auto s : this->m_systems )
+    {
+        s->step();
+    }
+}
+
+void AnimationSystem::play( bool isPlaying ) {
+    m_isPlaying = isPlaying;
+
+    // deal with coupled systems
+    for ( auto s : this->m_systems )
+    {
+        s->play( isPlaying );
+    }
 }
 
 void AnimationSystem::reset() {
+    m_animFrame = 0;
+    // deal with AnimationComponents
     for ( auto compEntry : this->m_components )
     {
-        AnimationComponent* component = static_cast<AnimationComponent*>( compEntry.second );
-        { component->reset(); }
+        static_cast<AnimationComponent*>( compEntry.second )->reset();
+    }
+
+    // deal with coupled systems
+    for ( auto s : this->m_systems )
+    {
+        s->reset();
     }
 }
 
-bool AnimationSystem::isXrayOn() {
-    return m_xrayOn;
+void AnimationSystem::cacheFrame() const {
+    // deal with AnimationComponents
+    for ( const auto& comp : m_components )
+    {
+        static_cast<AnimationComponent*>( comp.second )->cacheFrame( m_animFrame );
+    }
+    // deal with coupled systems
+    for ( const auto &s : this->m_systems )
+    {
+        s->cacheFrame( m_animFrame );
+    }
 }
+
+bool AnimationSystem::restoreFrame( uint frame ) {
+    static bool restoringCurrent = false;
+    if (!restoringCurrent)
+    {
+        // first save current, in case restoration fails.
+        cacheFrame();
+    }
+    bool success = true;
+    // deal with AnimationComponents
+    for ( const auto& comp : m_components )
+    {
+        success &= static_cast<AnimationComponent*>( comp.second )->restoreFrame( frame );
+    }
+    // if fail, restore current frame
+    if ( !success && !restoringCurrent )
+    {
+        restoringCurrent = true;
+        restoreFrame( m_animFrame );
+        restoringCurrent = false;
+        return false;
+    }
+    CORE_ASSERT( success, "Error while trying to restore current frame" );
+    // deal with coupled systems
+    for ( const auto &s : this->m_systems )
+    {
+        success &= s->restoreFrame( frame );
+    }
+    // if fail, restore current frame
+    if ( !success && !restoringCurrent )
+    {
+        restoringCurrent = true;
+        restoreFrame( m_animFrame );
+        restoringCurrent = false;
+        return false;
+    }
+    CORE_ASSERT( success, "Error while trying to restore current frame" );
+    if ( success )
+    {
+        m_animFrame = frame;
+    }
+    return success;
+}
+
+// Animation Plugin specific calls
 
 void AnimationSystem::setXray( bool on ) {
     m_xrayOn = on;
@@ -56,14 +190,6 @@ void AnimationSystem::setXray( bool on ) {
     {
         static_cast<AnimationComponent*>( comp.second )->setXray( on );
     }
-}
-
-void AnimationSystem::step() {
-    m_oneStep = true;
-}
-
-void AnimationSystem::play( bool isPlaying ) {
-    m_isPlaying = isPlaying;
 }
 
 void AnimationSystem::toggleSkeleton( const bool status ) {
@@ -101,40 +227,6 @@ void AnimationSystem::toggleSlowMotion( const bool status ) {
     }
 }
 
-void AnimationSystem::handleAssetLoading( Ra::Engine::Entity* entity,
-                                          const Ra::Asset::FileData* fileData ) {
-    auto geomData = fileData->getGeometryData();
-    auto skelData = fileData->getHandleData();
-    auto animData = fileData->getAnimationData();
-
-    for ( const auto& skel : skelData )
-    {
-        uint geomID = uint( -1 );
-        for ( uint i = 0; i < geomData.size(); ++i )
-        {
-            if ( skel->getName() == geomData[i]->getName() )
-            {
-                geomID = i;
-            }
-        }
-
-        // FIXME(Charly): Certainly not the best way to do this
-        AnimationComponent* component = new AnimationComponent( "AC_" + skel->getName(), entity );
-        std::vector<Ra::Core::Index> dupliTable;
-        uint nbMeshVertices = 0;
-        if ( geomID != uint( -1 ) )
-        {
-            dupliTable = geomData[geomID]->getDuplicateTable();
-            nbMeshVertices = geomData[geomID]->getVerticesSize();
-        }
-        component->handleSkeletonLoading( skel, dupliTable, nbMeshVertices );
-        component->handleAnimationLoading( animData );
-
-        component->setXray( m_xrayOn );
-        registerComponent( entity, component );
-    }
-}
-
 Scalar AnimationSystem::getTime( const Ra::Engine::ItemEntry& entry ) const {
     if ( entry.isValid() )
     {
@@ -145,7 +237,7 @@ Scalar AnimationSystem::getTime( const Ra::Engine::ItemEntry& entry ) const {
         {
             if ( ec.first == entry.m_entity )
             {
-                const AnimationComponent* c = static_cast<AnimationComponent*>( ec.second );
+                auto c = static_cast<AnimationComponent*>( ec.second );
                 // Entry match, return that one
                 if ( ec.second == c )
                 {
