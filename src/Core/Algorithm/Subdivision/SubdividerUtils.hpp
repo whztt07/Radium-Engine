@@ -1,3 +1,5 @@
+#ifndef RADIUMENGINE_SUBDIVIDERUTILS_H
+#define RADIUMENGINE_SUBDIVIDERUTILS_H
 
 #include <Core/Mesh/TopologicalTriMesh/TopologicalMesh.hpp>
 
@@ -163,3 +165,5 @@ void interpolateProps( const std::vector<OpenMesh::HPropHandleT<T>>& hprops,
 
 } // namespace Core
 } // namespace Ra
+
+#endif // RADIUMENGINE_SUBDIVIDERUTILS_H

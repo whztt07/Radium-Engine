@@ -29,26 +29,34 @@ bool LoopSubdivider::subdivide( TopologicalMesh& mesh, size_t n, const bool upda
     TopologicalMesh::EdgeIter eit, e_end;
     TopologicalMesh::VertexIter vit;
 
-    // Do _n subdivisions
-    for ( size_t i = 0; i < n; ++i )
+    m_oldVertexOps.clear();
+    m_newVertexOps.clear();
+    m_oldVertexOps.resize( n );
+    m_newVertexOps.resize( n );
+
+    // Do n subdivisions
+    for ( size_t iter = 0; iter < n; ++iter )
     {
+        const int NV = mesh.n_vertices();
         if ( updatePoints )
         {
             // compute new positions for old vertices
+            m_oldVertexOps[iter].reserve( NV );
 #pragma omp parallel for
-            for ( uint i = 0; i < mesh.n_vertices(); ++i )
+            for ( uint i = 0; i < NV; ++i )
             {
                 const auto& vh = mesh.vertex_handle( i );
-                smooth( mesh, vh );
+                smooth( mesh, vh, iter );
             }
         }
 
         // Compute position for new vertices and store them in the edge property
+        m_newVertexOps[iter].reserve( mesh.n_edges() );
 #pragma omp parallel for
         for ( uint i = 0; i < mesh.n_edges(); ++i )
         {
             const auto& eh = mesh.edge_handle( i );
-            compute_midpoint( mesh, eh );
+            compute_midpoint( mesh, eh, iter );
         }
 
         // Split each edge at midpoint and store precomputed positions (stored in
@@ -78,7 +86,7 @@ bool LoopSubdivider::subdivide( TopologicalMesh& mesh, size_t n, const bool upda
         {
             // Commit changes in geometry
 #pragma omp parallel for
-            for ( uint i = 0; i < mesh.n_vertices(); ++i )
+            for ( uint i = 0; i < NV; ++i )
             {
                 const auto& vh = mesh.vertex_handle( i );
                 mesh.set_point( vh, mesh.property( m_vpPos, vh ) );
@@ -197,10 +205,7 @@ void LoopSubdivider::split_edge( TopologicalMesh& mesh, const TopologicalMesh::E
     VHandle vh1( mesh.to_vertex_handle( heh ) );
 
     // new vertex
-    vh = mesh.new_vertex( mesh.property( m_epPos, eh ) );
-
-    // memorize position, since it will be set later
-    mesh.property( m_vpPos, vh ) = mesh.property( m_epPos, eh );
+    vh = mesh.property( m_epPos, eh );
 
     // Re-link mesh entities
     if ( mesh.is_boundary( eh ) )
@@ -251,32 +256,49 @@ void LoopSubdivider::split_edge( TopologicalMesh& mesh, const TopologicalMesh::E
     interpolateProps( m_vec4Props, heh, opp_heh, t_heh, new_heh, opp_new_heh, mesh );
 }
 
-void LoopSubdivider::compute_midpoint( TopologicalMesh& mesh,
-                                       const TopologicalMesh::EdgeHandle& eh ) {
+void LoopSubdivider::compute_midpoint( TopologicalMesh& mesh, const TopologicalMesh::EdgeHandle& eh,
+                                       int iter ) {
     TopologicalMesh::HalfedgeHandle heh = mesh.halfedge_handle( eh, 0 );
     TopologicalMesh::HalfedgeHandle opp_heh = mesh.halfedge_handle( eh, 1 );
 
     TopologicalMesh::Point pos = mesh.point( mesh.to_vertex_handle( heh ) );
     pos += mesh.point( mesh.to_vertex_handle( opp_heh ) );
 
+    std::vector<V_OP> ops;
+
     // boundary edge: just average vertex positions
     if ( mesh.is_boundary( eh ) )
     {
         pos *= 0.5;
+        ops.resize( 2 );
+        ops[0] = V_OP( 0.5, mesh.to_vertex_handle( heh ) );
+        ops[1] = V_OP( 0.5, mesh.to_vertex_handle( opp_heh ) );
     } else // inner edge: add neighbouring Vertices to sum
     {
         pos *= 3.0;
         pos += mesh.point( mesh.to_vertex_handle( mesh.next_halfedge_handle( heh ) ) );
         pos += mesh.point( mesh.to_vertex_handle( mesh.next_halfedge_handle( opp_heh ) ) );
         pos *= 1.0 / 8.0;
+        ops.resize( 4 );
+        ops[0] = V_OP( 3.f / 8.f, mesh.to_vertex_handle( heh ) );
+        ops[1] = V_OP( 3.f / 8.f, mesh.to_vertex_handle( opp_heh ) );
+        ops[2] = V_OP( 1.f / 8.f, mesh.to_vertex_handle( mesh.next_halfedge_handle( heh ) ) );
+        ops[3] = V_OP( 1.f / 8.f, mesh.to_vertex_handle( mesh.next_halfedge_handle( opp_heh ) ) );
     }
-    mesh.property( m_epPos, eh ) = pos;
+    auto vh = mesh.add_vertex( pos );
+    mesh.property( m_epPos, eh ) = vh;
+
+#pragma omp critical
+    { m_newVertexOps[iter].push_back( V_OPS( vh, ops ) ); }
 }
 
-void LoopSubdivider::smooth( TopologicalMesh& mesh, const TopologicalMesh::VertexHandle& vh ) {
+void LoopSubdivider::smooth( TopologicalMesh& mesh, const TopologicalMesh::VertexHandle& vh,
+                             int iter ) {
     using VHandle = TopologicalMesh::VertexHandle;
 
     TopologicalMesh::Point pos( 0.0, 0.0, 0.0 );
+
+    std::vector<V_OP> ops;
 
     if ( mesh.is_boundary( vh ) ) // if boundary: Point 1-6-1
     {
@@ -284,39 +306,46 @@ void LoopSubdivider::smooth( TopologicalMesh& mesh, const TopologicalMesh::Verte
         TopologicalMesh::HalfedgeHandle prev_heh;
         heh = mesh.halfedge_handle( vh );
 
-        if ( heh.is_valid() )
-        {
-            assert( mesh.is_boundary( mesh.edge_handle( heh ) ) );
+        assert( mesh.is_boundary( mesh.edge_handle( heh ) ) );
 
-            prev_heh = mesh.prev_halfedge_handle( heh );
+        prev_heh = mesh.prev_halfedge_handle( heh );
 
-            VHandle to_vh = mesh.to_vertex_handle( heh );
-            VHandle from_vh = mesh.from_vertex_handle( prev_heh );
+        VHandle to_vh = mesh.to_vertex_handle( heh );
+        VHandle from_vh = mesh.from_vertex_handle( prev_heh );
 
-            // ( v_l + 6 v + v_r ) / 8
-            pos = mesh.point( vh );
-            pos *= 6.0;
-            pos += mesh.point( to_vh );
-            pos += mesh.point( from_vh );
-            pos *= 1.0 / 8.0;
-        } else
-            return;
+        // ( v_l + 6 v + v_r ) / 8
+        pos = mesh.point( vh );
+        pos *= 6.0;
+        pos += mesh.point( to_vh );
+        pos += mesh.point( from_vh );
+        pos *= 1.0 / 8.0;
+
+        ops.resize( 3 );
+        ops[2] = V_OP( 6.f / 8.f, vh );
+        ops[0] = V_OP( 1.f / 8.f, to_vh );
+        ops[1] = V_OP( 1.f / 8.f, from_vh );
     } else // inner vertex: (1-a) * p + a/n * Sum q, q in one-ring of p
     {
         TopologicalMesh::VertexVertexIter vvit;
-        size_t valence( 0 );
+        const int valence = mesh.valence( vh );
+        ops.resize( valence + 1 );
+        int i = 0;
 
         // Calculate Valence and sum up neighbour points
         for ( vvit = mesh.vv_iter( vh ); vvit.is_valid(); ++vvit )
         {
-            ++valence;
             pos += mesh.point( *vvit );
+            ops[i++] = V_OP( m_weights[valence].second, *vvit );
         }
         pos *= m_weights[valence].second; // alpha(n)/n * Sum q, q in one-ring of p
         pos += m_weights[valence].first * mesh.point( vh ); // + (1-a)*p
+        ops[i] = V_OP( m_weights[valence].first, vh );
     }
 
     mesh.property( m_vpPos, vh ) = pos;
+
+#pragma omp critical
+    { m_oldVertexOps[iter].push_back( V_OPS( vh, ops ) ); }
 }
 
 } // namespace Core

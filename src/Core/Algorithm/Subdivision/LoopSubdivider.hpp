@@ -17,6 +17,9 @@ class RA_CORE_API LoopSubdivider
     using base = OpenMesh::Subdivider::Uniform::SubdividerT<TopologicalMesh, Scalar>;
     using Weight = std::pair<Scalar, Scalar>;
     using Weights = std::vector<Weight>;
+    using V_OP = std::pair<Scalar, TopologicalMesh::VertexHandle>;
+    using V_OPS = std::pair<TopologicalMesh::VertexHandle, std::vector<V_OP>>;
+    using S_OPS = std::vector<V_OPS>;
 
   public:
     LoopSubdivider() : base() { init_weights(); }
@@ -28,6 +31,11 @@ class RA_CORE_API LoopSubdivider
   public:
     /// must implement
     const char* name( void ) const override { return "LoopSubdivider"; }
+
+    /// @return the list of vertex operations done during subdivision.
+    const std::vector<S_OPS>& getNewVertexOperations() const { return m_newVertexOps; }
+    /// @return the list of vertex operations done during subdivision.
+    const std::vector<S_OPS>& getOldVertexOperations() const { return m_oldVertexOps; }
 
   protected:
     /// Pre-compute weights
@@ -78,17 +86,17 @@ class RA_CORE_API LoopSubdivider
     // geometry helpers
 
     /// compute edge midpoint
-    void compute_midpoint( TopologicalMesh& mesh, const TopologicalMesh::EdgeHandle& eh );
+    void compute_midpoint( TopologicalMesh& mesh, const TopologicalMesh::EdgeHandle& eh, int iter );
 
     /// smooth input vertices
-    void smooth( TopologicalMesh& mesh, const TopologicalMesh::VertexHandle& vh );
+    void smooth( TopologicalMesh& mesh, const TopologicalMesh::VertexHandle& vh, int iter );
 
   private:
     /// old vertex new position
     OpenMesh::VPropHandleT<TopologicalMesh::Point> m_vpPos;
 
     /// new edge midpoint position
-    OpenMesh::EPropHandleT<TopologicalMesh::Point> m_epPos;
+    OpenMesh::EPropHandleT<TopologicalMesh::VertexHandle> m_epPos;
 
     /// deal with properties
     std::vector<OpenMesh::HPropHandleT<float>> m_floatProps;
@@ -98,6 +106,10 @@ class RA_CORE_API LoopSubdivider
 
     /// precomputed weights
     Weights m_weights;
+
+    /// list of vertices computations
+    std::vector<S_OPS> m_oldVertexOps;
+    std::vector<S_OPS> m_newVertexOps;
 };
 
 } // namespace Core
