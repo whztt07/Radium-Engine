@@ -1,11 +1,17 @@
 #include <SkinningComponent.hpp>
 
+#include <Core/Time/Timer.hpp>
+
 #include <Core/Animation/Pose/PoseOperation.hpp>
 #include <Core/Geometry/Normal/Normal.hpp>
 
 #include <Core/Animation/Skinning/DualQuaternionSkinning.hpp>
-#include <Core/Animation/Skinning/RotationCenterSkinning.hpp>
 #include <Core/Animation/Skinning/LinearBlendSkinning.hpp>
+#include <Core/Animation/Skinning/RotationCenterSkinning.hpp>
+
+#include <Engine/Renderer/Mesh/Mesh.hpp>
+#include <Engine/Renderer/RenderObject/RenderObject.hpp>
+#include <Engine/Renderer/RenderObject/RenderObjectManager.hpp>
 
 using Ra::Core::DualQuaternion;
 using Ra::Core::Quaternion;
@@ -34,6 +40,7 @@ void SkinningComponent::setupSkinning() {
 
     if ( hasSkel && hasWeights && hasMesh && hasRefPose )
     {
+        m_roIdxGetter = compMsg->getterCallback<Ra::Core::Index>( getEntity(), m_contentsName );
         m_skeletonGetter = compMsg->getterCallback<Skeleton>( getEntity(), m_contentsName );
         m_verticesWriter =
             compMsg->rwCallback<Ra::Core::Vector3Array>( getEntity(), m_contentsName + "v" );
@@ -55,6 +62,56 @@ void SkinningComponent::setupSkinning() {
         m_frameData.m_previousPos = m_refData.m_referenceMesh.vertices();
         m_frameData.m_currentPos = m_refData.m_referenceMesh.vertices();
         m_frameData.m_currentNormal = m_refData.m_referenceMesh.normals();
+
+        // ####################
+        // ##### building topo data (mesh, maps, subdiv)
+        // helpers
+        struct hash_vec {
+            size_t operator()( const Ra::Core::Vector3& lvalue ) const {
+                size_t hx = std::hash<Scalar>()( lvalue[0] );
+                size_t hy = std::hash<Scalar>()( lvalue[1] );
+                size_t hz = std::hash<Scalar>()( lvalue[2] );
+                return ( hx ^ ( hy << 1 ) ) ^ hz;
+            }
+        };
+        using VertexMap = std::unordered_map<Ra::Core::Vector3,
+                                             Ra::Core::TopologicalMesh::VertexHandle, hash_vec>;
+        // create topo coarse
+        m_topoMeshCoarse = Ra::Core::TopologicalMesh( m_refData.m_referenceMesh );
+        // fill map coarse
+        VertexMap mapV2HCoarse;
+        for ( auto vit = m_topoMeshCoarse.vertices_begin(); vit != m_topoMeshCoarse.vertices_end();
+              ++vit )
+        {
+            mapV2HCoarse[m_topoMeshCoarse.point( *vit )] = *vit;
+        }
+        m_mapI2HCoarse.resize( m_refData.m_referenceMesh.vertices().size() );
+        for ( size_t i = 0; i < m_refData.m_referenceMesh.vertices().size(); ++i )
+        {
+            m_mapI2HCoarse[i] = mapV2HCoarse[m_refData.m_referenceMesh.vertices()[i]];
+        }
+        // create topo full (subdiv)
+        m_topoMeshFull = m_topoMeshCoarse;
+        Subdivider subdiv;
+        subdiv.attach( m_topoMeshFull );
+        subdiv( 2 );
+        subdiv.detach();
+        m_subdivNewOps = subdiv.getNewVertexOperations();
+        m_subdivOldOps = subdiv.getOldVertexOperations();
+        // create map full
+        VertexMap mapV2HFull;
+        for ( auto vit = m_topoMeshFull.vertices_begin(); vit != m_topoMeshFull.vertices_end();
+              ++vit )
+        {
+            mapV2HFull[m_topoMeshFull.point( *vit )] = *vit;
+        }
+        m_meshFull = m_topoMeshFull.toTriangleMesh();
+        m_mapI2HFull.resize( m_meshFull.vertices().size() );
+        for ( size_t i = 0; i < m_meshFull.vertices().size(); ++i )
+        {
+            m_mapI2HFull[i] = mapV2HFull[m_meshFull.vertices()[i]];
+        }
+        // ####################
 
         // Do some debug checks:  Attempt to write to the mesh and check the weights match skeleton
         // and mesh.
@@ -131,16 +188,94 @@ void SkinningComponent::skin() {
     }
 }
 
+//#define FULL_SUBDIV
 void SkinningComponent::endSkinning() {
     if ( m_frameData.m_doSkinning )
     {
-        Ra::Core::Vector3Array& vertices = *( m_verticesWriter() );
-        Ra::Core::Vector3Array& normals = *( m_normalsWriter() );
+        auto mesh = m_refData.m_referenceMesh;
+        mesh.vertices() = m_frameData.m_currentPos;
 
-        vertices = m_frameData.m_currentPos;
+        {
+            // update coarse topomesh
+            auto timerStart = Ra::Core::Timer::Clock::now();
+#ifdef FULL_SUBDIV
+            m_topoMeshFull = m_topoMeshCoarse;
+#endif
+#pragma omp parallel for schedule( static )
+            for ( size_t i = 0; i < m_mapI2HCoarse.size(); ++i )
+            {
+                m_topoMeshFull.set_point( m_mapI2HCoarse[i], mesh.vertices()[i] );
+            }
+            std::cout << "coarse: "
+                      << Ra::Core::Timer::getIntervalMicro( timerStart,
+                                                            Ra::Core::Timer::Clock::now() )
+                      << std::endl;
 
-        Ra::Core::Geometry::uniformNormal( vertices, m_refData.m_referenceMesh.m_triangles,
-                                           *( m_duplicateTableGetter() ), normals );
+            // apply subdiv
+#ifdef FULL_SUBDIV
+            Subdivider subdiv;
+            subdiv.attach( m_topoMeshFull );
+            subdiv( 2 );
+            subdiv.detach();
+#else
+            timerStart = Ra::Core::Timer::Clock::now();
+            // for each subdiv step
+            for ( int i = 0; i < m_subdivNewOps.size(); ++i )
+            {
+                // first update new vertices
+#    pragma omp parallel for schedule( static )
+                for ( int j = 0; j < m_subdivNewOps[i].size(); ++j )
+                {
+                    Ra::Core::Vector3 pos( 0, 0, 0 );
+                    const auto& ops = m_subdivNewOps[i][j];
+                    for ( const auto& op : ops.second )
+                    {
+                        pos += op.first * m_topoMeshFull.point( op.second );
+                    }
+                    m_topoMeshFull.set_point( ops.first, pos );
+                }
+                // then compute old vertices
+                std::vector<Ra::Core::Vector3> pos( m_subdivOldOps[i].size() );
+#    pragma omp parallel for
+                for ( int j = 0; j < m_subdivOldOps[i].size(); ++j )
+                {
+                    pos[j] = Ra::Core::Vector3( 0, 0, 0 );
+                    const auto& ops = m_subdivOldOps[i][j];
+                    for ( const auto& op : ops.second )
+                    {
+                        pos[j] += op.first * m_topoMeshFull.point( op.second );
+                    }
+                }
+                // then commit pos for old vertices
+#    pragma omp parallel for schedule( static )
+                for ( int j = 0; j < m_subdivOldOps[i].size(); ++j )
+                {
+                    m_topoMeshFull.set_point( m_subdivOldOps[i][j].first, pos[j] );
+                }
+            }
+#endif
+            std::cout << "subdiv: "
+                      << Ra::Core::Timer::getIntervalMicro( timerStart,
+                                                            Ra::Core::Timer::Clock::now() )
+                      << std::endl;
+
+            // update rendermesh
+            timerStart = Ra::Core::Timer::Clock::now();
+#pragma omp parallel for schedule( static )
+            for ( size_t i = 0; i < m_mapI2HFull.size(); ++i )
+            {
+                m_meshFull.vertices()[i] = m_topoMeshFull.point( m_mapI2HFull[i] );
+            }
+            std::cout << "full: "
+                      << Ra::Core::Timer::getIntervalMicro( timerStart,
+                                                            Ra::Core::Timer::Clock::now() )
+                      << std::endl;
+        }
+        Ra::Core::Geometry::uniformNormal( m_meshFull.vertices(), m_meshFull.m_triangles,
+                                           m_meshFull.normals() );
+
+        auto RO = getRoMgr()->getRenderObject( *( m_roIdxGetter() ) );
+        RO->getMesh()->loadGeometry( m_meshFull );
 
         std::swap( m_frameData.m_previousPose, m_frameData.m_currentPose );
         std::swap( m_frameData.m_previousPos, m_frameData.m_currentPos );
@@ -149,12 +284,17 @@ void SkinningComponent::endSkinning() {
 
     } else if ( m_frameData.m_doReset )
     {
-        // Reset mesh to its initial state.
-        Ra::Core::Vector3Array& vertices = *( m_verticesWriter() );
-        Ra::Core::Vector3Array& normals = *( m_normalsWriter() );
-
-        vertices = m_refData.m_referenceMesh.vertices();
-        normals = m_refData.m_referenceMesh.normals();
+        auto mesh = m_refData.m_referenceMesh;
+        {
+            Ra::Core::TopologicalMesh topo( mesh );
+            Subdivider subdiv;
+            subdiv.attach( topo );
+            subdiv( 2 );
+            subdiv.detach();
+            mesh = topo.toTriangleMesh();
+        }
+        auto RO = getRoMgr()->getRenderObject( *( m_roIdxGetter() ) );
+        RO->getMesh()->loadGeometry( mesh );
 
         m_frameData.m_doReset = false;
         m_frameData.m_currentPose = m_refData.m_refPose;
