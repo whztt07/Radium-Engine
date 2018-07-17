@@ -201,11 +201,11 @@ RayCastResult castRay( const TriangleMesh& mesh, const Ray& ray ) {
 Scalar getMeanEdgeLength( const TriangleMesh& mesh ) {
     using Key = std::pair<uint, uint>;
     std::set<Key> list;
-    const uint size = mesh.m_triangles.size();
+    const int size = mesh.m_triangles.size();
     uint edgeSize = 0;
     Scalar edgeLength = 0.0;
 #pragma omp parallel for
-    for ( int t = 0; t < int( size ); ++t )
+    for ( int t = 0; t < size; ++t )
     {
         for ( uint v = 0; v < 3; ++v )
         {

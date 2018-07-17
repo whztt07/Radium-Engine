@@ -56,7 +56,7 @@ void diffuseDelta( const Ra::Core::Geometry::AdjacencyMatrix& A, const Delta& de
         //        u.swap( tmp );
 
 #pragma omp parallel for
-        for ( int k = 0; k < A.outerSize(); ++k )
+        for ( int k = 0; k < int( A.outerSize() ); ++k )
         {
             uint nonZero = 0;
             Scalar oneRingMeanValue = 0.0;

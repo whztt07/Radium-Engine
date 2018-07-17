@@ -77,7 +77,7 @@ bool checkNoWeightVertex( Eigen::Ref<const WeightMatrix> matrix, const bool FAIL
     if ( MT )
     {
 #pragma omp parallel for
-        for ( int i = 0; i < matrix.rows(); ++i )
+        for ( int i = 0; i < int( matrix.rows() ); ++i )
         {
             Sparse row = matrix.row( i );
             const int check = ( row.nonZeros() > 0 ) ? 1 : 0;
@@ -119,7 +119,7 @@ bool normalizeWeights( Eigen::Ref<WeightMatrix> matrix, const bool MT ) {
     bool skinningWeightOk = true;
 
 #pragma omp parallel for if ( MT )
-    for ( int k = 0; k < matrix.innerSize(); ++k )
+    for ( int k = 0; k < int( matrix.innerSize() ); ++k )
     {
         const Scalar sum = matrix.row( k ).sum();
         if ( !Ra::Core::Math::areApproxEqual( sum, Scalar( 0 ) ) )

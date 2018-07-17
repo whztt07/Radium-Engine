@@ -124,8 +124,8 @@ void dualQuaternionSkinning( const Ra::Core::Vector3Array& input, const DQList& 
     output.resize( size );
 #if defined CORE_USE_OMP
     omp_set_dynamic( 0 );
-#    pragma omp parallel for schedule( static ) num_threads( 4 )
 #endif
+#pragma omp parallel for schedule( static ) num_threads( 4 )
     for ( int i = 0; i < int( size ); ++i )
     {
         output[i] = DQ[i].transform( input[i] );

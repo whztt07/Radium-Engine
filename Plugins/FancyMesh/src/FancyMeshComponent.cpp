@@ -79,18 +79,19 @@ void FancyMeshComponent::handleMeshLoading( const Ra::Asset::GeometryData* data 
     Ra::Core::Transform N;
     N.matrix() = ( T.matrix() ).inverse().transpose();
 
-    mesh.vertices().resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
+    const uint size = data->getVerticesSize();
+    mesh.vertices().resize( size, Ra::Core::Vector3::Zero() );
 #pragma omp parallel for
-    for ( uint i = 0; i < data->getVerticesSize(); ++i )
+    for ( int i = 0; i < int( size ); ++i )
     {
         mesh.vertices()[i] = T * data->getVertices()[i];
     }
 
     if ( data->hasNormals() )
     {
-        mesh.normals().resize( data->getVerticesSize(), Ra::Core::Vector3::Zero() );
+        mesh.normals().resize( size, Ra::Core::Vector3::Zero() );
 #pragma omp parallel for
-        for ( uint i = 0; i < data->getVerticesSize(); ++i )
+        for ( int i = 0; i < int( size ); ++i )
         {
             mesh.normals()[i] = ( N * data->getNormals()[i] ).normalized();
         }
@@ -98,7 +99,7 @@ void FancyMeshComponent::handleMeshLoading( const Ra::Asset::GeometryData* data 
 
     mesh.m_triangles.resize( data->getFaces().size(), Ra::Core::Triangle::Zero() );
 #pragma omp parallel for
-    for ( uint i = 0; i < data->getFaces().size(); ++i )
+    for ( int i = 0; i < int( data->getFaces().size() ); ++i )
     {
         mesh.m_triangles[i] = data->getFaces()[i].head<3>();
     }
@@ -108,7 +109,7 @@ void FancyMeshComponent::handleMeshLoading( const Ra::Asset::GeometryData* data 
     // get the actual duplicate table according to the mesh, not to the file data.
     if ( !data->isLoadingDuplicates() )
     {
-        m_duplicateTable.resize( data->getVerticesSize() );
+        m_duplicateTable.resize( size );
         std::iota( m_duplicateTable.begin(), m_duplicateTable.end(), 0 );
     } else
     { Ra::Core::MeshUtils::findDuplicates( mesh, m_duplicateTable ); }

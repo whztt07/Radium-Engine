@@ -18,9 +18,9 @@ void BulgeCorrectionData::resize( const uint size ) {
 void bulgeCorrection( const Vector3Array& restMesh, const BulgeCorrectionData& restData,
                       Vector3Array& currMesh, const BulgeCorrectionData& currData ) {
     CORE_ASSERT( ( restMesh.size() == currMesh.size() ), " Meshes don't match " );
-    const uint n = restMesh.size();
+    const int n = restMesh.size();
 #pragma omp parallel for
-    for ( int i = 0; i < int( n ); ++i )
+    for ( int i = 0; i < n; ++i )
     {
         if ( restData.m_dv[i] < currData.m_dv[i] )
         {

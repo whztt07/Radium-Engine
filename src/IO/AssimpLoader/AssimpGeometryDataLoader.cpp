@@ -6,8 +6,8 @@
 #include <Core/File/GeometryData.hpp>
 #include <Core/Log/Log.hpp>
 
-#include <IO/AssimpLoader/AssimpWrapper.hpp>
 #include <Core/File/BlinnPhongMaterialData.hpp>
+#include <IO/AssimpLoader/AssimpWrapper.hpp>
 
 namespace Ra {
 namespace IO {
@@ -241,7 +241,7 @@ void AssimpGeometryDataLoader::fetchEdges( const aiMesh& mesh, Asset::GeometryDa
     auto& edge = data.getEdges();
     edge.resize( size );
 #pragma omp parallel for
-    for ( uint i = 0; i < size; ++i )
+    for ( int i = 0; i < int( size ); ++i )
     {
         edge[i] = assimpToCore( mesh.mFaces[i].mIndices, mesh.mFaces[i].mNumIndices ).cast<uint>();
         if ( !data.isLoadingDuplicates() )
@@ -257,7 +257,7 @@ void AssimpGeometryDataLoader::fetchFaces( const aiMesh& mesh, Asset::GeometryDa
     auto& face = data.getFaces();
     face.resize( size );
 #pragma omp parallel for
-    for ( uint i = 0; i < size; ++i )
+    for ( int i = 0; i < int( size ); ++i )
     {
         face[i] = assimpToCore( mesh.mFaces[i].mIndices, mesh.mFaces[i].mNumIndices ).cast<uint>();
         if ( !data.isLoadingDuplicates() )
@@ -281,13 +281,13 @@ void AssimpGeometryDataLoader::fetchNormals( const aiMesh& mesh, Asset::Geometry
     normal.resize( data.getVerticesSize(), Core::Vector3::Zero() );
 
 #pragma omp parallel for if ( data.isLoadingDuplicates() )
-    for ( uint i = 0; i < mesh.mNumVertices; ++i )
+    for ( int i = 0; i < int( mesh.mNumVertices ); ++i )
     {
         normal.at( data.getDuplicateTable().at( i ) ) += assimpToCore( mesh.mNormals[i] );
     }
 
 #pragma omp parallel for
-    for ( uint i = 0; i < uint( normal.size() ); ++i )
+    for ( int i = 0; i < int( normal.size() ); ++i )
     {
         normal[i].normalize();
     }
@@ -300,7 +300,7 @@ void AssimpGeometryDataLoader::fetchTangents( const aiMesh& mesh,
     auto& tangent = data.getTangents();
     tangent.resize( size, Core::Vector3::Zero() );
 #    pragma omp parallel for
-    for ( uint i = 0; i < size; ++i )
+    for ( int i = 0; i < int( size ); ++i )
     {
         tangent[i] = assimpToCore( mesh.mTangents[i] );
     }
@@ -314,7 +314,7 @@ void AssimpGeometryDataLoader::fetchBitangents( const aiMesh& mesh,
     auto& bitangent = data.getBiTangents();
     bitangent.resize( size );
 #    pragma omp parallel for
-    for ( uint i = 0; i < size; ++i )
+    for ( int i = 0; i < int( size ); ++i )
     {
         bitangent[i] = assimpToCore( mesh.mBitangents[i] );
     }
@@ -328,7 +328,7 @@ void AssimpGeometryDataLoader::fetchTextureCoordinates( const aiMesh& mesh,
     auto& texcoord = data.getTexCoords();
     texcoord.resize( data.getVerticesSize() );
 #    pragma omp parallel for
-    for ( uint i = 0; i < size; ++i )
+    for ( int i = 0; i < int( size ); ++i )
     {
         // FIXME(Charly): Is it safe to only consider texcoords[0] ?
         texcoord.at( i ) = assimpToCore( mesh.mTextureCoords[0][i] );

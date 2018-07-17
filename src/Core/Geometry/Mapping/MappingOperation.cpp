@@ -61,10 +61,8 @@ void findParametrization( const TriangleMesh& source, const TriangleMesh& target
     const uint size = source.vertices().size();
     param.clear();
     param.resize( size );
-#if defined( CORE_USE_OMP )
-#    pragma omp parallel for
-#endif
-    for ( uint i = 0; i < size; ++i )
+#pragma omp parallel for
+    for ( int i = 0; i < int( size ); ++i )
     {
         const Vector3& v = source.vertices()[i];
         Mapping map;
@@ -105,10 +103,8 @@ void applyParametrization( const TriangleMesh& inMesh, const Parametrization& pa
                            Vector3Array& outPoint, const bool FORCE_DISPLACEMENT_TO_ZERO ) {
     const uint size = param.size();
     outPoint.resize( size, Vector3::Zero() );
-#if defined( CORE_USE_OMP )
-#    pragma omp parallel for
-#endif
-    for ( uint v = 0; v < size; ++v )
+#pragma omp parallel for
+    for ( int v = 0; v < int( size ); ++v )
     {
         const Mapping map = param[v];
         // const Scalar  alpha = map.getAlpha();
