@@ -2,13 +2,12 @@
 #define RADIUMENGINE_ATTRIBS_HPP
 
 #include <Core/Containers/VectorArray.hpp>
+#include <Core/Index/IndexMap.hpp>
 #include <Core/Log/Log.hpp>
 #include <Core/RaCore.hpp>
 
-namespace Ra
-{
-namespace Core
-{
+namespace Ra {
+namespace Core {
 
 template <typename T>
 class Attrib;
@@ -17,8 +16,7 @@ class Attrib;
 /// An Attrib is data linked to Vertices of a mesh.
 /// In the future, it is expected to allow automatic binding between the CPU
 /// and the rendered data on the GPU.
-class AttribBase
-{
+class AttribBase {
   public:
     /// attrib name is used to automatic location binding when using shaders.
     virtual ~AttribBase() {}
@@ -32,14 +30,12 @@ class AttribBase
     bool inline operator==( const AttribBase& rhs ) { return m_name == rhs.getName(); }
 
     template <typename T>
-    inline Attrib<T>& cast()
-    {
+    inline Attrib<T>& cast() {
         return static_cast<Attrib<T>&>( *this );
     }
 
     template <typename T>
-    inline const Attrib<T>& cast() const
-    {
+    inline const Attrib<T>& cast() const {
         return static_cast<const Attrib<T>&>( *this );
     }
 
@@ -53,8 +49,7 @@ class AttribBase
 };
 
 template <typename T>
-class Attrib : public AttribBase
-{
+class Attrib : public AttribBase {
   public:
     using value_type = T;
     using Container = VectorArray<T>;
@@ -82,28 +77,26 @@ class Attrib : public AttribBase
 };
 
 template <typename T>
-class AttribHandle
-{
+class AttribHandle {
   public:
     typedef T value_type;
     using Container = typename Attrib<T>::Container;
 
     /// There is no validity check against the corresponding mesh, but just a
     /// simple test to allow the manipuation of unitialized handles.
-    constexpr bool isValid() const { return m_idx != -1; }
+    constexpr bool isValid() const { return m_idx.isValid(); }
 
     /// compare two handle, there are the same if they both represent the same
     /// attrib (type and value).
     template <typename U>
-    bool operator==( const AttribHandle<U>& lhs ) const
-    {
+    bool operator==( const AttribHandle<U>& lhs ) const {
         return std::is_same<T, U>::value && m_idx == lhs.m_idx;
     }
 
-    int idx() { return m_idx; }
+    Ra::Core::Index idx() { return m_idx; }
 
   private:
-    int m_idx = -1;
+    Ra::Core::Index m_idx = -1;
 
     friend class AttribManager;
 };
@@ -134,23 +127,42 @@ class AttribHandle
  * \warning There is no error check on the handles attribute type
  *
  */
-class AttribManager
-{
+class AttribManager {
   public:
     using value_type = AttribBase*;
-    using Container = std::vector<value_type>;
+    using Container = Ra::Core::IndexMap<value_type>;
 
-    /// const acces to attrib vector
-    const Container& attribs() const { return m_attribs; }
+    AttribManager() {}
 
-    /// clear all attribs, invalidate handles !
-    void clear()
-    {
-        for ( auto a : m_attribs )
+    /// Shallow copy of attributes
+    AttribManager( const AttribManager& m ) = default;
+    AttribManager& operator=( const AttribManager& m ) = default;
+
+    // Deep copy of attributes
+    /// Base copy, does nothing.
+    void copyAttribs( const AttribManager& m ) {}
+
+    /// Deep copy of attrib.
+    /// Note: if some attrib already exist, it will be replaced but not de-allocated.
+    template <class T, class... Handle>
+    void copyAttribs( const AttribManager& m, const AttribHandle<T>& attr, Handle... attribs ) {
+        // get attrib to copy
+        auto a = m.getAttrib( attr );
+        // add new attrib
+        auto h = addAttrib<T>( a.getName() );
+        getAttrib( h ).data() = a.data();
+        // deal with other attribs
+        copyAttribs( m, attribs... );
+    }
+
+    /// clear all attribs, invalidate handles and shallow copies.
+    void clear() {
+        for ( auto attr : m_attribs )
         {
-            delete a;
+            delete attr;
         }
         m_attribs.clear();
+        m_attribsIndex.clear();
     }
 
     /*!
@@ -173,8 +185,7 @@ class AttribManager
      * \warning There is no error check on the attribute type
      */
     template <typename T>
-    inline AttribHandle<T> getAttribHandle( const std::string& name ) const
-    {
+    inline AttribHandle<T> getAttribHandle( const std::string& name ) const {
         auto c = m_attribsIndex.find( name );
         AttribHandle<T> handle;
         if ( c != m_attribsIndex.end() )
@@ -186,78 +197,73 @@ class AttribManager
 
     /// Get attribute by handle
     template <typename T>
-    inline Attrib<T>& getAttrib( AttribHandle<T> h )
-    {
-        return *static_cast<Attrib<T>*>( m_attribs[h.m_idx] );
+    inline Attrib<T>& getAttrib( AttribHandle<T> h ) {
+        return *static_cast<Attrib<T>*>( m_attribs.at( h.m_idx ) );
     }
 
     /// Get attribute by handle (const)
     template <typename T>
-    inline const Attrib<T>& getAttrib( AttribHandle<T> h ) const
-    {
-        return *static_cast<Attrib<T>*>( m_attribs[h.m_idx] );
+    inline const Attrib<T>& getAttrib( AttribHandle<T> h ) const {
+        return *static_cast<Attrib<T>*>( m_attribs.at( h.m_idx ) );
     }
 
-    /// Add attribute by name
+    /// Add attribute by name.
+    /// Note: If an attribute with the same name already exists,
+    ///  it will be replaced but not de-allocated.
     template <typename T>
-    AttribHandle<T> addAttrib( const std::string& name )
-    {
+    AttribHandle<T> addAttrib( const std::string& name ) {
         AttribHandle<T> h;
         Attrib<T>* attrib = new Attrib<T>;
         attrib->setName( name );
 
-        auto itr = std::find_if( m_attribs.begin(), m_attribs.end(),
-                                 []( AttribBase* b ) { return b == nullptr; } );
-        if ( itr != m_attribs.end() )
-        {
+        auto it = std::find_if( m_attribs.begin(), m_attribs.end(),
+                                [&name]( const auto& a ) { return a->getName() == name; } );
 
-            *itr = attrib;
-            h.m_idx = std::distance( m_attribs.begin(), itr );
-        }
-        else
+        if ( it != m_attribs.end() )
         {
-
-            m_attribs.push_back( attrib );
-            h.m_idx = m_attribs.size() - 1;
+            LOG( logWARNING ) << "Replacing existing attribute " << name << ".";
+            *it = attrib;
+            h.m_idx = m_attribsIndex[name];
+        } else
+        {
+            h.m_idx = m_attribs.insert( attrib );
+            m_attribsIndex[name] = h.m_idx;
         }
-        m_attribsIndex[name] = h.m_idx;
+
         return h;
     }
 
     /// Remove attribute by name
-    void removeAttrib( const std::string& name )
-    {
+    void removeAttrib( const std::string& name ) {
         auto c = m_attribsIndex.find( name );
         if ( c != m_attribsIndex.end() )
         {
-            int idx = c->second;
+            Ra::Core::Index idx = c->second;
             delete m_attribs[idx];
-            m_attribs[idx] = nullptr;
-            //            m_attribs.erase( m_attribs.begin() + idx );
+            m_attribs.remove( idx );
             m_attribsIndex.erase( c );
-
-            // reindex attribs with index superior to removed index
-            //            for ( auto& d : m_attribsIndex )
-            //            {
-            //                if ( d.second > idx )
-            //                {
-            //                    --d.second;
-            //                }
-            //            }
         }
     }
 
     /// Remove attribute by handle, invalidate all the handles
     template <typename T>
-    void removeAttrib( AttribHandle<T> h )
-    {
+    void removeAttrib( AttribHandle<T> h ) {
         const auto& att = getAttrib( h ); // check the attribute exists
         removeAttrib( att.getName() );
     }
 
   private:
-    std::map<std::string, int> m_attribsIndex;
+    /// const acces to attrib vector
+    const Container& attribs() const { return m_attribs; }
+
+    // Map between the attrib's name and its index
+    std::map<std::string, Ra::Core::Index> m_attribsIndex;
+
+    // Attrib list
     Container m_attribs;
+
+    // Ease wrapper
+    friend class TopologicalMesh;
 };
 
 } // namespace Core
