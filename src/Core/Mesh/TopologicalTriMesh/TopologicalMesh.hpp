@@ -16,15 +16,12 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-namespace Ra
-{
-namespace Core
-{
+namespace Ra {
+namespace Core {
 
 class TriangleMesh;
 
-struct TopologicalMeshTraits : OpenMesh::DefaultTraits
-{
+struct TopologicalMeshTraits : OpenMesh::DefaultTraits {
     using Point = Ra::Core::Vector3;
     using Normal = Ra::Core::Vector3;
 
@@ -38,13 +35,12 @@ struct TopologicalMeshTraits : OpenMesh::DefaultTraits
 /// vertex graph, using a half-edge representation.
 ///
 /// This integration is inspired by: https://gist.github.com/Unril/03fa353d0461ed6bd41d
-class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<TopologicalMeshTraits>
-{
+class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<TopologicalMeshTraits> {
   private:
     using base = OpenMesh::PolyMesh_ArrayKernelT<TopologicalMeshTraits>;
     using base::PolyMesh_ArrayKernelT;
 
-    std::vector<OpenMesh::HPropHandleT<float>> m_floatPph;
+    std::vector<OpenMesh::HPropHandleT<Scalar>> m_scalarPph;
     std::vector<OpenMesh::HPropHandleT<Vector2>> m_vec2Pph;
     std::vector<OpenMesh::HPropHandleT<Vector3>> m_vec3Pph;
     std::vector<OpenMesh::HPropHandleT<Vector4>> m_vec4Pph;

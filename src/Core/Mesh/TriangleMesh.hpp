@@ -27,7 +27,7 @@ class TriangleMesh {
 
     using PointAttribHandle = AttribHandle<Vector3>;
     using NormalAttribHandle = AttribHandle<Vector3>;
-    using FloatAttribHandle = AttribHandle<float>;
+    using ScalarAttribHandle = AttribHandle<Scalar>;
     using Vec2AttribHandle = AttribHandle<Vector2>;
     using Vec3AttribHandle = AttribHandle<Vector3>;
     using Vec4AttribHandle = AttribHandle<Vector4>;

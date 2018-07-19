@@ -10,7 +10,7 @@ namespace Core {
 namespace Animation {
 
 // Taken from the ISL. TODO: Keep only one version
-using SkinningWeights = std::map<int, float>;
+using SkinningWeights = std::map<int, Scalar>;
 using Weights = std::vector<SkinningWeights>;
 
 // Defining the pair handle/weight for a vertex

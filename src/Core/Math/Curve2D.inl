@@ -24,11 +24,11 @@ Curve2D::Vector CubicBezier::df( Scalar u ) const {
 }
 
 Curve2D::Vector CubicBezier::fdf( Scalar t, Vector& grad ) const {
-    float t2 = t * t;
-    float t3 = t2 * t;
-    float oneMinusT = 1.0 - t;
-    float oneMinusT2 = oneMinusT * oneMinusT;
-    float oneMinusT3 = oneMinusT2 * oneMinusT;
+    Scalar t2 = t * t;
+    Scalar t3 = t2 * t;
+    Scalar oneMinusT = 1.0 - t;
+    Scalar oneMinusT2 = oneMinusT * oneMinusT;
+    Scalar oneMinusT3 = oneMinusT2 * oneMinusT;
 
     grad = 3.0 * oneMinusT2 * ( m_points[1] - m_points[0] ) +
            6.0 * oneMinusT * t * ( m_points[2] - m_points[1] ) +

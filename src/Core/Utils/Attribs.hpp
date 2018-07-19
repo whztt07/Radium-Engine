@@ -39,7 +39,7 @@ class AttribBase {
         return static_cast<const Attrib<T>&>( *this );
     }
 
-    virtual bool isFloat() const = 0;
+    virtual bool isScalar() const = 0;
     virtual bool isVec2() const = 0;
     virtual bool isVec3() const = 0;
     virtual bool isVec4() const = 0;
@@ -67,7 +67,7 @@ class Attrib : public AttribBase {
     uint getSize() override { return Container::Matrix::RowsAtCompileTime; }
     int getStride() override { return sizeof( typename Container::value_type ); }
 
-    bool isFloat() const override { return std::is_same<float, T>::value; }
+    bool isScalar() const override { return std::is_same<Scalar, T>::value; }
     bool isVec2() const override { return std::is_same<Core::Vector2, T>::value; }
     bool isVec3() const override { return std::is_same<Core::Vector3, T>::value; }
     bool isVec4() const override { return std::is_same<Core::Vector4, T>::value; }
@@ -118,9 +118,8 @@ class AttribHandle {
  * ...
  *
  * // somewhere else: access
- * auto iattribhandler = mng.getAttribHandler<float>("MyAttrib"); //  iattribhandler == inputfattrib
- * if (iattribhandler.isValid()) {
- *    auto &attrib = mng.getAttrib( iattribhandler );
+ * auto iattribhandler = mng.getAttribHandler<Scalar>("MyAttrib"); //  iattribhandler ==
+ * inputfattrib if (iattribhandler.isValid()) { auto &attrib = mng.getAttrib( iattribhandler );
  * }
  * \endcode
  *
@@ -171,13 +170,13 @@ class AttribManager {
      * \return Attribute handler
      * \code
      * VertexAttribManager mng;
-     * auto inputfattrib = mng.addAttrib<float>("MyAttrib");
+     * auto inputfattrib = mng.addAttrib<Scalar>("MyAttrib");
      *
-     * auto iattribhandler = mng.getAttribHandler<float>("MyAttrib"); //  iattribhandler ==
+     * auto iattribhandler = mng.getAttribHandler<Scalar>("MyAttrib"); //  iattribhandler ==
      * inputfattrib if (iattribhandler.isValid()) { // true auto &attrib = mng.getAttrib(
      * iattribhandler );
      * }
-     * auto& iattribhandler = mng.getAttribHandler<float>("InvalidAttrib"); // invalid
+     * auto& iattribhandler = mng.getAttribHandler<Scalar>("InvalidAttrib"); // invalid
      * if (iattribhandler.isValid()) { // false
      *    ...
      * }

@@ -228,7 +228,7 @@ class RA_GUIBASE_API Viewer : public QWindow {
     /// Owning Pointer to the feature picking manager.
     PickingManager* m_pickingManager;
     bool m_isBrushPickingEnabled;
-    float m_brushRadius;
+    Scalar m_brushRadius;
 
     /// Owning pointer to the camera.
     std::unique_ptr<CameraInterface> m_camera;

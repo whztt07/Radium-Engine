@@ -32,7 +32,7 @@ class TriangleKdTree {
     struct KdNode {
         //        union {
         //            struct {
-        float splitValue; // value of the dim coordinate
+        Scalar splitValue; // value of the dim coordinate
         IndexList triangleIndices;
         unsigned int firstChildId : 24;
         unsigned int dim : 2; // axis of the split
@@ -104,7 +104,7 @@ class TriangleKdTree {
                      //                    unsigned int leftchild,
                      //                    AxisAlignedBoxType bb,
                      //                    unsigned int d,
-                     float splitValue, // splitValue of the father
+                     Scalar splitValue, // splitValue of the father
                      unsigned int level, unsigned int targetCellsize, unsigned int targetMaxDepth );
 
   protected:
@@ -536,7 +536,7 @@ void TriangleKdTree<Index>::split(
 template <typename Index>
 void TriangleKdTree<Index>::createTree(
     unsigned int nodeId, /*IndexList& triangleIndices,*/
-    /*unsigned int leftchild, AxisAlignedBoxType bb, unsigned int d,*/ float splitValue,
+    /*unsigned int leftchild, AxisAlignedBoxType bb, unsigned int d,*/ Scalar splitValue,
     unsigned int level, unsigned int targetCellSize, unsigned int targetMaxDepth ) {
     KdNode& node = mNodes[nodeId];
     AxisAlignedBoxType aabb = AxisAlignedBoxType();

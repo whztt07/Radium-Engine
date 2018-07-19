@@ -53,7 +53,7 @@ class MeshTests : public Test {
         mesh.attribManager().removeAttrib( "filled2" );
 
         // Test dummy handler
-        auto invalid = mesh.attribManager().getAttribHandle<float>( "toto" );
+        auto invalid = mesh.attribManager().getAttribHandle<Scalar>( "toto" );
         RA_UNIT_TEST( !invalid.isValid(), "Invalid Attrib Handle cannot be recognized" );
 
         // Test shallow copy
