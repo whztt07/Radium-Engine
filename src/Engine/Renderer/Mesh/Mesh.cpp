@@ -109,14 +109,18 @@ void Mesh::loadGeometry( const Core::TriangleMesh& mesh ) {
         m_dataDirty[i] = true;
     }
     m_isDirty = true;
-    // must also invalidate the attribute handles
+    // must also update the attribute handles
     for ( uint i = 0; i < MAX_VEC3; ++i )
     {
-        m_v3DataHandle[i] = Core::TriangleMesh::Vec3AttribHandle();
+        m_v3DataHandle[i] = m_mesh.attribManager().getAttribHandle<Core::Vector3>(
+            std::string( "Vec3_attr_" ) + std::to_string( i ) );
+        m_dataDirty[MAX_MESH + i] = true;
     }
     for ( uint i = 0; i < MAX_VEC4; ++i )
     {
-        m_v4DataHandle[i] = Core::TriangleMesh::Vec4AttribHandle();
+        m_v4DataHandle[i] = m_mesh.attribManager().getAttribHandle<Core::Vector4>(
+            std::string( "Vec4_attr_" ) + std::to_string( i ) );
+        m_dataDirty[MAX_MESH + MAX_VEC3 + i] = true;
     }
 }
 

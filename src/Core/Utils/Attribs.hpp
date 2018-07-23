@@ -113,7 +113,7 @@ class AttribHandle {
  * \code
  * // somewhere: creation
  * VertexAttribManager mng;
- * auto inputfattrib = mng.addAttrib<float>("MyAttrib");
+ * auto inputfattrib = mng.addAttrib<Scalar>("MyAttrib");
  *
  * ...
  *
@@ -145,11 +145,14 @@ class AttribManager {
     /// Note: if some attrib already exist, it will be replaced but not de-allocated.
     template <class T, class... Handle>
     void copyAttribs( const AttribManager& m, const AttribHandle<T>& attr, Handle... attribs ) {
-        // get attrib to copy
-        auto a = m.getAttrib( attr );
-        // add new attrib
-        auto h = addAttrib<T>( a.getName() );
-        getAttrib( h ).data() = a.data();
+        if ( attr.isValid() )
+        {
+            // get attrib to copy
+            auto a = m.getAttrib( attr );
+            // add new attrib
+            auto h = addAttrib<T>( a.getName() );
+            getAttrib( h ).data() = a.data();
+        }
         // deal with other attribs
         copyAttribs( m, attribs... );
     }

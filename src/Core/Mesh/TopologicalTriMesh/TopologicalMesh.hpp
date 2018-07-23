@@ -45,6 +45,9 @@ class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<Topol
     std::vector<OpenMesh::HPropHandleT<Vector3>> m_vec3Pph;
     std::vector<OpenMesh::HPropHandleT<Vector4>> m_vec4Pph;
 
+    friend class LoopSubdivider;
+    friend class CatmullClarkSubdivider;
+
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -56,7 +59,7 @@ class RA_CORE_API TopologicalMesh : public OpenMesh::PolyMesh_ArrayKernelT<Topol
     explicit TopologicalMesh( const Ra::Core::TriangleMesh& triMesh );
 
     /// Construct an empty topological mesh
-    explicit TopologicalMesh(){};
+    explicit TopologicalMesh() {}
 
     /// Obtain a triangleMesh from a topological mesh.
     /// This is a costly operation.
