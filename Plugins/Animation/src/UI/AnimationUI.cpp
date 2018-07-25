@@ -60,6 +60,10 @@ void AnimationUI::on_m_step_clicked() {
     ui->m_play->style()->polish( ui->m_play );
     ui->m_play->update();
 
+    ui->actionPlay->blockSignals( true );
+    ui->actionPlay->setChecked( false );
+    ui->actionPlay->blockSignals( false );
+
     emit step();
 }
 
@@ -70,6 +74,10 @@ void AnimationUI::on_m_reset_clicked() {
     ui->m_play->style()->unpolish( ui->m_play );
     ui->m_play->style()->polish( ui->m_play );
     ui->m_play->update();
+
+    ui->actionPlay->blockSignals( true );
+    ui->actionPlay->setChecked( false );
+    ui->actionPlay->blockSignals( false );
 
     emit stop();
 }
