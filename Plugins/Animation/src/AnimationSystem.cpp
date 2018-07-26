@@ -18,7 +18,9 @@ namespace AnimationPlugin {
 AnimationSystem::AnimationSystem() {
     m_isPlaying = false;
     m_oneStep = false;
+    m_isStepping = false;
     m_xrayOn = false;
+    m_animFrame = 0;
 }
 
 // Calls to be also transmitted to coupled systems
@@ -133,7 +135,7 @@ void AnimationSystem::cacheFrame() const {
         static_cast<AnimationComponent*>( comp.second )->cacheFrame( m_animFrame );
     }
     // deal with coupled systems
-    for ( const auto &s : this->m_systems )
+    for ( const auto& s : this->m_systems )
     {
         s->cacheFrame( m_animFrame );
     }
@@ -141,7 +143,7 @@ void AnimationSystem::cacheFrame() const {
 
 bool AnimationSystem::restoreFrame( uint frame ) {
     static bool restoringCurrent = false;
-    if (!restoringCurrent)
+    if ( !restoringCurrent )
     {
         // first save current, in case restoration fails.
         cacheFrame();
@@ -162,7 +164,7 @@ bool AnimationSystem::restoreFrame( uint frame ) {
     }
     CORE_ASSERT( success, "Error while trying to restore current frame" );
     // deal with coupled systems
-    for ( const auto &s : this->m_systems )
+    for ( const auto& s : this->m_systems )
     {
         success &= s->restoreFrame( frame );
     }

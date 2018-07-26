@@ -91,6 +91,9 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
     /// @returns the current time of animation.
     Scalar getTime() const;
 
+    /// @returns the timestep of the current animation.
+    Scalar getTimeStep() const;
+
     /// @returns the duration of the current animation.
     Scalar getDuration() const;
 
@@ -102,10 +105,9 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
 
     Ra::Core::Transform getTransform( Ra::Core::Index roIdx ) const override;
 
-    void setTransform( Ra::Core::Index roIdx,
-                       const Ra::Core::Transform& transform ) override;
+    void setTransform( Ra::Core::Index roIdx, const Ra::Core::Transform& transform ) override;
 
-private:
+  private:
     // Internal function to create the skinning weights.
     void createWeightMatrix( const Ra::Asset::HandleData* data,
                              const std::map<uint, uint>& indexTable,
@@ -140,7 +142,7 @@ private:
     /// Current Animation Time for CC.
     const Scalar* getTimeOutput() const;
 
-private:
+  private:
     /// Entity name for CC.
     std::string m_contentName;
 
