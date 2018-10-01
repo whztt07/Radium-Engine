@@ -122,6 +122,7 @@ inline void Camera::setType( const ProjType& projectionType ) {
     m_projType = projectionType;
 }
 
+
 inline Core::Matrix4 Camera::getViewMatrix() const {
     return ( m_entity->getTransform() * m_frame ).inverse().matrix();
 }

@@ -509,6 +509,15 @@ void Gui::Viewer::startRendering( const Scalar dt ) {
     // Move camera if needed. Disabled for now as it takes too long (see issue #69)
     // m_camera->update( dt );
 
+    // update znear/zfar to fit the scene ...
+    auto roManager = Engine::RadiumEngine::getInstance()->getRenderObjectManager();
+    if (roManager) {
+        auto aabb = roManager->getSceneAabb();
+        if ( !aabb.isEmpty() ) {
+            m_camera->getCamera()->fitZRange(aabb);
+        }
+    }
+
     Engine::RenderData data;
     data.dt = dt;
     data.projMatrix = m_camera->getProjMatrix();

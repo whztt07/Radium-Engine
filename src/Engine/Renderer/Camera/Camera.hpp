@@ -73,6 +73,9 @@ class RA_ENGINE_API Camera : public Component {
     /// Update the projection matrix according to the current parameters.
     void updateProjMatrix();
 
+    /// Fit the Z-range of the camera to the scene's aabb. This will maximize z-buffer precision
+    void fitZRange( const Core::Aabb& aabb );
+
     //
     // Utility functions
     //
