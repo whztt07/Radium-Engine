@@ -512,6 +512,8 @@ void Gui::Viewer::startRendering( const Scalar dt ) {
     // update znear/zfar to fit the scene ...
     auto roManager = Engine::RadiumEngine::getInstance()->getRenderObjectManager();
     if (roManager) {
+        // FIXME : make the aabb only recomputed when needed. For now, getSceneAabb loop over scene vertices to (re)compute the aabb at each call.
+        //
         auto aabb = roManager->getSceneAabb();
         if ( !aabb.isEmpty() ) {
             // tight depth bounds
