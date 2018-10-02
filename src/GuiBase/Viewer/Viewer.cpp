@@ -514,7 +514,12 @@ void Gui::Viewer::startRendering( const Scalar dt ) {
     if (roManager) {
         auto aabb = roManager->getSceneAabb();
         if ( !aabb.isEmpty() ) {
+            // tight depth bounds
             m_camera->getCamera()->fitZRange(aabb);
+        } else {
+            // scene is empty, reset to defaults bounds ?
+            m_camera->setCameraZNear(0.1);
+            m_camera->setCameraZFar(100);
         }
     }
 
