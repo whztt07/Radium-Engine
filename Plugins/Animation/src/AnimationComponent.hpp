@@ -64,9 +64,10 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
     /// Saves all the state data related to the current frame into a cache file.
     void cacheFrame( const std::string& dir, int frame ) const;
 
-    /// Restores the state data related to the \p frameID -th frame from the cache file.
-    /// \returns true if the frame has been successfully restored, false otherwise.
-    /// Note: the AnimationSystem ensures that in case the frame restoration fails,
+    /// Restores the state data related to the \p frameID -th frame from the cache
+    /// file. \returns true if the frame has been successfully restored, false
+    /// otherwise. Note: the AnimationSystem ensures that in case the frame
+    /// restoration fails,
     ///       the Component still remains in the current frame state
     bool restoreFrame( const std::string& dir, int frame );
 
@@ -99,7 +100,8 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
     /// Toggle skeleton bones display.
     void toggleSkeleton( const bool status );
 
-    /// @returns the index of the skeleton bone associated to the RenderObject with index \p index.
+    /// @returns the index of the skeleton bone associated to the RenderObject
+    /// with index \p index.
     uint getBoneIdx( Ra::Core::Index index ) const;
 
     //
@@ -128,9 +130,11 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
     // Component Communication (CC)
     //
 
+  public:
     /// Setup CC.
     void setupIO( const std::string& id );
 
+  private:
     /// Skeleton getter for CC.
     const Ra::Core::Animation::Skeleton* getSkeletonOutput() const;
 
@@ -140,6 +144,14 @@ class ANIM_PLUGIN_API AnimationComponent : public Ra::Engine::Component {
     /// Skinning Weight Matrix getter for CC.
     const Ra::Core::Animation::WeightMatrix* getWeightsOutput() const;
 
+  public:
+    Ra::Core::Animation::WeightMatrix getWeights() const { return m_weights; }
+    void setWeights( const Ra::Core::Animation::WeightMatrix& weights ) { m_weights = weights; }
+
+    std::string getContentName() const { return m_contentName; }
+    void setContentName( const std::string& contentName ) { m_contentName = contentName; }
+
+  private:
     /// Reset status getter for CC.
     const bool* getWasReset() const;
 
