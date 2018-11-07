@@ -426,11 +426,14 @@ void Renderer::doPicking( const RenderData& renderData ) {
             result.m_vertexIdx.emplace_back( pick[1] );  // vertex idx in the element
             result.m_elementIdx.emplace_back( pick[2] ); // element idx
             result.m_edgeIdx.emplace_back( pick[3] );    // edge opposite idx for triangles
+            result.m_distance.emplace_back( 0.0 );
         } else
         {
             // select the results for the RO with the most representatives
             // (or first to come if same amount)
             std::map<int, PickingResult> resultPerRO;
+            const Scalar r2 = m_brushRadius * m_brushRadius;
+            const Scalar pr = 0.1 * m_brushRadius;
             for ( int i = -m_brushRadius; i <= m_brushRadius; i += 3 )
             {
                 int h = std::round( std::sqrt( m_brushRadius * m_brushRadius - i * i ) );
@@ -448,8 +451,10 @@ void Renderer::doPicking( const RenderData& renderData ) {
                     resultPerRO[pick[0]].m_vertexIdx.emplace_back( pick[1] );
                     resultPerRO[pick[0]].m_elementIdx.emplace_back( pick[2] );
                     resultPerRO[pick[0]].m_edgeIdx.emplace_back( pick[3] );
+                    resultPerRO[pick[0]].m_distance.emplace_back( sqrt( i * i + j * j ) );
                 }
             }
+            // get the RO with the max number of picks
             int maxRO = -1;
             int nbMax = 0;
             for ( const auto& res : resultPerRO )
