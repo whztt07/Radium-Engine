@@ -51,6 +51,14 @@ void Component::removeRenderObject( Core::Index roIdx ) {
     }
 }
 
+void Component::clearRenderObjects() {
+    for ( const auto& ro : m_renderObjects )
+    {
+        getRoMgr()->removeRenderObject( ro );
+    }
+    m_renderObjects.clear();
+}
+
 void Component::notifyRenderObjectExpired( const Core::Index& idx ) {
     auto found = std::find( m_renderObjects.cbegin(), m_renderObjects.cend(), idx );
     CORE_WARN_IF( found == m_renderObjects.cend(), " Render object not found in component" );

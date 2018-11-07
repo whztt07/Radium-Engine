@@ -141,6 +141,8 @@ class RA_ENGINE_API SystemEntity : public Entity {
                 Ra::Engine::SystemEntity::dbgCmp(),          \
                 Ra::Engine::DrawPrimitives::Line( a, b, color ) ) )
 
+#    define RA_CLEAR_DEBUG_DISPLAY() Ra::Engine::SystemEntity::dbgCmp()->clearRenderObjects();
+
 #else // if debug display is disabled
 
 #    define RA_DISPLAY_POINT( p, color, scale )     // Nothing
@@ -155,6 +157,7 @@ class RA_ENGINE_API SystemEntity : public Entity {
 #    define RA_DISPLAY_SPHERE( c, r, color )        // ...
 #    define RA_DISPLAY_CAPSULE( p1, p2, r, color )  // ...
 #    define RA_DISPLAY_LINE( a, b, color )          // ...
+#    define RA_CLEAR_DEBUG_DISPLAY()                // ...
 
 #endif //! defined DISABLED_DEBUG_DISPLAY
 
