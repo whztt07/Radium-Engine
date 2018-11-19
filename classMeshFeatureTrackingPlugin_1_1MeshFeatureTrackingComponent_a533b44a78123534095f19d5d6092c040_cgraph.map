@@ -1,0 +1,26 @@
+<map id="MeshFeatureTrackingPlugin::MeshFeatureTrackingComponent::initialize" name="MeshFeatureTrackingPlugin::MeshFeatureTrackingComponent::initialize">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Core_1_1MeshUtils.html#acf5b460cf3a22cd1e35eff5a5e1127ab" title="Create a parametric spherical mesh of given radius. Template parameters set the resolution. " alt="" coords="299,249,466,290"/>
+<area shape="rect" id="node14" href="$classRa_1_1Engine_1_1RenderObject.html#ae9cb914f351555a60d29e8d6afedc06b" title="Sort of factory method to easily create a render object. " alt="" coords="295,489,470,530"/>
+<area shape="rect" id="node17" href="$classRa_1_1Engine_1_1RenderObject.html#a62e0eb3a7de5a7d352b565a28260cc06" title="Ra::Engine::RenderObject\l::setVisible" alt="" coords="558,554,733,595"/>
+<area shape="rect" id="node19" href="$classRa_1_1Engine_1_1RenderTechnique.html#a7d0c94a20081423baa758dd6e5b3f954" title="Ra::Engine::RenderTechnique\l::createDefaultRenderTechnique" alt="" coords="277,619,488,661"/>
+<area shape="rect" id="node23" href="$classRa_1_1Engine_1_1RenderObject.html#ab80fe6e6565273eac1984ec6e213c354" title="Ra::Engine::RenderObject\l::setPickable" alt="" coords="295,685,470,726"/>
+<area shape="rect" id="node24" href="$classRa_1_1Engine_1_1Component.html#a8faa6f03b4a5a8bc30bb8ff402e6b61f" title="Add a new render object to the component. This adds the RO to the manager for drawing. " alt="" coords="301,782,464,823"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="1206,170,1367,211"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1TriangleMesh.html#a40d31b7b2943947d6eac5d906f0182fd" title="Access the vertices normals. " alt="" coords="803,257,965,298"/>
+<area shape="rect" id="node6" href="$namespaceRa_1_1Core_1_1Vector.html#a42d87f3bd0658bac532d72f0ec528827" title="Get the cosine of the angle between two vectors. " alt="" coords="570,307,721,333"/>
+<area shape="rect" id="node7" href="$namespaceRa_1_1Core_1_1MeshUtils.html#a5398f7b15335cb47b83a2d573f277640" title="Check that the mesh is well built, asserting when it is not. " alt="" coords="574,139,717,181"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="1417,211,1581,253"/>
+<area shape="rect" id="node8" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="809,37,959,64"/>
+<area shape="rect" id="node9" href="$namespaceRa_1_1Core_1_1MeshUtils.html#a746199d436bb1dc31c4bccb3953743b9" title="Returns the area of a given triangle. " alt="" coords="813,89,955,130"/>
+<area shape="rect" id="node10" href="$namespaceRa_1_1Core_1_1MeshUtils.html#afbee0fe3203a295fb1f93b33dfb33f81" title="Fills the given array with the vertices of a given triangle. " alt="" coords="1014,89,1157,130"/>
+<area shape="rect" id="node11" href="$namespaceRa_1_1Core_1_1Geometry.html#a178f2b7309fe2ea5bc31a3abcb25368e" title="Ra::Core::Geometry\l::triangleArea" alt="" coords="1015,23,1155,65"/>
+<area shape="rect" id="node12" href="$namespaceOpenMesh.html#a71e7f1dd3eac016d2b8245ac408a291c" title="OpenMesh::cross" alt="" coords="1224,5,1349,32"/>
+<area shape="rect" id="node13" href="$namespaceOpenMesh.html#a8205f789ce08919bc11c58383574596c" title="OpenMesh::norm" alt="" coords="1225,56,1348,83"/>
+<area shape="rect" id="node15" href="$classRa_1_1Engine_1_1RenderObject.html#acf300c8fdb55fee54d27b3fb46a1e523" title="A &#45;1 (or any other negative value) lifetime is considered infinite, 0 is an &quot;invalid value&quot; (would ..." alt="" coords="558,358,733,399"/>
+<area shape="rect" id="node16" href="$classRa_1_1Engine_1_1RenderObject.html#ae8e94954e783a2012fd774598af1eb52" title="Ra::Engine::RenderObject\l::setMesh" alt="" coords="558,423,733,465"/>
+<area shape="rect" id="node18" href="$classRa_1_1Engine_1_1RenderObject.html#ae1ea453e2b698cda9956586d11b9cfbd" title="Ra::Engine::RenderObject\l::setRenderTechnique" alt="" coords="558,489,733,530"/>
+<area shape="rect" id="node20" href="$namespaceRa_1_1Engine.html#ae16a1eeeb93530e2a7604d5a53e5fbc4" title="Ra::Engine::RadiumDefault\lRenderTechnique" alt="" coords="554,619,737,661"/>
+<area shape="rect" id="node21" href="$classRa_1_1Engine_1_1RenderTechnique.html#a9bddcd20723ee582fd81c363b9148cf9" title="Ra::Engine::RenderTechnique\l::setMaterial" alt="" coords="547,685,744,726"/>
+<area shape="rect" id="node22" href="$namespaceRa_1_1Engine_1_1EngineRenderTechniques.html#a5e831d5088144082e9bd3828323aa57a" title="Ra::Engine::EngineRender\lTechniques::getDefaultTechnique" alt="" coords="537,750,754,791"/>
+<area shape="rect" id="node25" href="$classRa_1_1Engine_1_1Component.html#a10b0bc182b76165744ebea603ae32dfe" title="Shortcut to access the render object manager. " alt="" coords="564,815,727,857"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="Ra::Core::TopologicalMesh::TopologicalMesh" name="Ra::Core::TopologicalMesh::TopologicalMesh">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Core.html#abb46c5a60ddd6094b40710dcb9e745f5" title="Ra::Core::addAttribPairToTopo" alt="" coords="235,77,437,104"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="495,135,657,177"/>
+<area shape="rect" id="node8" href="$classRa_1_1Core_1_1TriangleMesh.html#a40d31b7b2943947d6eac5d906f0182fd" title="Access the vertices normals. " alt="" coords="255,186,417,227"/>
+<area shape="rect" id="node9" href="$classRa_1_1Core_1_1TopologicalMesh.html#a94c32854d7aa51edc42d5d1dd70856f3" title="Return the half&#45;edge associated with a given vertex and face. " alt="" coords="485,263,667,305"/>
+<area shape="rect" id="node10" href="$classRa_1_1Core_1_1TopologicalMesh.html#a5c4e128a2964b81044fc1a97063cf4d2" title="Set normal of the vertex vh, when member of fh. " alt="" coords="245,303,427,345"/>
+<area shape="rect" id="node11" href="$namespaceRa_1_1Core.html#aadbec8ca5a459657864d0f6be0a21b72" title="Ra::Core::copyAttribToTopo" alt="" coords="243,369,429,396"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TriangleMesh.html#a2050187a77536bb43bfa2e25c25389c6" title="Return the Handle to the attribute with the given name if it exists, an invalid handle otherwise..." alt="" coords="495,5,657,46"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1AttribBase.html#a8bc2827bfe23f9c6def2647a946ebdc8" title="Ra::Core::AttribBase\l::getName" alt="" coords="504,70,648,111"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#a83cb9e1c9e687d161a3070ffbdf07b22" title="findAttrib Grab an attribute handler by name. " alt="" coords="715,5,879,46"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="715,194,879,235"/>
+<area shape="rect" id="node12" href="$classRa_1_1Core_1_1TriangleMesh.html#a01e44dce5a80eae1220d9e7988d4fe03" title="Get attribute by handle. " alt="" coords="495,350,657,391"/>
+</map>

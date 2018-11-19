@@ -1,0 +1,5 @@
+<map id="Ra::Core::LoopSubdivider::recompute" name="Ra::Core::LoopSubdivider::recompute">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TopologicalMesh.html#a32cb3d4c54ee7ebfacbcfb6307e36d1e" title="Return a handle to the halfedge property storing vertices indices within the TriangleMesh *this has b..." alt="" coords="231,5,446,61"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TopologicalMesh.html#a94c32854d7aa51edc42d5d1dd70856f3" title="Return the half&#45;edge associated with a given vertex and face. " alt="" coords="248,85,429,126"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TopologicalMesh.html#a1720e39b86ff8ebf92276e41c744cccd" title="Return a handle to the halfedge property storing vertices indices within the TriangleMesh returned by..." alt="" coords="227,149,451,205"/>
+</map>

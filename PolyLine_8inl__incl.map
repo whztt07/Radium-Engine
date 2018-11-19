@@ -1,0 +1,30 @@
+<map id="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/src/Core/Math/PolyLine.inl" name="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/src/Core/Math/PolyLine.inl">
+<area shape="rect" id="node2" href="$PolyLine_8hpp.html" title="PolyLine.hpp" alt="" coords="1787,109,1884,136"/>
+<area shape="rect" id="node46" href="$PointCloud_8hpp.html" title="Core/Geometry/PointCloud\l/PointCloud.hpp" alt="" coords="2112,515,2291,557"/>
+<area shape="rect" id="node3" href="$VectorArray_8hpp.html" title="Core/Containers/VectorArray.hpp" alt="" coords="1510,613,1724,640"/>
+<area shape="rect" id="node5" href="$RaCore_8hpp.html" title="Core/RaCore.hpp" alt="" coords="1222,877,1345,904"/>
+<area shape="rect" id="node14" href="$LinearAlgebra_8hpp.html" title="Core/Math/LinearAlgebra.hpp" alt="" coords="1954,704,2144,731"/>
+<area shape="rect" id="node25" href="$DistanceQueries_8hpp.html" title="Core/Geometry/Distance\l/DistanceQueries.hpp" alt="" coords="1391,185,1557,226"/>
+<area shape="rect" id="node4" href="$AlignedStdVector_8hpp.html" title="Core/Containers/AlignedStd\lVector.hpp" alt="" coords="1473,697,1657,738"/>
+<area shape="rect" id="node6" href="$CoreMacros_8hpp.html" title="Core/CoreMacros.hpp" alt="" coords="969,952,1119,979"/>
+<area shape="rect" id="node20" href="$Math_8hpp.html" title="Core/Math/Math.hpp" alt="" coords="2839,795,2979,821"/>
+<area shape="rect" id="node24" href="$LinearAlgebra_8inl.html" title="Core/Math/LinearAlgebra.inl" alt="" coords="1991,795,2173,821"/>
+<area shape="rect" id="node23" href="$Math_8inl.html" title="Core/Math/Math.inl" alt="" coords="2843,877,2976,904"/>
+<area shape="rect" id="node26" href="$TriangleMesh_8hpp.html" title="Core/Mesh/TriangleMesh.hpp" alt="" coords="1186,440,1379,467"/>
+<area shape="rect" id="node41" href="$DistanceQueries_8inl.html" title="Core/Geometry/Distance\l/DistanceQueries.inl" alt="" coords="1391,275,1557,317"/>
+<area shape="rect" id="node27" href="$MeshTypes_8hpp.html" title="Core/Mesh/MeshTypes.hpp" alt="" coords="1201,613,1383,640"/>
+<area shape="rect" id="node31" href="$Attribs_8hpp.html" title="Core/Utils/Attribs.hpp" alt="" coords="923,523,1071,549"/>
+<area shape="rect" id="node40" href="$TriangleMesh_8inl.html" title="Core/Mesh/TriangleMesh.inl" alt="" coords="1147,523,1332,549"/>
+<area shape="rect" id="node28" href="$Index_8hpp.html" title="Core/Index/Index.hpp" alt="" coords="999,704,1145,731"/>
+<area shape="rect" id="node30" href="$Index_8inl.html" title="Core/Index/Index.inl" alt="" coords="1003,795,1141,821"/>
+<area shape="rect" id="node32" href="$IndexMap_8hpp.html" title="Core/Index/IndexMap.hpp" alt="" coords="815,613,987,640"/>
+<area shape="rect" id="node36" href="$Log_8hpp.html" title="Core/Log/Log.hpp" alt="" coords="197,613,323,640"/>
+<area shape="rect" id="node35" href="$IndexMap_8inl.html" title="Core/Index/IndexMap.inl" alt="" coords="759,704,923,731"/>
+<area shape="rect" id="node39" href="$StringUtils_8hpp.html" title="Core/String/StringUtils.hpp" alt="" coords="331,704,509,731"/>
+<area shape="rect" id="node42" href="$MeshUtils_8hpp.html" title="Core/Mesh/MeshUtils.hpp" alt="" coords="1423,365,1597,392"/>
+<area shape="rect" id="node44" href="$Ray_8hpp.html" title="Core/Math/Ray.hpp" alt="" coords="1749,613,1884,640"/>
+<area shape="rect" id="node45" href="$MeshUtils_8inl.html" title="Core/Mesh/MeshUtils.inl" alt="" coords="1631,440,1797,467"/>
+<area shape="rect" id="node48" href="$Obb_8hpp.html" title="Core/Math/Obb.hpp" alt="" coords="2788,613,2923,640"/>
+<area shape="rect" id="node50" href="$PointCloud_8inl.html" title="Core/Geometry/PointCloud\l/PointCloud.inl" alt="" coords="2112,606,2291,647"/>
+<area shape="rect" id="node49" href="$Obb_8inl.html" title="Core/Math/Obb.inl" alt="" coords="2839,704,2967,731"/>
+</map>

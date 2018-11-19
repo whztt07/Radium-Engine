@@ -1,0 +1,7 @@
+<map id="Ra::Engine::Mesh::loadGeometry" name="Ra::Engine::Mesh::loadGeometry">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="482,5,643,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TriangleMesh.html#ae1a7885bbe20b759a8f247ed8c194ba0" title="Erases all attributes, leaving the mesh with faces and geometry only. " alt="" coords="270,69,431,110"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="694,38,858,79"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1TriangleMesh.html#a40d31b7b2943947d6eac5d906f0182fd" title="Access the vertices normals. " alt="" coords="482,70,643,111"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1AttribManager.html#ae53b7e22a2098c6151c6b2702569a3be" title="clear all attribs, invalidate handles. " alt="" coords="481,135,645,177"/>
+</map>

@@ -1,0 +1,33 @@
+<map id="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/Plugins/Skinning/src/SkinningComponent.hpp" name="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/Plugins/Skinning/src/SkinningComponent.hpp">
+<area shape="rect" id="node2" href="$SkinningPluginMacros_8hpp.html" title="SkinningPluginMacros.hpp" alt="" coords="740,653,916,680"/>
+<area shape="rect" id="node9" href="$HandleWeight_8hpp.html" title="Core/Animation/Handle\l/HandleWeight.hpp" alt="" coords="599,382,756,423"/>
+<area shape="rect" id="node23" href="$Pose_8hpp.html" title="Core/Animation/Pose\l/Pose.hpp" alt="" coords="735,201,881,242"/>
+<area shape="rect" id="node24" href="$SkinningData_8hpp.html" title="Core/Animation/Skinning\l/SkinningData.hpp" alt="" coords="941,110,1107,151"/>
+<area shape="rect" id="node26" href="$TriangleMesh_8hpp.html" title="Core/Mesh/TriangleMesh.hpp" alt="" coords="1153,208,1345,235"/>
+<area shape="rect" id="node29" href="$Index_8hpp.html" title="Core/Index/Index.hpp" alt="" coords="2263,480,2409,507"/>
+<area shape="rect" id="node34" href="$HandleData_8hpp.html" title="Core/File/HandleData.hpp" alt="" coords="401,389,575,416"/>
+<area shape="rect" id="node38" href="$DualQuaternion_8hpp.html" title="Core/Math/DualQuaternion.hpp" alt="" coords="1637,389,1840,416"/>
+<area shape="rect" id="node40" href="$Component_8hpp.html" title="Engine/Component/Component.hpp" alt="" coords="1991,299,2220,325"/>
+<area shape="rect" id="node45" href="$ComponentMessenger_8hpp.html" title="Engine/Managers/Component\lMessenger/ComponentMessenger.hpp" alt="" coords="2654,201,2900,242"/>
+<area shape="rect" id="node3" href="$CoreMacros_8hpp.html" title="Core/CoreMacros.hpp" alt="" coords="2063,728,2213,755"/>
+<area shape="rect" id="node10" href="$AlignedStdVector_8hpp.html" title="Core/Containers/AlignedStd\lVector.hpp" alt="" coords="648,473,832,514"/>
+<area shape="rect" id="node14" href="$LinearAlgebra_8hpp.html" title="Core/Math/LinearAlgebra.hpp" alt="" coords="1331,480,1521,507"/>
+<area shape="rect" id="node11" href="$RaCore_8hpp.html" title="Core/RaCore.hpp" alt="" coords="1762,653,1885,680"/>
+<area shape="rect" id="node20" href="$Math_8hpp.html" title="Core/Math/Math.hpp" alt="" coords="1753,571,1893,597"/>
+<area shape="rect" id="node21" href="$LinearAlgebra_8inl.html" title="Core/Math/LinearAlgebra.inl" alt="" coords="1059,571,1241,597"/>
+<area shape="rect" id="node25" href="$Skeleton_8hpp.html" title="Core/Animation/Handle\l/Skeleton.hpp" alt="" coords="905,201,1063,242"/>
+<area shape="rect" id="node27" href="$VectorArray_8hpp.html" title="Core/Containers/VectorArray.hpp" alt="" coords="882,389,1096,416"/>
+<area shape="rect" id="node28" href="$MeshTypes_8hpp.html" title="Core/Mesh/MeshTypes.hpp" alt="" coords="1430,389,1612,416"/>
+<area shape="rect" id="node32" href="$Attribs_8hpp.html" title="Core/Utils/Attribs.hpp" alt="" coords="933,299,1080,325"/>
+<area shape="rect" id="node33" href="$TriangleMesh_8inl.html" title="Core/Mesh/TriangleMesh.inl" alt="" coords="1157,299,1341,325"/>
+<area shape="rect" id="node31" href="$Index_8inl.html" title="Core/Index/Index.inl" alt="" coords="2340,571,2479,597"/>
+<area shape="rect" id="node36" href="$AssetData_8hpp.html" title="Core/File/AssetData.hpp" alt="" coords="283,480,449,507"/>
+<area shape="rect" id="node37" href="$HandleData_8inl.html" title="Core/File/HandleData.inl" alt="" coords="43,480,207,507"/>
+<area shape="rect" id="node39" href="$DualQuaternion_8inl.html" title="Core/Math/DualQuaternion.inl" alt="" coords="1751,480,1945,507"/>
+<area shape="rect" id="node41" href="$RaEngine_8hpp.html" title="Engine/RaEngine.hpp" alt="" coords="2786,389,2933,416"/>
+<area shape="rect" id="node42" href="$IndexedObject_8hpp.html" title="Core/Index/IndexedObject.hpp" alt="" coords="2370,389,2568,416"/>
+<area shape="rect" id="node43" href="$Ray_8hpp.html" title="Core/Math/Ray.hpp" alt="" coords="2160,389,2295,416"/>
+<area shape="rect" id="node44" href="$Component_8inl.html" title="Engine/Component/Component.inl" alt="" coords="1915,389,2136,416"/>
+<area shape="rect" id="node49" href="$Singleton_8hpp.html" title="Core/Utils/Singleton.hpp" alt="" coords="2658,480,2821,507"/>
+<area shape="rect" id="node50" href="$ComponentMessenger_8inl.html" title="Engine/Managers/Component\lMessenger/ComponentMessenger.inl" alt="" coords="2737,291,2975,333"/>
+</map>

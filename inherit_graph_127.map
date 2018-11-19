@@ -1,0 +1,15 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classRa_1_1Engine_1_1System.html" title="Systems are responsible of updating a specific subset of the components of each entity. " alt="" coords="6,188,146,215"/>
+<area shape="rect" id="node2" href="$classDummyPlugin_1_1DummySystem.html" title="DummyPlugin::DummySystem" alt="" coords="195,5,397,32"/>
+<area shape="rect" id="node3" href="$classMeshPaintPlugin_1_1MeshPaintSystem.html" title="MeshPaintPlugin::MeshPaint\lSystem" alt="" coords="201,57,391,98"/>
+<area shape="rect" id="node4" href="$classRa_1_1Engine_1_1AbstractTimedSystem.html" title="Timed Systems are systems which can be disabled or paused, e.g. animation systems. " alt="" coords="206,122,386,163"/>
+<area shape="rect" id="node8" href="$classRa_1_1Engine_1_1CameraManager.html" title="Interface providing functions to manage a group or type of Cameras in a specific way. " alt="" coords="201,188,391,215"/>
+<area shape="rect" id="node10" href="$classRa_1_1Engine_1_1GeometrySystem.html" title="Ra::Engine::GeometrySystem" alt="" coords="197,239,395,265"/>
+<area shape="rect" id="node11" href="$classRa_1_1Engine_1_1LightManager.html" title="Interface providing functions to manage a group or type of lights in a specific way. " alt="" coords="209,289,383,316"/>
+<area shape="rect" id="node13" href="$classSkinningPlugin_1_1SkinningSystem.html" title="SkinningPlugin::Skinning\lSystem" alt="" coords="213,341,379,382"/>
+<area shape="rect" id="node5" href="$classRa_1_1Engine_1_1BaseCouplingSystem.html" title="Ra::Engine::BaseCoupling\lSystem\&lt; AbstractTimedSystem \&gt;" alt="" coords="445,119,667,161"/>
+<area shape="rect" id="node6" href="$classRa_1_1Engine_1_1CoupledTimedSystem.html" title="Ra::Engine::CoupledTimed\lSystem" alt="" coords="715,119,893,161"/>
+<area shape="rect" id="node7" href="$classAnimationPlugin_1_1AnimationSystem.html" title="The AnimationSystem is the main system for coupling TimedSystems. " alt="" coords="942,119,1125,161"/>
+<area shape="rect" id="node9" href="$classRa_1_1Engine_1_1DefaultCameraManager.html" title="DefaultCameraManager. " alt="" coords="465,185,647,226"/>
+<area shape="rect" id="node12" href="$classRa_1_1Engine_1_1DefaultLightManager.html" title="DefaultLightManager. " alt="" coords="473,282,639,323"/>
+</map>

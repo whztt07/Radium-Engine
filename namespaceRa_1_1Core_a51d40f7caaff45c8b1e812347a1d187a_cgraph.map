@@ -1,0 +1,8 @@
+<map id="Ra::Core::addAttribPairToCore" name="Ra::Core::addAttribPairToCore">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TriangleMesh.html#a5551c0aa273f8528997a59507afbd9c8" title="Add attribute with the given name. " alt="" coords="257,27,418,69"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1AttribManager.html#aba5ff01e716bf2cfe571edad8b289ed9" title="Add attribute by name. " alt="" coords="467,27,631,69"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#a60dbf6cd73f3de13bc1247435ce52a81" title="Return true if h correspond to an existing attribute in *this. " alt="" coords="681,27,845,69"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1Index.html#a16f988512f9ef442cc97b6bc4809ba45" title="Ra::Core::Index::Invalid" alt="" coords="894,5,1055,32"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1AttribHandle.html#a7e994151627b8847e1f6f03fd88ff093" title="Ra::Core::AttribHandle\l::attribName" alt="" coords="897,57,1052,98"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1Index.html#af6afe563ad57a4ab82f3706987e684ef" title="CONSTRUCTOR. " alt="" coords="1104,5,1259,32"/>
+</map>

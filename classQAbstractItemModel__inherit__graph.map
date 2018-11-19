@@ -1,0 +1,4 @@
+<map id="QAbstractItemModel" name="QAbstractItemModel">
+<area shape="rect" id="node2" href="$classRa_1_1GuiBase_1_1TreeModel.html" title="This class implement QAbstractItem model with the TreeItem as its model Derived class must use some k..." alt="" coords="5,131,171,399"/>
+<area shape="rect" id="node3" href="$classRa_1_1GuiBase_1_1ItemModel.html" title="Implementation of QAbstractItemModel to show the engine objects as a tree in the main GUI..." alt="" coords="5,448,171,613"/>
+</map>

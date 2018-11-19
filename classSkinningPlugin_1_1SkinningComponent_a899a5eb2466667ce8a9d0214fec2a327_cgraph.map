@@ -1,0 +1,9 @@
+<map id="SkinningPlugin::SkinningComponent::endSkinning" name="SkinningPlugin::SkinningComponent::endSkinning">
+<area shape="rect" id="node2" href="$namespaceSkinningPlugin.html#ac4a2143a835b62849bc83ad3895f9e16" title="SkinningPlugin::uniformNormal" alt="" coords="222,35,423,61"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="242,86,403,127"/>
+<area shape="rect" id="node8" href="$classRa_1_1Core_1_1TriangleMesh.html#a40d31b7b2943947d6eac5d906f0182fd" title="Access the vertices normals. " alt="" coords="242,151,403,193"/>
+<area shape="rect" id="node3" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="479,5,630,32"/>
+<area shape="rect" id="node4" href="$namespaceRa_1_1Core_1_1Geometry.html#a2ce97206423345716bf1b55f60c1c227" title="Ra::Core::Geometry\l::triangleNormal" alt="" coords="485,57,625,98"/>
+<area shape="rect" id="node5" href="$namespaceOpenMesh.html#a71e7f1dd3eac016d2b8245ac408a291c" title="OpenMesh::cross" alt="" coords="685,64,811,91"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="473,137,637,178"/>
+</map>

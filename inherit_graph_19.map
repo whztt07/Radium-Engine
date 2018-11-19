@@ -1,0 +1,10 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classRa_1_1Asset_1_1AssetData.html" title="General interface of an asset data. " alt="" coords="6,132,157,159"/>
+<area shape="rect" id="node2" href="$classRa_1_1Asset_1_1AnimationData.html" title="Ra::Asset::AnimationData" alt="" coords="206,5,381,32"/>
+<area shape="rect" id="node3" href="$classRa_1_1Asset_1_1CameraData.html" title="The CameraData class stores the data related to one of the Cameras of a loaded scene. " alt="" coords="212,56,375,83"/>
+<area shape="rect" id="node4" href="$classRa_1_1Asset_1_1GeometryData.html" title="The GeometryData class stores all the geometry related data of a loaded object. " alt="" coords="206,107,381,133"/>
+<area shape="rect" id="node5" href="$classRa_1_1Asset_1_1HandleData.html" title="Ra::Asset::HandleData" alt="" coords="214,157,373,184"/>
+<area shape="rect" id="node6" href="$classRa_1_1Asset_1_1LightData.html" title="Asset defining how lights must be passed to the Radium systems from a loader. " alt="" coords="221,208,366,235"/>
+<area shape="rect" id="node7" href="$classRa_1_1Asset_1_1MaterialData.html" title="represent material data loaded by a file loader. " alt="" coords="212,259,375,285"/>
+<area shape="rect" id="node8" href="$classRa_1_1Asset_1_1BlinnPhongMaterialData.html" title="Ra::Asset::BlinnPhongMaterialData" alt="" coords="429,259,659,285"/>
+</map>

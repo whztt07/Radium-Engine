@@ -1,0 +1,4 @@
+<map id="AnimationPlugin::AnimationPluginC::restoreFrame" name="AnimationPlugin::AnimationPluginC::restoreFrame">
+<area shape="rect" id="node2" href="$classAnimationPlugin_1_1AnimationSystem.html#ab310b648e38b02e175e83966a5a80a39" title="Restores the state data related to the frameID &#45;th frame from the cache file. " alt="" coords="238,29,421,70"/>
+<area shape="rect" id="node3" href="$classAnimationPlugin_1_1AnimationSystem.html#abfbf09ff83a03cbbcb158d5c5bdcc065" title="Saves all the state data related to the current frame into a cache file. " alt="" coords="470,29,653,70"/>
+</map>

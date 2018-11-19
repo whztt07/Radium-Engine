@@ -1,0 +1,17 @@
+<map id="Ra::Core::TopologicalMesh::toTriangleMesh" name="Ra::Core::TopologicalMesh::toTriangleMesh">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Core.html#a51d40f7caaff45c8b1e812347a1d187a" title="Ra::Core::addAttribPairToCore" alt="" coords="235,43,437,69"/>
+<area shape="rect" id="node9" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="495,93,657,134"/>
+<area shape="rect" id="node11" href="$classRa_1_1Core_1_1TriangleMesh.html#a40d31b7b2943947d6eac5d906f0182fd" title="Access the vertices normals. " alt="" coords="495,158,657,199"/>
+<area shape="rect" id="node12" href="$classRa_1_1Core_1_1TopologicalMesh.html#aaf1c3fc7e595f5a33dd86087e7871968" title="Get normal of the vertex vh, when member of fh. " alt="" coords="245,202,427,243"/>
+<area shape="rect" id="node14" href="$namespaceRa_1_1Core.html#a57a8f6cf007e638eb613ad9a08b2f32c" title="Ra::Core::copyAttribToCore\lVertex" alt="" coords="243,267,429,309"/>
+<area shape="rect" id="node15" href="$namespaceRa_1_1Core.html#aa014f3f342887c4958ed9c122c160be8" title="Ra::Core::copyAttribToCore" alt="" coords="243,333,429,360"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TriangleMesh.html#a5551c0aa273f8528997a59507afbd9c8" title="Add attribute with the given name. " alt="" coords="495,27,657,69"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#aba5ff01e716bf2cfe571edad8b289ed9" title="Add attribute by name. " alt="" coords="715,27,879,69"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1AttribManager.html#a60dbf6cd73f3de13bc1247435ce52a81" title="Return true if h correspond to an existing attribute in *this. " alt="" coords="929,27,1093,69"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1Index.html#a16f988512f9ef442cc97b6bc4809ba45" title="Ra::Core::Index::Invalid" alt="" coords="1142,5,1303,32"/>
+<area shape="rect" id="node8" href="$classRa_1_1Core_1_1AttribHandle.html#a7e994151627b8847e1f6f03fd88ff093" title="Ra::Core::AttribHandle\l::attribName" alt="" coords="1145,57,1300,98"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1Index.html#af6afe563ad57a4ab82f3706987e684ef" title="CONSTRUCTOR. " alt="" coords="1352,5,1507,32"/>
+<area shape="rect" id="node10" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="715,158,879,199"/>
+<area shape="rect" id="node13" href="$classRa_1_1Core_1_1TopologicalMesh.html#a94c32854d7aa51edc42d5d1dd70856f3" title="Return the half&#45;edge associated with a given vertex and face. " alt="" coords="485,223,667,265"/>
+<area shape="rect" id="node16" href="$classRa_1_1Core_1_1TriangleMesh.html#a01e44dce5a80eae1220d9e7988d4fe03" title="Get attribute by handle. " alt="" coords="495,307,657,349"/>
+</map>

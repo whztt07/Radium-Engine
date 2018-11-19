@@ -1,0 +1,5 @@
+<map id="Ra::Core::TriangleMesh::copyBaseGeometry" name="Ra::Core::TriangleMesh::copyBaseGeometry">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TriangleMesh.html#aa838b995226a922fc10f2f8f4c6dec31" title="Erases all data, making the mesh empty. " alt="" coords="218,5,379,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#ab973dc08cbca7da7108c40bb56c4a708" title="Base copy, does nothing. " alt="" coords="217,70,381,111"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1AttribManager.html#ae53b7e22a2098c6151c6b2702569a3be" title="clear all attribs, invalidate handles. " alt="" coords="430,5,594,46"/>
+</map>

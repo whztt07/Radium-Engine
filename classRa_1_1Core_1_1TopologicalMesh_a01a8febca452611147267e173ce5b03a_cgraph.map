@@ -1,0 +1,9 @@
+<map id="Ra::Core::TopologicalMesh::interpolateAllPropsOnFaces" name="Ra::Core::TopologicalMesh::interpolateAllPropsOnFaces">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TopologicalMesh.html#a0294459ae0b252566b228c8caa6f9d8b" title="Interpolate normal property on face center. " alt="" coords="246,5,431,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TopologicalMesh.html#aea2f723e3af4a564d62715713f416d08" title="Interpolate hprops on face center. " alt="" coords="248,70,429,111"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1TopologicalMesh.html#aa1016df75edb65e69fcdec5465e49245" title="Ra::Core::TopologicalMesh\l::getFloatPropsHandles" alt="" coords="248,135,429,177"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1TopologicalMesh.html#acf1e58078add6e5cc9ce13b30fb3baf3" title="Ra::Core::TopologicalMesh\l::getVector2PropsHandles" alt="" coords="248,201,429,242"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1TopologicalMesh.html#a6865aee84eb0d92f6acc12081bf8a6f8" title="Ra::Core::TopologicalMesh\l::getVector3PropsHandles" alt="" coords="248,266,429,307"/>
+<area shape="rect" id="node8" href="$classRa_1_1Core_1_1TopologicalMesh.html#a938483e7f6900eeb3914d662b9aac21c" title="Ra::Core::TopologicalMesh\l::getVector4PropsHandles" alt="" coords="248,331,429,373"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TopologicalMesh.html#a94c32854d7aa51edc42d5d1dd70856f3" title="Return the half&#45;edge associated with a given vertex and face. " alt="" coords="480,38,661,79"/>
+</map>

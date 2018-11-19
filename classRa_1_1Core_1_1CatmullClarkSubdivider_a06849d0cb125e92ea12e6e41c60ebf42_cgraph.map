@@ -1,0 +1,5 @@
+<map id="Ra::Core::CatmullClarkSubdivider::cleanup" name="Ra::Core::CatmullClarkSubdivider::cleanup">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TopologicalMesh.html#a55819d80aae83bba116852ef6b0f7e8e" title="Remove all the given properties from mesh. " alt="" coords="275,38,456,79"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TopologicalMesh.html#a2b062412ffa1f71fb76a6451b566354c" title="Remove face property prop from mesh. " alt="" coords="504,5,685,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TopologicalMesh.html#a99a412013599ec675d875b1968c00629" title="Remove props from mesh. " alt="" coords="504,70,685,111"/>
+</map>

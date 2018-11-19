@@ -1,0 +1,8 @@
+<map id="Ra::Core::TopologicalMesh::createAllPropsOnFaces" name="Ra::Core::TopologicalMesh::createAllPropsOnFaces">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TopologicalMesh.html#a604b1ee95758797b828eee7c5c5164cc" title="Create a new property for normals on faces of mesh. " alt="" coords="235,5,423,46"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TopologicalMesh.html#a89fb68b4eb30634e1b30a4143d5caa7d" title="Create a new property for each input properties of mesh on faces. " alt="" coords="239,70,420,111"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TopologicalMesh.html#aa1016df75edb65e69fcdec5465e49245" title="Ra::Core::TopologicalMesh\l::getFloatPropsHandles" alt="" coords="239,135,420,177"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1TopologicalMesh.html#acf1e58078add6e5cc9ce13b30fb3baf3" title="Ra::Core::TopologicalMesh\l::getVector2PropsHandles" alt="" coords="239,201,420,242"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1TopologicalMesh.html#a6865aee84eb0d92f6acc12081bf8a6f8" title="Ra::Core::TopologicalMesh\l::getVector3PropsHandles" alt="" coords="239,266,420,307"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1TopologicalMesh.html#a938483e7f6900eeb3914d662b9aac21c" title="Ra::Core::TopologicalMesh\l::getVector4PropsHandles" alt="" coords="239,331,420,373"/>
+</map>

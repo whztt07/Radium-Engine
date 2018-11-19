@@ -1,0 +1,5 @@
+<map id="Ra::Core::TriangleMesh::operator=" name="Ra::Core::TriangleMesh::operator=">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1AttribManager.html#ae53b7e22a2098c6151c6b2702569a3be" title="clear all attribs, invalidate handles. " alt="" coords="217,5,381,46"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1AttribManager.html#a19855e5d5abcc6bd9201064e3502f9fa" title="Copy all attributes from . " alt="" coords="217,70,381,111"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="430,70,594,111"/>
+</map>

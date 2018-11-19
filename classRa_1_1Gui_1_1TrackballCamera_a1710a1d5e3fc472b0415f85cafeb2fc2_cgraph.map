@@ -1,0 +1,6 @@
+<map id="Ra::Gui::TrackballCamera::setCamera" name="Ra::Gui::TrackballCamera::setCamera">
+<area shape="rect" id="node2" href="$classRa_1_1Engine_1_1Camera.html#a2acbb1a258f8d0af86edcd978cfbf3e1" title="Change the viewport size. " alt="" coords="229,5,371,46"/>
+<area shape="rect" id="node5" href="$classRa_1_1Engine_1_1Camera.html#a724a052e94817af7e602129467c8696f" title="Return the position. " alt="" coords="229,70,371,111"/>
+<area shape="rect" id="node3" href="$classRa_1_1Engine_1_1Camera.html#a2124136d939bd433f9630e23c403cdd6" title="Update the projection matrix according to the current parameters. " alt="" coords="419,5,560,46"/>
+<area shape="rect" id="node4" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="609,12,759,39"/>
+</map>

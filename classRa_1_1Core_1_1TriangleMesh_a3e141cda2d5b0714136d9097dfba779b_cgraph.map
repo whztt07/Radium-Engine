@@ -1,0 +1,6 @@
+<map id="Ra::Core::TriangleMesh::removeAttrib" name="Ra::Core::TriangleMesh::removeAttrib">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1AttribManager.html#a22afbf5c345b9b8bf3ee10cbab4e4fd8" title="Remove attribute by handle, invalidates the handle. " alt="" coords="217,34,381,75"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="430,5,594,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1Index.html#a16f988512f9ef442cc97b6bc4809ba45" title="Ra::Core::Index::Invalid" alt="" coords="431,71,593,97"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1Index.html#af6afe563ad57a4ab82f3706987e684ef" title="CONSTRUCTOR. " alt="" coords="643,71,797,97"/>
+</map>

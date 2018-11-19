@@ -1,0 +1,18 @@
+<map id="Ra::IO::AssimpCameraDataLoader::loadData" name="Ra::IO::AssimpCameraDataLoader::loadData">
+<area shape="rect" id="node2" href="$classRa_1_1IO_1_1AssimpCameraDataLoader.html#aee4e07a4dc9963b2e995da7ad70be848" title="Return true if the given scene has camera data. " alt="" coords="240,198,427,239"/>
+<area shape="rect" id="node3" href="$classRa_1_1IO_1_1AssimpCameraDataLoader.html#ae7e4fe02bd416357002683f13ece2be1" title="Return the number of cameras in the given scene. " alt="" coords="240,263,427,305"/>
+<area shape="rect" id="node4" href="$classRa_1_1IO_1_1AssimpCameraDataLoader.html#ad068121220037f8725552e17093c9b0d" title="Fill data with the CameraData from camera. " alt="" coords="240,329,427,370"/>
+<area shape="rect" id="node5" href="$classRa_1_1IO_1_1AssimpCameraDataLoader.html#a5ca93e8ff210412d4f45933127bd1911" title="Fill data with the camera name from camera. " alt="" coords="475,67,661,109"/>
+<area shape="rect" id="node6" href="$namespaceRa_1_1IO.html#aef6c50424873964fcea0008be55d4a34" title="Ra::IO::assimpToCore" alt="" coords="713,16,868,43"/>
+<area shape="rect" id="node8" href="$classRa_1_1IO_1_1AssimpCameraDataLoader.html#a96d4a726a53ae6044a374be9a3144b1f" title="Return the Camera transformation, in world space, for data from the scene. " alt="" coords="475,133,661,174"/>
+<area shape="rect" id="node10" href="$namespaceRa_1_1Core_1_1MatrixUtils.html#acc2bdc892f1b307610612b0e53f407e3" title="Ra::Core::MatrixUtils\l::lookAt" alt="" coords="495,198,641,239"/>
+<area shape="rect" id="node11" href="$classRa_1_1Asset_1_1CameraData.html#a11c15054dc68f8cfc22ac86b63ddb346" title="Set the transformation of the Camera. " alt="" coords="487,263,649,305"/>
+<area shape="rect" id="node12" href="$classRa_1_1Asset_1_1CameraData.html#a011347b07a736aede440b811615372bb" title="Set the projection type of the Camera. " alt="" coords="487,329,649,370"/>
+<area shape="rect" id="node13" href="$classRa_1_1Asset_1_1CameraData.html#a5e68619eb8810cb1b98c8dc19987bc44" title="Set the Field of View of the Camera. " alt="" coords="487,394,649,435"/>
+<area shape="rect" id="node14" href="$classRa_1_1Asset_1_1CameraData.html#ab3db0bea8144a8e3de886c2bfad49e7d" title="Set the distance from the near plane to the Camera. " alt="" coords="487,459,649,501"/>
+<area shape="rect" id="node15" href="$classRa_1_1Asset_1_1CameraData.html#a46fbb0c7521cb181974f155333339127" title="Set the distance from the far plane to the Camera. " alt="" coords="487,525,649,566"/>
+<area shape="rect" id="node16" href="$classRa_1_1Asset_1_1CameraData.html#a9ebb267200d6c3d9fe57e501fbd1eb44" title="Set the zoom factor of the Camera. " alt="" coords="487,590,649,631"/>
+<area shape="rect" id="node17" href="$classRa_1_1Asset_1_1CameraData.html#a95343705f4b55c4e1737bbb2bb60770d" title="Set the aspect ratio of the Camera. " alt="" coords="487,655,649,697"/>
+<area shape="rect" id="node7" href="$classRa_1_1Asset_1_1CameraData.html#a0b58cc07a81c63c980ae9ff2e961db3e" title="Return the name of the Camera. " alt="" coords="709,67,872,109"/>
+<area shape="rect" id="node9" href="$classRa_1_1Asset_1_1AssetData.html#a8b107d2673623febe173f37f14ff777d" title="Acces to the name of the asset. " alt="" coords="715,133,866,174"/>
+</map>

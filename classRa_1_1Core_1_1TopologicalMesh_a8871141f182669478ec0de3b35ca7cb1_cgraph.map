@@ -1,0 +1,5 @@
+<map id="Ra::Core::TopologicalMesh::propagate_normal_to_halfedges" name="Ra::Core::TopologicalMesh::propagate_normal_to_halfedges">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TopologicalMesh.html#a5c4e128a2964b81044fc1a97063cf4d2" title="Set normal of the vertex vh, when member of fh. " alt="" coords="269,5,451,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TopologicalMesh.html#aaf1c3fc7e595f5a33dd86087e7871968" title="Get normal of the vertex vh, when member of fh. " alt="" coords="269,70,451,111"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TopologicalMesh.html#a94c32854d7aa51edc42d5d1dd70856f3" title="Return the half&#45;edge associated with a given vertex and face. " alt="" coords="499,38,680,79"/>
+</map>

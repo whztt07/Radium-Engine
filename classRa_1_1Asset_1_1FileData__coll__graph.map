@@ -1,0 +1,24 @@
+<map id="Ra::Asset::FileData" name="Ra::Asset::FileData">
+<area shape="rect" id="node4" href="$classRa_1_1Asset_1_1LightData.html" title="Asset defining how lights must be passed to the Radium systems from a loader. " alt="" coords="948,1703,1093,2015"/>
+<area shape="rect" id="node5" href="$classRa_1_1Asset_1_1AssetData.html" title="General interface of an asset data. " alt="" coords="2007,629,2157,750"/>
+<area shape="rect" id="node21" href="$classRa_1_1Asset_1_1AnimationData.html" title="{Ra::Asset::AnimationData\n||+ AnimationData()\l+ ~AnimationData()\l+ setName()\l+ getTime()\l+ setTime()\l+ getTimeStep()\l+ setTimeStep()\l+ getFramesSize()\l+ getFrames()\l+ setFrames()\l+ displayInfo()\l}" alt="" coords="1767,1747,1941,1971"/>
+<area shape="rect" id="node27" href="$classRa_1_1Asset_1_1CameraData.html" title="The CameraData class stores the data related to one of the Cameras of a loaded scene. " alt="" coords="88,1673,259,2044"/>
+<area shape="rect" id="node31" href="$classRa_1_1Asset_1_1GeometryData.html" title="The GeometryData class stores all the geometry related data of a loaded object. " alt="" coords="2755,977,2931,2741"/>
+<area shape="rect" id="node44" href="$classRa_1_1Asset_1_1HandleData.html" title="{Ra::Asset::HandleData\n||+ HandleData()\l+ HandleData()\l+ ~HandleData()\l+ setName()\l+ getType()\l+ setType()\l+ getFrame()\l+ setFrame()\l+ getVertexSize()\l+ setVertexSize()\l+ setNameTable()\l+ getComponentDataSize()\l+ getComponentData()\l+ getComponentData()\l+ getComponent()\l+ getComponent()\l+ setComponents()\l+ getEdgeData()\l+ getEdgeData()\l+ setEdges()\l+ getFaceData()\l+ getFaceData()\l+ setFaces()\l+ recomputeAllIndices()\l+ isPointCloud()\l+ isSkeleton()\l+ isCage()\l+ hasComponents()\l+ hasEdges()\l+ hasFaces()\l+ needsEndNodes()\l+ getIndexOf()\l+ needEndNodes()\l+ displayInfo()\l}" alt="" coords="4006,1578,4187,2139"/>
+<area shape="rect" id="node6" title="STL class. " alt="" coords="1895,149,1974,227"/>
+<area shape="rect" id="node23" href="$structRa_1_1Asset_1_1HandleAnimation.html" title="{Ra::Asset::HandleAnimation\n||+ HandleAnimation()\l}" alt="" coords="1487,299,1674,376"/>
+<area shape="rect" id="node7" title="STL class. " alt="" coords="1872,6,1998,98"/>
+<area shape="rect" id="node15" href="$structRa_1_1Asset_1_1LightData_1_1LightAttenuation.html" title="Define the parameters of the attenuation function. " alt="" coords="545,643,690,735"/>
+<area shape="rect" id="node24" href="$classRa_1_1Asset_1_1AnimationTime.html" title="{Ra::Asset::AnimationTime\n||+ AnimationTime()\l+ AnimationTime()\l+ ~AnimationTime()\l+ getStart()\l+ setStart()\l+ getEnd()\l+ setEnd()\l+ duration()\l+ merge()\l+ contain()\l+ intersect()\l+ isValid()\l+ operator==()\l+ operator!=()\l+ operator\&lt;()\l+ operator==()\l+ operator\&lt;()\l+ operator\&gt;()\l}" alt="" coords="1627,526,1803,853"/>
+<area shape="rect" id="node16" title="STL class. " alt="" coords="1992,1820,2131,1897"/>
+<area shape="rect" id="node18" title="STL class. " alt="" coords="2233,299,2349,376"/>
+<area shape="rect" id="node34" href="$classRa_1_1Core_1_1VectorArray.html" title="{Ra::Core::VectorArray\l\&lt; Core::VectorNui \&gt;\n||+ getMap()\l+ getMap()\l}" alt="" coords="3342,636,3494,743"/>
+<area shape="rect" id="node35" href="$structRa_1_1Core_1_1AlignedStdVector.html" title="{Ra::Core::AlignedStdVector\l\&lt; Core::VectorNui \&gt;\n||}" alt="" coords="3473,291,3657,383"/>
+<area shape="rect" id="node36" href="$classRa_1_1Core_1_1VectorArray.html" title="{Ra::Core::VectorArray\l\&lt; Core::Vector3 \&gt;\n||+ getMap()\l+ getMap()\l}" alt="" coords="2678,636,2830,743"/>
+<area shape="rect" id="node39" href="$classRa_1_1Core_1_1VectorArray.html" title="{Ra::Core::VectorArray\l\&lt; Core::Color \&gt;\n||+ getMap()\l+ getMap()\l}" alt="" coords="3166,636,3318,743"/>
+<area shape="rect" id="node40" href="$classRa_1_1Core_1_1VectorArray.html" title="{Ra::Core::VectorArray\l\&lt; Core::Vector2ui \&gt;\n||+ getMap()\l+ getMap()\l}" alt="" coords="2283,636,2435,743"/>
+<area shape="rect" id="node41" href="$classbool.html" title="{bool\n||}" alt="" coords="4740,651,4786,728"/>
+<area shape="rect" id="node45" href="$structRa_1_1Core_1_1AlignedStdVector.html" title="{Ra::Core::AlignedStdVector\l\&lt; Core::VectorNi \&gt;\n||}" alt="" coords="3729,643,3913,735"/>
+<area shape="rect" id="node47" href="$structRa_1_1Core_1_1AlignedStdVector.html" title="{Ra::Core::AlignedStdVector\l\&lt; Core::Vector2i \&gt;\n||}" alt="" coords="3937,643,4121,735"/>
+<area shape="rect" id="node49" href="$structRa_1_1Core_1_1AlignedStdVector.html" title="{Ra::Core::AlignedStdVector\l\&lt; Ra::Asset::HandleComponentData \&gt;\n||}" alt="" coords="4208,643,4457,735"/>
+</map>

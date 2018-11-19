@@ -1,0 +1,6 @@
+<map id="Ra::Core::MeshUtils::getMeanEdgeLength" name="Ra::Core::MeshUtils::getMeanEdgeLength">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="209,5,359,32"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="203,57,365,98"/>
+<area shape="rect" id="node5" href="$namespaceOpenMesh.html#a8205f789ce08919bc11c58383574596c" title="OpenMesh::norm" alt="" coords="223,123,345,149"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="414,57,578,98"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="Ra::Core::CatmullClarkSubdivider::subdivide" name="Ra::Core::CatmullClarkSubdivider::subdivide">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Engine_1_1DrawPrimitives.html#a2eff9774611ef4e9cdfb2ac969182123" title="Displays given point shown as the crossing of 3 lines of length &#39;scale&#39;. " alt="" coords="279,5,463,46"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1TopologicalMesh.html#a94c32854d7aa51edc42d5d1dd70856f3" title="Return the half&#45;edge associated with a given vertex and face. " alt="" coords="752,122,933,163"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TopologicalMesh.html#a01a8febca452611147267e173ce5b03a" title="Interpolate hprops on face center. " alt="" coords="275,286,467,327"/>
+<area shape="rect" id="node11" href="$namespaceRa_1_1Core_1_1Graph.html#a3b2b602f627a47463a09d850e1781760" title="Ra::Core::Graph::check" alt="" coords="290,645,451,672"/>
+<area shape="rect" id="node14" href="$classRa_1_1Core_1_1TopologicalMesh.html#ab8adf0e20463e4e4a4eb1b4624eb5b40" title="Copy all properties from input_heh to copy_heh. " alt="" coords="280,383,461,425"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1TopologicalMesh.html#a0294459ae0b252566b228c8caa6f9d8b" title="Interpolate normal property on face center. " alt="" coords="515,187,701,229"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1TopologicalMesh.html#aea2f723e3af4a564d62715713f416d08" title="Interpolate hprops on face center. " alt="" coords="517,122,699,163"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1TopologicalMesh.html#aa1016df75edb65e69fcdec5465e49245" title="Ra::Core::TopologicalMesh\l::getFloatPropsHandles" alt="" coords="517,449,699,490"/>
+<area shape="rect" id="node8" href="$classRa_1_1Core_1_1TopologicalMesh.html#acf1e58078add6e5cc9ce13b30fb3baf3" title="Ra::Core::TopologicalMesh\l::getVector2PropsHandles" alt="" coords="517,253,699,294"/>
+<area shape="rect" id="node9" href="$classRa_1_1Core_1_1TopologicalMesh.html#a6865aee84eb0d92f6acc12081bf8a6f8" title="Ra::Core::TopologicalMesh\l::getVector3PropsHandles" alt="" coords="517,318,699,359"/>
+<area shape="rect" id="node10" href="$classRa_1_1Core_1_1TopologicalMesh.html#a938483e7f6900eeb3914d662b9aac21c" title="Ra::Core::TopologicalMesh\l::getVector4PropsHandles" alt="" coords="517,383,699,425"/>
+<area shape="rect" id="node12" href="$classRa_1_1Core_1_1Graph_1_1AdjacencyList.html#a63e089f5da2ddc2da39dfd5bd6adb410" title="SIZE. " alt="" coords="749,667,936,709"/>
+<area shape="rect" id="node13" href="$classRa_1_1Core_1_1Graph_1_1AdjacencyList.html#a209e8c037a722c617b3feebdbb85c044" title="Ra::Core::Graph::Adjacency\lList::isLeaf" alt="" coords="515,697,701,738"/>
+<area shape="rect" id="node15" href="$classRa_1_1Core_1_1TopologicalMesh.html#afc2c2977da4b6cc4a76a044a580cfacf" title="Copy the normal property from input_heh to copy_heh. " alt="" coords="517,579,699,621"/>
+<area shape="rect" id="node16" href="$classRa_1_1Core_1_1TopologicalMesh.html#a7550874ffae2f25bcf60826dc2ff948e" title="Copy props properties from input_heh to copy_heh. " alt="" coords="517,514,699,555"/>
+</map>

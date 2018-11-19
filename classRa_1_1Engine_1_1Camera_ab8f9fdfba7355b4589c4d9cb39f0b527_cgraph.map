@@ -1,0 +1,5 @@
+<map id="Ra::Engine::Camera::setPosition" name="Ra::Engine::Camera::setPosition">
+<area shape="rect" id="node2" href="$classRa_1_1Engine_1_1Camera.html#a7a2c1c84e3063c6c3f09d490477abb0f" title="Apply the local transformation &#39;T&#39; to the camera. " alt="" coords="195,38,336,79"/>
+<area shape="rect" id="node3" href="$classRa_1_1Engine_1_1Camera.html#a724a052e94817af7e602129467c8696f" title="Return the position. " alt="" coords="401,5,543,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Engine_1_1RenderObject.html#a2d6a1bc2b7646fe0912035a2ece24864" title="Ra::Engine::RenderObject\l::setLocalTransform" alt="" coords="385,70,559,111"/>
+</map>

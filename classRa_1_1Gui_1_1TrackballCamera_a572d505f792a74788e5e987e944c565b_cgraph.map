@@ -1,0 +1,5 @@
+<map id="Ra::Gui::TrackballCamera::handleCameraRotate" name="Ra::Gui::TrackballCamera::handleCameraRotate">
+<area shape="rect" id="node2" href="$namespaceOpenMesh.html#a8205f789ce08919bc11c58383574596c" title="OpenMesh::norm" alt="" coords="244,5,367,32"/>
+<area shape="rect" id="node3" href="$namespaceRa_1_1Core_1_1Vector.html#a42d87f3bd0658bac532d72f0ec528827" title="Get the cosine of the angle between two vectors. " alt="" coords="230,56,381,83"/>
+<area shape="rect" id="node4" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="230,107,381,133"/>
+</map>

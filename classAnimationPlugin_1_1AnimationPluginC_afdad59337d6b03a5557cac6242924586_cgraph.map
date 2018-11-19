@@ -1,0 +1,24 @@
+<map id="AnimationPlugin::AnimationPluginC::registerPlugin" name="AnimationPlugin::AnimationPluginC::registerPlugin">
+<area shape="rect" id="node2" href="$classRa_1_1Engine_1_1RadiumEngine.html#a88d584c699f333ea93aff6b15f0f2341" title="Ra::Engine::RadiumEngine\l::registerSystem" alt="" coords="239,179,419,221"/>
+<area shape="rect" id="node3" href="$classRa_1_1Engine_1_1RadiumEngine.html#abe7b493d6e9806ff7edff0f755f936f2" title="Ra::Engine::RadiumEngine\l::getSignalManager" alt="" coords="239,245,419,286"/>
+<area shape="rect" id="node4" href="$classAnimationPlugin_1_1AnimationPluginC.html#a848f15219c0581689310f9a7277ee273" title="Updates the displayed animation time. " alt="" coords="238,310,421,351"/>
+<area shape="rect" id="node5" href="$classAnimationPlugin_1_1AnimationSystem.html#a7bc07bee3ce43e27b9ddc72fb0184478" title="AnimationPlugin::Animation\lSystem::getMaxFrame" alt="" coords="483,211,666,253"/>
+<area shape="rect" id="node6" href="$classAnimationPlugin_1_1AnimationSystem.html#aab1ae3308916ce53c43eb6520640824f" title="AnimationPlugin::Animation\lSystem::getTime" alt="" coords="483,277,666,318"/>
+<area shape="rect" id="node18" href="$classRa_1_1GuiBase_1_1SelectionManager.html#a29cbd250208f1e18d2ab1e0f4d91105d" title="Return the current selected item, or an invalid entry if there is no current item. " alt="" coords="470,342,679,383"/>
+<area shape="rect" id="node23" href="$classAnimationPlugin_1_1AnimationSystem.html#ac50ad27ef6e9aa174b0f9695cabf0454" title="AnimationPlugin::Animation\lSystem::getAnimFrame" alt="" coords="483,407,666,449"/>
+<area shape="rect" id="node7" href="$structRa_1_1Engine_1_1ItemEntry.html#aceafc81a73631955b64999dd39a639da" title="Returns true if the item represents any valid object. " alt="" coords="757,179,909,221"/>
+<area shape="rect" id="node17" href="$classAnimationPlugin_1_1AnimationComponent.html#a7bb9a09b3c704302420b1ec5e24ea59e" title="AnimationPlugin::Animation\lComponent::getTime" alt="" coords="742,277,925,318"/>
+<area shape="rect" id="node8" href="$structRa_1_1Engine_1_1ItemEntry.html#a1fb9fdd74413a1fa5878f53c1cfcf8fd" title="Debug checks. " alt="" coords="1224,109,1376,150"/>
+<area shape="rect" id="node10" href="$classRa_1_1Engine_1_1RadiumEngine.html#a79f6626ce468268791bc5bdfe17b5586" title="Ra::Engine::RadiumEngine\l::getEntityManager" alt="" coords="987,39,1167,81"/>
+<area shape="rect" id="node11" href="$classRa_1_1Engine_1_1EntityManager.html#a5115cccae6aaef614ad4bd08e64d8185" title="Check wether an entity with a given name exists or not. " alt="" coords="988,105,1167,146"/>
+<area shape="rect" id="node12" href="$classRa_1_1Engine_1_1Entity.html#aaf256bea44bbc5bff6aa504aca05ca35" title="Ra::Engine::Entity\l::getName" alt="" coords="1013,170,1142,211"/>
+<area shape="rect" id="node13" href="$structRa_1_1Engine_1_1ItemEntry.html#a898047549069e5b64d3a9a65c058af56" title="Returns true if the item represents a render object. " alt="" coords="1001,235,1153,277"/>
+<area shape="rect" id="node15" href="$classRa_1_1Engine_1_1RadiumEngine.html#a58b27bc600ea769f68b0e2938abc7862" title="Manager getters. " alt="" coords="987,301,1167,342"/>
+<area shape="rect" id="node16" href="$classRa_1_1Engine_1_1RenderObjectManager.html#a4077b9cf9e1e4d62fd5456386f2d72c8" title="Returns true if the index points to a valid render object. " alt="" coords="990,366,1165,407"/>
+<area shape="rect" id="node9" href="$classRa_1_1Core_1_1Index.html#a7283e7fb9cc134e04ef3cde8877f8fe2" title="INVALID. " alt="" coords="1432,116,1603,143"/>
+<area shape="rect" id="node14" href="$classRa_1_1Core_1_1Index.html#a87c70243f30c65c1a24834d1829bda01" title="DESTRUCTOR: Must not be defined, we need it trivial to be constexpr. " alt="" coords="1219,308,1381,335"/>
+<area shape="rect" id="node19" href="$classRa_1_1GuiBase_1_1SelectionManager.html#aec178a6b3de1c04e5e1d16ff72c6e966" title="Ra::GuiBase::SelectionManager\l::itemModel" alt="" coords="729,342,938,383"/>
+<area shape="rect" id="node20" href="$classRa_1_1GuiBase_1_1ItemModel.html#a3236433d461ad6cac5e9390b2685fa3f" title="Returns the entry corresponding to a given index or an invalid entry if the index doesn&#39;t match any e..." alt="" coords="750,423,917,465"/>
+<area shape="rect" id="node21" href="$classRa_1_1GuiBase_1_1TreeModel.html#a5aa24ace72c1c3d29e268cb34dc576f2" title="Get the tree item corresponding to the given index. " alt="" coords="994,431,1161,473"/>
+<area shape="rect" id="node22" href="$classRa_1_1GuiBase_1_1TreeModel.html#a972106921da4c960f23f81722d3b4cf5" title="Internal functions to check if an item is in the tree. " alt="" coords="1217,431,1383,473"/>
+</map>

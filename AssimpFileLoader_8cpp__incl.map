@@ -1,0 +1,31 @@
+<map id="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/src/IO/AssimpLoader/AssimpFileLoader.cpp" name="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/src/IO/AssimpLoader/AssimpFileLoader.cpp">
+<area shape="rect" id="node2" href="$AssimpFileLoader_8hpp.html" title="IO/AssimpLoader/AssimpFile\lLoader.hpp" alt="" coords="2300,275,2492,317"/>
+<area shape="rect" id="node15" href="$FileData_8hpp.html" title="Core/File/FileData.hpp" alt="" coords="703,125,856,152"/>
+<area shape="rect" id="node45" href="$AssimpAnimationDataLoader_8hpp.html" title="IO/AssimpLoader/AssimpAnimation\lDataLoader.hpp" alt="" coords="3279,275,3508,317"/>
+<area shape="rect" id="node47" href="$AssimpGeometryDataLoader_8hpp.html" title="IO/AssimpLoader/AssimpGeometry\lDataLoader.hpp" alt="" coords="2567,275,2795,317"/>
+<area shape="rect" id="node49" href="$AssimpHandleDataLoader_8hpp.html" title="IO/AssimpLoader/AssimpHandle\lDataLoader.hpp" alt="" coords="3042,275,3253,317"/>
+<area shape="rect" id="node50" href="$AssimpLightDataLoader_8hpp.html" title="IO/AssimpLoader/AssimpLight\lDataLoader.hpp" alt="" coords="2819,275,3017,317"/>
+<area shape="rect" id="node4" href="$FileLoaderInterface_8hpp.html" title="Core/File/FileLoaderInterface.hpp" alt="" coords="2003,448,2217,475"/>
+<area shape="rect" id="node14" href="$RaIO_8hpp.html" title="IO/RaIO.hpp" alt="" coords="3099,365,3195,392"/>
+<area shape="rect" id="node7" href="$RaCore_8hpp.html" title="Core/RaCore.hpp" alt="" coords="1938,696,2061,723"/>
+<area shape="rect" id="node8" href="$CoreMacros_8hpp.html" title="Core/CoreMacros.hpp" alt="" coords="1925,771,2075,797"/>
+<area shape="rect" id="node17" href="$FileData_8inl.html" title="Core/File/FileData.inl" alt="" coords="1239,200,1384,227"/>
+<area shape="rect" id="node18" href="$AnimationData_8hpp.html" title="Core/File/AnimationData.hpp" alt="" coords="574,365,764,392"/>
+<area shape="rect" id="node25" href="$Log_8hpp.html" title="Core/Log/Log.hpp" alt="" coords="195,531,320,557"/>
+<area shape="rect" id="node26" href="$CameraData_8hpp.html" title="Core/File/CameraData.hpp" alt="" coords="1441,365,1620,392"/>
+<area shape="rect" id="node37" href="$GeometryData_8hpp.html" title="Core/File/GeometryData.hpp" alt="" coords="1217,283,1407,309"/>
+<area shape="rect" id="node40" href="$HandleData_8hpp.html" title="Core/File/HandleData.hpp" alt="" coords="2541,365,2715,392"/>
+<area shape="rect" id="node42" href="$LightData_8hpp.html" title="Core/File/LightData.hpp" alt="" coords="1809,365,1968,392"/>
+<area shape="rect" id="node19" href="$AssetData_8hpp.html" title="Core/File/AssetData.hpp" alt="" coords="1609,448,1775,475"/>
+<area shape="rect" id="node20" href="$AnimationTime_8hpp.html" title="Core/File/KeyFrame\l/AnimationTime.hpp" alt="" coords="3320,441,3459,482"/>
+<area shape="rect" id="node23" href="$KeyTransform_8hpp.html" title="Core/File/KeyFrame\l/KeyTransform.hpp" alt="" coords="707,441,845,482"/>
+<area shape="rect" id="node24" href="$AnimationData_8inl.html" title="Core/File/AnimationData.inl" alt="" coords="347,448,529,475"/>
+<area shape="rect" id="node27" href="$VectorArray_8hpp.html" title="Core/Containers/VectorArray.hpp" alt="" coords="1267,448,1481,475"/>
+<area shape="rect" id="node28" href="$LinearAlgebra_8hpp.html" title="Core/Math/LinearAlgebra.hpp" alt="" coords="2595,531,2785,557"/>
+<area shape="rect" id="node36" href="$CameraData_8inl.html" title="Core/File/CameraData.inl" alt="" coords="1072,448,1243,475"/>
+<area shape="rect" id="node34" href="$Math_8hpp.html" title="Core/Math/Math.hpp" alt="" coords="3160,613,3300,640"/>
+<area shape="rect" id="node35" href="$LinearAlgebra_8inl.html" title="Core/Math/LinearAlgebra.inl" alt="" coords="2702,613,2884,640"/>
+<area shape="rect" id="node38" href="$Index_8hpp.html" title="Core/Index/Index.hpp" alt="" coords="2496,448,2643,475"/>
+<area shape="rect" id="node39" href="$MaterialData_8hpp.html" title="Core/File/MaterialData.hpp" alt="" coords="1159,365,1337,392"/>
+<area shape="rect" id="node46" href="$DataLoader_8hpp.html" title="Core/File/DataLoader.hpp" alt="" coords="2853,365,3024,392"/>
+</map>

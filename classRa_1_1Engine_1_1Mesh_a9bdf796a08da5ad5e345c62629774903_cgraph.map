@@ -1,0 +1,6 @@
+<map id="Ra::Engine::Mesh::loadGeometry" name="Ra::Engine::Mesh::loadGeometry">
+<area shape="rect" id="node2" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="270,5,431,46"/>
+<area shape="rect" id="node4" href="$classRa_1_1Core_1_1TriangleMesh.html#a2050187a77536bb43bfa2e25c25389c6" title="Return the Handle to the attribute with the given name if it exists, an invalid handle otherwise..." alt="" coords="270,70,431,111"/>
+<area shape="rect" id="node3" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="481,5,645,46"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1AttribManager.html#a83cb9e1c9e687d161a3070ffbdf07b22" title="findAttrib Grab an attribute handler by name. " alt="" coords="481,70,645,111"/>
+</map>

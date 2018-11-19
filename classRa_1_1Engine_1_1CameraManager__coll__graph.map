@@ -1,0 +1,8 @@
+<map id="Ra::Engine::CameraManager" name="Ra::Engine::CameraManager">
+<area shape="rect" id="node2" href="$classRa_1_1Engine_1_1System.html" title="Systems are responsible of updating a specific subset of the components of each entity. " alt="" coords="135,714,321,894"/>
+<area shape="rect" id="node5" title="STL class. " alt="" coords="186,191,301,268"/>
+<area shape="rect" id="node13" title="STL class. " alt="" coords="327,191,467,268"/>
+<area shape="rect" id="node7" href="$classRa_1_1Engine_1_1RenderParameters.html" title="{Ra::Engine::RenderParameters\n||+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ addParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ updateParameter()\l+ concatParameters()\l+ bind()\l+ print()\l}" alt="" coords="469,589,672,1019"/>
+<area shape="rect" id="node8" href="$structRa_1_1Engine_1_1RenderData.html" title="{Ra::Engine::RenderData\n||}" alt="" coords="697,765,861,843"/>
+<area shape="rect" id="node12" href="$classRa_1_1Engine_1_1CameraStorage.html" title="Interface providing functions to access and store cameras in an implementation&#45;defined way..." alt="" coords="531,147,717,312"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="AnimationPlugin::AnimationPluginC::step" name="AnimationPlugin::AnimationPluginC::step">
+<area shape="rect" id="node2" href="$classAnimationPlugin_1_1AnimationPluginC.html#a2557c2abe774ff96f778edbb44a6362b" title="Slot for the user asking to pause the animation. " alt="" coords="238,5,421,46"/>
+<area shape="rect" id="node4" href="$classAnimationPlugin_1_1AnimationSystem.html#a47edb32277314755d72534c3c1b25f77" title="Advance the animation next frame, then pauses. " alt="" coords="238,70,421,111"/>
+<area shape="rect" id="node3" href="$classAnimationPlugin_1_1AnimationSystem.html#a5212467a5429133988c38e8390459e2b" title="Toggle on/off playing of animations. " alt="" coords="470,5,653,46"/>
+</map>

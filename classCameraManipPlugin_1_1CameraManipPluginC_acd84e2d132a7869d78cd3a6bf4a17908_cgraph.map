@@ -1,0 +1,34 @@
+<map id="CameraManipPlugin::CameraManipPluginC::createCamera" name="CameraManipPlugin::CameraManipPluginC::createCamera">
+<area shape="rect" id="node2" href="$classRa_1_1Engine_1_1RadiumEngine.html#a23bc4cf581345f7333e0f7e3f743c401" title="Ra::Engine::RadiumEngine\l::getSystem" alt="" coords="214,5,394,46"/>
+<area shape="rect" id="node3" href="$classRa_1_1Engine_1_1RadiumEngine.html#a79f6626ce468268791bc5bdfe17b5586" title="Ra::Engine::RadiumEngine\l::getEntityManager" alt="" coords="214,70,394,111"/>
+<area shape="rect" id="node4" href="$classRa_1_1Engine_1_1EntityManager.html#a130f412ff1044ee5dc67f2c9bc2e36f4" title="Create (if does not exist) an entity given its name. " alt="" coords="215,135,393,177"/>
+<area shape="rect" id="node9" href="$classRa_1_1Gui_1_1Viewer.html#a4c52ddd225ed6e8fe630a7b1ac4c138f" title="Access to camera interface. " alt="" coords="211,201,397,242"/>
+<area shape="rect" id="node10" href="$classRa_1_1Engine_1_1Camera.html#a2acbb1a258f8d0af86edcd978cfbf3e1" title="Change the viewport size. " alt="" coords="233,331,375,373"/>
+<area shape="rect" id="node13" href="$classRa_1_1Engine_1_1Camera.html#af986d111c94ed3668b846865f7d572d5" title="Set the projection type to &#39;projectionType&#39;. " alt="" coords="233,593,375,634"/>
+<area shape="rect" id="node14" href="$classRa_1_1Engine_1_1Camera.html#afb2eb1eaed43dfbad89a89f90c067b4e" title="Set the frame of the camera to &#39;frame&#39;. " alt="" coords="233,658,375,699"/>
+<area shape="rect" id="node15" href="$classRa_1_1Engine_1_1Camera.html#a54a29618a5515e0b4ef00402f2f42cd5" title="Set the Field Of View to &#39;fov&#39;. " alt="" coords="233,397,375,438"/>
+<area shape="rect" id="node16" href="$classRa_1_1Engine_1_1Camera.html#a4a3fabf640b33f4438acbf9497585680" title="Set the Z Near plane distance to &#39;zNear&#39;. " alt="" coords="233,462,375,503"/>
+<area shape="rect" id="node17" href="$classRa_1_1Engine_1_1Camera.html#a1f51ef3da326d7017bd8a457b5ce7edb" title="Set the Z Far plane distance to &#39;zFar&#39;. " alt="" coords="233,527,375,569"/>
+<area shape="rect" id="node18" href="$classRa_1_1Engine_1_1Camera.html#a6c6f55e7821123b64e4b84bdeacf12ea" title="Set the zoom factor to &#39;zoomFactor&#39;. " alt="" coords="233,266,375,307"/>
+<area shape="rect" id="node19" href="$classRa_1_1Engine_1_1Camera.html#abec46e062874d71bf9cfc9143c889a60" title="Pure virtual method to be overridden by any component. " alt="" coords="233,723,375,765"/>
+<area shape="rect" id="node33" href="$classRa_1_1Engine_1_1Camera.html#a4c2aac5ad419cef7720e2a18d93b3703" title="Toggle on/off displaying the Camera. " alt="" coords="481,919,623,961"/>
+<area shape="rect" id="node5" href="$namespaceRa_1_1Core_1_1StringUtils.html#a63b10a7c14473b4aa762cf00e0432690" title="Writes a formatted print into the given string, similarly to sprintf. " alt="" coords="480,135,624,177"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1Index.html#a06abaf1320f1682bb6ab3aac9a89b13b" title="INDEX. " alt="" coords="465,201,639,228"/>
+<area shape="rect" id="node8" href="$classRa_1_1Engine_1_1EntityManager.html#a5115cccae6aaef614ad4bd08e64d8185" title="Check wether an entity with a given name exists or not. " alt="" coords="463,70,641,111"/>
+<area shape="rect" id="node6" href="$namespaceRa_1_1Core_1_1StringUtils.html#ac348328b878bb8f1b1c1a3335ea20c4b" title="Ra::Core::StringUtils\l::stringvPrintf" alt="" coords="741,135,885,177"/>
+<area shape="rect" id="node11" href="$classRa_1_1Engine_1_1Camera.html#a2124136d939bd433f9630e23c403cdd6" title="Update the projection matrix according to the current parameters. " alt="" coords="481,397,623,438"/>
+<area shape="rect" id="node12" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="738,404,889,431"/>
+<area shape="rect" id="node20" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="471,723,633,765"/>
+<area shape="rect" id="node22" href="$classRa_1_1Engine_1_1RenderObject.html#ae9cb914f351555a60d29e8d6afedc06b" title="Sort of factory method to easily create a render object. " alt="" coords="465,789,639,830"/>
+<area shape="rect" id="node27" href="$classRa_1_1Engine_1_1RenderObject.html#acc91aff99b91e06143b28940ec49d0e0" title="Ra::Engine::RenderObject\l::getRenderTechnique" alt="" coords="465,593,639,634"/>
+<area shape="rect" id="node28" href="$namespaceRa_1_1Engine_1_1ShaderConfigurationFactory.html#a0bc60f21dbabd745961037f3d2f019c8" title="Ra::Engine::ShaderConfiguration\lFactory::getConfiguration" alt="" coords="445,527,659,569"/>
+<area shape="rect" id="node30" href="$classRa_1_1Engine_1_1RenderObject.html#a2d6a1bc2b7646fe0912035a2ece24864" title="Ra::Engine::RenderObject\l::setLocalTransform" alt="" coords="465,658,639,699"/>
+<area shape="rect" id="node31" href="$classRa_1_1Engine_1_1Component.html#a8faa6f03b4a5a8bc30bb8ff402e6b61f" title="Add a new render object to the component. This adds the RO to the manager for drawing. " alt="" coords="471,854,633,895"/>
+<area shape="rect" id="node21" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="731,593,895,634"/>
+<area shape="rect" id="node23" href="$classRa_1_1Engine_1_1RenderObject.html#acf300c8fdb55fee54d27b3fb46a1e523" title="A &#45;1 (or any other negative value) lifetime is considered infinite, 0 is an &quot;invalid value&quot; (would ..." alt="" coords="726,658,901,699"/>
+<area shape="rect" id="node24" href="$classRa_1_1Engine_1_1RenderObject.html#ae8e94954e783a2012fd774598af1eb52" title="Ra::Engine::RenderObject\l::setMesh" alt="" coords="726,723,901,765"/>
+<area shape="rect" id="node25" href="$classRa_1_1Engine_1_1RenderObject.html#a62e0eb3a7de5a7d352b565a28260cc06" title="Ra::Engine::RenderObject\l::setVisible" alt="" coords="726,919,901,961"/>
+<area shape="rect" id="node26" href="$classRa_1_1Engine_1_1RenderObject.html#ae1ea453e2b698cda9956586d11b9cfbd" title="Ra::Engine::RenderObject\l::setRenderTechnique" alt="" coords="726,789,901,830"/>
+<area shape="rect" id="node29" href="$classRa_1_1Engine_1_1ShaderConfiguration.html#a7e20a600c78e8627f0238b342f4b42f2" title="Ra::Engine::ShaderConfiguration\l::getDefaultShaderConfig" alt="" coords="707,527,920,569"/>
+<area shape="rect" id="node32" href="$classRa_1_1Engine_1_1Component.html#a10b0bc182b76165744ebea603ae32dfe" title="Shortcut to access the render object manager. " alt="" coords="732,854,895,895"/>
+</map>

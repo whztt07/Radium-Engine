@@ -1,0 +1,6 @@
+<map id="Ra::Gui::TranslateGizmo::selectConstraint" name="Ra::Gui::TranslateGizmo::selectConstraint">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Core_1_1Colors.html#a5106b4a3ae9cf36ed9f57b733062346c" title="Ra::Core::Colors::Red" alt="" coords="229,5,382,32"/>
+<area shape="rect" id="node3" href="$namespaceRa_1_1Core_1_1Colors.html#ac6dad1afb4fbb6af3fb605e380dfe34b" title="Ra::Core::Colors::Green" alt="" coords="223,56,387,83"/>
+<area shape="rect" id="node4" href="$namespaceRa_1_1Core_1_1Colors.html#a749b34eb900efbaade04345f6eea99db" title="Ra::Core::Colors::Blue" alt="" coords="228,107,383,133"/>
+<area shape="rect" id="node5" href="$namespaceRa_1_1Core_1_1Colors.html#a975b73de86593a6e603f16f819b5acd1" title="Ra::Core::Colors::Yellow" alt="" coords="221,157,389,184"/>
+</map>

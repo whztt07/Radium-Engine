@@ -1,0 +1,27 @@
+<map id="Ra::Gui::TranslateGizmo::TranslateGizmo" name="Ra::Gui::TranslateGizmo::TranslateGizmo">
+<area shape="rect" id="node2" href="$namespaceRa_1_1Engine_1_1ShaderConfigurationFactory.html#a0bc60f21dbabd745961037f3d2f019c8" title="Ra::Engine::ShaderConfiguration\lFactory::getConfiguration" alt="" coords="221,22,435,63"/>
+<area shape="rect" id="node4" href="$namespaceRa_1_1Core_1_1MeshUtils.html#a8825e2dc9464c97fdf421a82032ce275" title="Create a cylinder approximation (n&#45;faced prism) with base faces centered on A and B with given radius..." alt="" coords="257,370,399,411"/>
+<area shape="rect" id="node7" href="$classRa_1_1Core_1_1TriangleMesh.html#a40d31b7b2943947d6eac5d906f0182fd" title="Access the vertices normals. " alt="" coords="746,515,907,557"/>
+<area shape="rect" id="node17" href="$namespaceRa_1_1Core_1_1MeshUtils.html#af7123999b4f5fd521131d36c39fc432b" title="Create a cone approximation (n&#45;faced pyramid) with base face centered on base, pointing towards tip w..." alt="" coords="257,301,399,342"/>
+<area shape="rect" id="node18" href="$classRa_1_1Core_1_1TriangleMesh.html#af4ceca64fe85525529a75765c49eb80e" title="Appends another mesh to this one, but only if they have the same attributes. " alt="" coords="509,70,670,111"/>
+<area shape="rect" id="node20" href="$classRa_1_1Engine_1_1RenderObject.html#ae1ea453e2b698cda9956586d11b9cfbd" title="Ra::Engine::RenderObject\l::setRenderTechnique" alt="" coords="241,435,415,477"/>
+<area shape="rect" id="node21" href="$classRa_1_1Engine_1_1RenderObject.html#ae8e94954e783a2012fd774598af1eb52" title="Ra::Engine::RenderObject\l::setMesh" alt="" coords="241,501,415,542"/>
+<area shape="rect" id="node22" href="$classRa_1_1Engine_1_1Component.html#a8faa6f03b4a5a8bc30bb8ff402e6b61f" title="Add a new render object to the component. This adds the RO to the manager for drawing. " alt="" coords="247,682,409,723"/>
+<area shape="rect" id="node24" href="$namespaceRa_1_1Core_1_1MeshUtils.html#abdf2c536d956c3939445079e4f6465d1" title="Create a 2D grid mesh with given number of row and columns. " alt="" coords="518,625,661,666"/>
+<area shape="rect" id="node26" href="$classRa_1_1Gui_1_1TranslateGizmo.html#a5a100607ad14934626008ba6222a4563" title="Called every time the underlying transform may have changed. " alt="" coords="245,182,411,223"/>
+<area shape="rect" id="node3" href="$classRa_1_1Engine_1_1ShaderConfiguration.html#a7e20a600c78e8627f0238b342f4b42f2" title="Ra::Engine::ShaderConfiguration\l::getDefaultShaderConfig" alt="" coords="483,5,696,46"/>
+<area shape="rect" id="node5" href="$classRa_1_1Core_1_1TriangleMesh.html#a495116f40cfec8bb6504698d786d4b8c" title="Access the vertices positions. " alt="" coords="1150,373,1311,414"/>
+<area shape="rect" id="node8" href="$namespaceRa_1_1Core_1_1Vector.html#a0464b705193d326a5102691dd58d753d" title="Get two vectors orthogonal to a given vector. " alt="" coords="484,355,695,397"/>
+<area shape="rect" id="node9" href="$namespaceRa_1_1Core_1_1Vector.html#a42d87f3bd0658bac532d72f0ec528827" title="Get the cosine of the angle between two vectors. " alt="" coords="514,421,665,448"/>
+<area shape="rect" id="node10" href="$namespaceRa_1_1Core_1_1MeshUtils.html#a5398f7b15335cb47b83a2d573f277640" title="Check that the mesh is well built, asserting when it is not. " alt="" coords="518,238,661,279"/>
+<area shape="rect" id="node6" href="$classRa_1_1Core_1_1AttribManager.html#aaa6088620425c1e1d74b50f1b50eb596" title="Get attribute by handle. " alt="" coords="1361,515,1525,557"/>
+<area shape="rect" id="node11" href="$namespaceRa_1_1Core_1_1Algorithm.html#aea294cdb6f4f0d85955bdcccb22886ec" title="Ra::Core::Algorithm::t" alt="" coords="751,136,902,163"/>
+<area shape="rect" id="node12" href="$namespaceRa_1_1Core_1_1MeshUtils.html#a746199d436bb1dc31c4bccb3953743b9" title="Returns the area of a given triangle. " alt="" coords="755,373,898,414"/>
+<area shape="rect" id="node13" href="$namespaceRa_1_1Core_1_1MeshUtils.html#afbee0fe3203a295fb1f93b33dfb33f81" title="Fills the given array with the vertices of a given triangle. " alt="" coords="958,373,1101,414"/>
+<area shape="rect" id="node14" href="$namespaceRa_1_1Core_1_1Geometry.html#a178f2b7309fe2ea5bc31a3abcb25368e" title="Ra::Core::Geometry\l::triangleArea" alt="" coords="959,599,1099,641"/>
+<area shape="rect" id="node15" href="$namespaceOpenMesh.html#a71e7f1dd3eac016d2b8245ac408a291c" title="OpenMesh::cross" alt="" coords="1168,611,1293,637"/>
+<area shape="rect" id="node16" href="$namespaceOpenMesh.html#a8205f789ce08919bc11c58383574596c" title="OpenMesh::norm" alt="" coords="1169,560,1292,587"/>
+<area shape="rect" id="node19" href="$classRa_1_1Core_1_1AttribManager.html#a9f7e8414913d3c39d553dbd359f2f62a" title="Return true if *this and other have the same attributes, same amount and same names. " alt="" coords="745,19,909,61"/>
+<area shape="rect" id="node23" href="$classRa_1_1Engine_1_1Component.html#a10b0bc182b76165744ebea603ae32dfe" title="Shortcut to access the render object manager. " alt="" coords="508,690,671,731"/>
+<area shape="rect" id="node25" href="$classRa_1_1Core_1_1Grid.html#ae9c02e6ec89130899fd0645dbfa4ece7" title="Access an element with a D&#45;dimensional index. " alt="" coords="763,632,890,659"/>
+</map>

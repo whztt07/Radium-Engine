@@ -1,0 +1,4 @@
+<map id="Ra::Engine::DefaultLightManager" name="Ra::Engine::DefaultLightManager">
+<area shape="rect" id="node2" href="$classRa_1_1Engine_1_1LightManager.html" title="Interface providing functions to manage a group or type of lights in a specific way. " alt="" coords="5,235,192,576"/>
+<area shape="rect" id="node3" href="$classRa_1_1Engine_1_1System.html" title="Systems are responsible of updating a specific subset of the components of each entity. " alt="" coords="5,6,192,186"/>
+</map>

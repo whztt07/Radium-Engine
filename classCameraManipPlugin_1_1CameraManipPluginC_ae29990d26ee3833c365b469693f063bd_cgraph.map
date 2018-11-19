@@ -1,0 +1,9 @@
+<map id="CameraManipPlugin::CameraManipPluginC::registerPlugin" name="CameraManipPlugin::CameraManipPluginC::registerPlugin">
+<area shape="rect" id="node2" href="$classCameraManipPlugin_1_1CameraManipPluginC.html#ab1bd40190b378ac7bd6ee000284535af" title="CameraManipPlugin::\lCameraManipPluginC::\lonCurrentChanged" alt="" coords="211,63,368,119"/>
+<area shape="rect" id="node3" href="$classRa_1_1GuiBase_1_1SelectionManager.html#a29cbd250208f1e18d2ab1e0f4d91105d" title="Return the current selected item, or an invalid entry if there is no current item. " alt="" coords="417,37,626,78"/>
+<area shape="rect" id="node8" href="$classRa_1_1Engine_1_1Component.html#aa3e5cb90432a9a49e4362b673652ff76" title="Return the component&#39;s name. " alt="" coords="440,102,603,143"/>
+<area shape="rect" id="node4" href="$classRa_1_1GuiBase_1_1SelectionManager.html#aec178a6b3de1c04e5e1d16ff72c6e966" title="Ra::GuiBase::SelectionManager\l::itemModel" alt="" coords="675,5,885,46"/>
+<area shape="rect" id="node5" href="$classRa_1_1GuiBase_1_1ItemModel.html#a3236433d461ad6cac5e9390b2685fa3f" title="Returns the entry corresponding to a given index or an invalid entry if the index doesn&#39;t match any e..." alt="" coords="697,70,863,111"/>
+<area shape="rect" id="node6" href="$classRa_1_1GuiBase_1_1TreeModel.html#a5aa24ace72c1c3d29e268cb34dc576f2" title="Get the tree item corresponding to the given index. " alt="" coords="934,70,1101,111"/>
+<area shape="rect" id="node7" href="$classRa_1_1GuiBase_1_1TreeModel.html#a972106921da4c960f23f81722d3b4cf5" title="Internal functions to check if an item is in the tree. " alt="" coords="1150,70,1317,111"/>
+</map>

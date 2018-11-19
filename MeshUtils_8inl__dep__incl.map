@@ -1,0 +1,35 @@
+<map id="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/src/Core/Mesh/MeshUtils.inl" name="/home/travis/build/STORM&#45;IRIT/Radium&#45;Engine/src/Core/Mesh/MeshUtils.inl">
+<area shape="rect" id="node2" href="$MeshUtils_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Mesh/MeshUtils.hpp" alt="" coords="2481,109,2680,165"/>
+<area shape="rect" id="node3" href="$RotationCenterSkinning_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Animation/Skinning\l/RotationCenterSkinning.cpp" alt="" coords="591,214,788,285"/>
+<area shape="rect" id="node4" href="$DistanceQueries_8inl.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Geometry/Distance\l/DistanceQueries.inl" alt="" coords="812,214,1009,285"/>
+<area shape="rect" id="node10" href="$MeshPrimitives_8inl.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Mesh/MeshPrimitives.inl" alt="" coords="1398,221,1620,277"/>
+<area shape="rect" id="node15" href="$DrawPrimitives_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Renderer/RenderObject\l/Primitives/DrawPrimitives.cpp" alt="" coords="2365,454,2595,525"/>
+<area shape="rect" id="node20" href="$MeshUtils_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Mesh/MeshUtils.cpp" alt="" coords="1700,221,1899,277"/>
+<area shape="rect" id="node21" href="$BVH_8inl.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/TreeStructures\l/BVH.inl" alt="" coords="1924,214,2121,285"/>
+<area shape="rect" id="node23" href="$Component_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Component/Component.cpp" alt="" coords="2146,221,2400,277"/>
+<area shape="rect" id="node24" href="$GeometryComponent_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Component/GeometryComponent.cpp" alt="" coords="2425,221,2737,277"/>
+<area shape="rect" id="node25" href="$Mesh_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Renderer/Mesh\l/Mesh.cpp" alt="" coords="2761,214,2959,285"/>
+<area shape="rect" id="node26" href="$RenderObject_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Renderer/RenderObject\l/RenderObject.cpp" alt="" coords="2983,214,3212,285"/>
+<area shape="rect" id="node27" href="$BaseApplication_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/GuiBase/BaseApplication.cpp" alt="" coords="3236,221,3457,277"/>
+<area shape="rect" id="node28" href="$SkeletonBoneDrawable_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/Animation/src/Drawing\l/SkeletonBoneDrawable.hpp" alt="" coords="3481,214,3687,285"/>
+<area shape="rect" id="node32" href="$DummyComponent_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/Dummy/src/DummyComponent.cpp" alt="" coords="3711,221,3992,277"/>
+<area shape="rect" id="node33" href="$MeshPaintComponent_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/MeshPaint/src/MeshPaint\lComponent.cpp" alt="" coords="4017,214,4239,285"/>
+<area shape="rect" id="node34" href="$SkinningComponent_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/Skinning/src/SkinningComponent.cpp" alt="" coords="4264,221,4555,277"/>
+<area shape="rect" id="node5" href="$DistanceQueries_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Geometry/Distance\l/DistanceQueries.hpp" alt="" coords="629,334,827,405"/>
+<area shape="rect" id="node6" href="$PolyLine_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Math/PolyLine.hpp" alt="" coords="227,461,424,517"/>
+<area shape="rect" id="node9" href="$trianglekdtree_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/TreeStructures\l/trianglekdtree.hpp" alt="" coords="448,454,645,525"/>
+<area shape="rect" id="node7" href="$PolyLine_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Math/PolyLine.cpp" alt="" coords="5,573,203,629"/>
+<area shape="rect" id="node8" href="$PolyLine_8inl.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Math/PolyLine.inl" alt="" coords="227,573,424,629"/>
+<area shape="rect" id="node11" href="$MeshPrimitives_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Mesh/MeshPrimitives.hpp" alt="" coords="1394,341,1624,397"/>
+<area shape="rect" id="node12" href="$MeshPrimitives_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/Mesh/MeshPrimitives.cpp" alt="" coords="670,461,900,517"/>
+<area shape="rect" id="node13" href="$Renderer_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Renderer/Renderer.cpp" alt="" coords="925,461,1152,517"/>
+<area shape="rect" id="node14" href="$DebugRender_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Engine/Renderer/Renderers\l/DebugRender.cpp" alt="" coords="1177,454,1385,525"/>
+<area shape="rect" id="node16" href="$RotateGizmo_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/GuiBase/Viewer/Gizmo\l/RotateGizmo.cpp" alt="" coords="1411,454,1608,525"/>
+<area shape="rect" id="node17" href="$ScaleGizmo_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/GuiBase/Viewer/Gizmo\l/ScaleGizmo.cpp" alt="" coords="1632,454,1829,525"/>
+<area shape="rect" id="node18" href="$TranslateGizmo_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/GuiBase/Viewer/Gizmo\l/TranslateGizmo.cpp" alt="" coords="1853,454,2051,525"/>
+<area shape="rect" id="node19" href="$MeshFeatureTrackingComponent_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/MeshFeatureTracking\l/src/MeshFeatureTrackingComponent.cpp" alt="" coords="2075,454,2341,525"/>
+<area shape="rect" id="node22" href="$BVH_8hpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/src/Core/TreeStructures\l/BVH.hpp" alt="" coords="1924,334,2121,405"/>
+<area shape="rect" id="node29" href="$AnimationComponent_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/Animation/src/Animation\lComponent.cpp" alt="" coords="3238,334,3452,405"/>
+<area shape="rect" id="node30" href="$AnimationSystem_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/Animation/src/Animation\lSystem.cpp" alt="" coords="3477,334,3691,405"/>
+<area shape="rect" id="node31" href="$SkeletonBoneDrawable_8cpp.html" title="/home/travis/build\l/STORM&#45;IRIT/Radium&#45;Engine\l/Plugins/Animation/src/Drawing\l/SkeletonBoneDrawable.cpp" alt="" coords="3716,334,3921,405"/>
+</map>
